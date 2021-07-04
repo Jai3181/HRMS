@@ -1,0 +1,44 @@
+[
+    {
+        "parent": "sub4",
+        "_id": "60cf62be1bd6d8d1ebc07cc5",
+        "type": "Department",
+        "name": "dep-1",
+        "__v": 0
+    },
+    {
+        "parent": "sub4",
+        "_id": "60cf62be1bd6d8d1ebc07cc5",
+        "type": "Department",
+        "name": "dep-2",
+        "__v": 0
+    },
+    {
+        "parent": "sub4",
+        "_id": "60cf62be1bd6d8d1ebc07cc5",
+        "type": "Sub-Department",
+        "name": "sub-2",
+        "__v": 0
+    },
+    {
+        "parent": "sub4",
+        "_id": "60cf62be1bd6d8d1ebc07cc5",
+        "type": "Team",
+        "name": "team2",
+        "__v": 0
+    },
+    {
+        "parent": "sub4",
+        "_id": "60cf62be1bd6d8d1ebc07cc5",
+        "type": "Sub-Department",
+        "name": "sub-1",
+        "__v": 0
+    },
+    {
+        "parent": "sub4",
+        "_id": "60cf62be1bd6d8d1ebc07cc5",
+        "type": "Team",
+        "name": "team3",
+        "__v": 0
+    }
+]

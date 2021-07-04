@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+
 
 // examples
 // const MyDashboard = React.lazy(() => import('./views/dashboard/MyDashboard'))
@@ -57,6 +58,8 @@ const MRF = React.lazy(() => import('./views/MyComponents/MRF/MRFform.js'))
 const UserManager = React.lazy(() => import('./views/MyComponents/UserManager/AddUserForm.js'))
 const BranchManager = React.lazy(() => import('./views/MyComponents/BranchManager/BranchManager.js'))
 const HierarchyManager = React.lazy(() => import('./views/MyComponents/HierarchyManager/Hierarchy.js'))
+const Approval = React.lazy(() => import('./views/MyComponents/Approval/Approval.js'))
+// const Approvalform = React.lazy(() => import('./views/MyComponents/Approval/Approvalform.js'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -69,6 +72,8 @@ const routes = [
   { path: '/userManager', name: 'UserManager', component: UserManager },
   { path: '/branchManager', name: 'BranchManager', component: BranchManager },
   { path: '/hierarchyManager', name: 'HierarchyManager', component: HierarchyManager },
+  { path: '/approval', name: 'Approval', component: Approval },
+  // { path: '/approvalform', name: 'Approval Form', component: Approvalform },
 
 
   { path: '/theme', name: 'Theme', component: Colors, exact: true },
