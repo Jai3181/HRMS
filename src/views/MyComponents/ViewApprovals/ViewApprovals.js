@@ -31,7 +31,7 @@ function ViewApprovals() {
 
     ]
 
-    async function showApprovalData(url) {
+    async function getApproval(url) {
         // console.log("in show data")
         // setIsLoading(true)
         const response = await fetch(url, {
@@ -64,7 +64,7 @@ function ViewApprovals() {
     }
 
     useEffect(() => {
-        showApprovalData(endPoints.showApprovals).then(data => setShowApproval(data))
+        getApproval(endPoints.getApprovals).then(data => console.log(data));
 
     }, [])
 
@@ -75,11 +75,13 @@ function ViewApprovals() {
             status: "Accept",
 
         }
-        sendApproval(endPoints.sendApproval, sendData).then(data => console.log(data))
+        // sendApproval(endPoints.sendApproval, sendData).then(data => console.log(data))
 
 
 
     }
+
+
 
     const declineApprovalHandler = (event) => {
         setRemarks(event.target.value);
@@ -118,7 +120,7 @@ function ViewApprovals() {
                         </CModalHeader>
                         <CModalBody>
                             <CFormControl
-                                size={100}
+                                size="sm"
                                 component="textarea"
                                 aria-label="With textarea"
                                 placeholder="enter remarks!"
@@ -180,7 +182,9 @@ function ViewApprovals() {
                                 <CNavbarBrand className="mx-auto nav1 " active={activeKey === 2}
                                     onClick={() => setActiveKey(2)}>ACCEPTED</CNavbarBrand>
                                 <CNavbarBrand className="mx-auto nav1 " active={activeKey === 3}
-                                    onClick={() => setActiveKey(3)}>APPROVED</CNavbarBrand>
+                                    onClick={() => setActiveKey(3)}>REJECTED</CNavbarBrand>
+                                <CNavbarBrand className="mx-auto nav1 " active={activeKey === 4}
+                                    onClick={() => setActiveKey(4)}>ESCALATED</CNavbarBrand>
 
 
                                 {/* </CCollapse> */}
@@ -189,6 +193,7 @@ function ViewApprovals() {
                         </CNavbar>
                     </CRow>
                     <hr />
+                    {/* <CButton onClick={getDataHandler}>show data</CButton> */}
                     <CRow>
                         <CCol>
                             <CTabContent >
@@ -275,7 +280,10 @@ function ViewApprovals() {
                                     <h1>acceptedapprovals</h1>
                                 </CTabPane>
                                 <CTabPane visible={activeKey === 3}>
-                                    <h1>approvals</h1>
+                                    <h1>rejected approvals</h1>
+                                </CTabPane>
+                                <CTabPane visible={activeKey === 4}>
+                                    <h1> escalated approvals</h1>
                                 </CTabPane>
 
                             </CTabContent>

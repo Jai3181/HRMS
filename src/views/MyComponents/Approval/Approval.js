@@ -19,8 +19,8 @@ import { useStateValue } from "../../../StateProvider"
 
 function Approval(props) {
     const [approvalMatrix, setApprovalMatrix] = useState([]);
-    const [reducerState, dispatch] = useStateValue()
-    const token = reducerState.token
+    const [reducerState, dispatch] = useStateValue();
+    const token = reducerState.token;
     // const [documentID, setDocumentID] = useState("");
     const [hierarchyList, setHierarchyList] = useState()
     const [branchList, setBranchList] = useState()
@@ -32,6 +32,7 @@ function Approval(props) {
     var searchBranch;
     var searchApprover;
 
+    if (approvalMatrix) { localStorage.setItem("approvalMatrix", JSON.stringify(approvalMatrix)) }
     if (userList) { localStorage.setItem("userList", JSON.stringify(userList)) }
     if (hierarchyList) { localStorage.setItem("hierarchyList", JSON.stringify(hierarchyList)) }
     if (branchList) { localStorage.setItem("branchList", JSON.stringify(branchList)) }
@@ -54,8 +55,8 @@ function Approval(props) {
         console.log("in use effect")
         showData(endPoints.showApprovalMatrix)
             .then(Data => {
-                console.log("Approval List:", Data)
-                setApprovalMatrix(Data)
+                console.log(Data);
+                setApprovalMatrix(Data);
             })
         showData(endPoints.searchUser)
             .then(Data => {
@@ -73,12 +74,19 @@ function Approval(props) {
                 console.log("branch:", Data)
                 setBranchList(Data)
             })
-    }, [])
+    }, []);
 
     const pageChangeHandler = (event) => {
+        // console.log("event id: ", event.target.id)
+        // const ApprovalSelected = approvalMatrix.filter((item) => item._id === event.target.id)
+        // localStorage.setItem("approval selected", JSON.stringify(ApprovalSelected))
         console.log("event id: ", event.target.id)
-        const ApprovalSelected = approvalMatrix.filter((item) => item._id === event.target.id)
-        localStorage.setItem("View Approval", JSON.stringify(ApprovalSelected))
+        localStorage.setItem("eventID", JSON.stringify(event.target.id));
+        dispatch({
+            type: "VIEW_APPROVAL",
+            approvalID: event.target.id
+        })
+
     }
 
 
@@ -146,30 +154,28 @@ function Approval(props) {
     const DataRows = []
     {
         approvalMatrix?.map(data => {
+            {
 
-            for (var i = 0; i < data.approversID.length; i++) {
+                for (var i = 0; i < data.approversID.length; i++) {
 
-                approverList += data.approversID[i]._id.name.firstName + "  " + data.approversID[i]._id.name.lastName + " " + ",";
-                var approverListfinal = approverList;
+                    approverList += [i + 1] + "." + "" + data.approversID[i]._id.name.firstName + "  " + data.approversID[i]._id.name.lastName + " ";
+                    var approverListfinal = approverList;
 
+                }
+
+                approverList = "";
+
+                console.log(approverListfinal);
             }
 
-            approverList = "";
-
-            console.log(approverListfinal);
-
-
-            // console.log(data)
+            console.log(data)
             {
                 DataRows.push({
                     document_id: data._id,
                     delete: <div className="icons">
-                        <AiOutlineMinusCircle size={20} className="icon1" onClick={dataDeleteHandler} id={data._id} />
-                        <Link to="/viewapprovalform">
-                            <BsEyeFill size={20} className="icon2" onClick={pageChangeHandler} >
+                        <Link to="/viewapprovalform"><CButton variant="ghost" id={data._id} className="icon1" onClick={pageChangeHandler}>View</CButton></Link>
+                        <CButton variant="ghost" color="danger" className="icon2" onClick={dataDeleteHandler} id={data._id} >Delete</CButton>
 
-                            </BsEyeFill>
-                        </Link>
                     </div>,
                     position: data.position,
                     heirarchy: data.hierarchyID.name,
@@ -183,6 +189,8 @@ function Approval(props) {
             }
 
         })
+
+
     }
 
 

@@ -634,13 +634,13 @@ function AddUserForm(props) {
                 entries={5}
                 // bordered
                 scrollX
-                searchTop
+                searchTop={false}
                 searchBottom={false}
                 data={dataTable}
             />;
             <CModal size="xl" alignment="center" visible={visible} backdrop={true}>
                 <CModalHeader onDismiss={modalCloseHandler}>
-                    <CModalTitle>Add New Employee</CModalTitle>
+                    <CModalTitle>Add New User</CModalTitle>
                 </CModalHeader>
                 <CModalBody className="bg-light">
                     <CForm onSubmit={formSubmitHandler}>
@@ -1171,7 +1171,11 @@ function AddUserForm(props) {
                         <br />
 
                         <CCol className="d-flex align-items-center justify-content-center">
-                            <CButton type="submit" color="primary" onClick={modalCloseHandler}>save changes</CButton>
+
+                            <CButton type="submit" color="primary" onClick={modalCloseHandler}>Add User</CButton>
+
+                            
+
                         </CCol>
                     </CForm>
                 </CModalBody>

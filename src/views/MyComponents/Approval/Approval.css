@@ -4,21 +4,21 @@
 }
 
 .icon1{
-    left: 100%; position: relative; 
-    color :#4f5d73;
-}
-
-.icon1:hover{
-    color: red;
-}
-.icon2{
-    left: 200%; position: relative; 
-    color :#4f5d73;
-}
-
-.icon2:hover{
+    left: 2%; position: relative; 
     color: blue;
 }
+
+/* .icon1:hover{
+    color: red;
+} */
+.icon2{
+    left: 10%; position: relative; 
+    color:red;
+}
+
+/* .icon2:hover{
+    color: blue;
+} */
 
 .filter{
     

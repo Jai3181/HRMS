@@ -8,7 +8,8 @@ import {
     CContainer, CRow, CCol, CButton,
 } from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index'
-import { useStateValue } from "../../../StateProvider"
+import { useStateValue } from "../../../StateProvider";
+import "../Approval/Approval.css";
 
 export default function MRFform(props) {
     const [reducerState, dispatch] = useStateValue()
@@ -58,7 +59,7 @@ export default function MRFform(props) {
         mrfList?.map(item => {
             // console.log("item:", item)
             tableRows.push({
-                showButton: <Link to="/EditMrfPage"><CButton id={item._id} onClick={showButtonHandler}>EYE</CButton></Link>,
+                showButton: <Link to="/EditMrfPage"><BsEyeFill id={item._id} onClick={showButtonHandler} /></Link>,
                 position_id: item.designation.positionID.position,
                 position_type: item.designation.positionType,
                 hierarchy: item.hierarchyID.type + ": " + item.hierarchyID.name,
@@ -221,8 +222,83 @@ export default function MRFform(props) {
                         <CRow>
                             <CCol md={2} className="filterbar align-self-start align-items-center justify-content-center">
                                 FILTER BAR
+                                <hr />
+                                <CRow>
+                                    <CRow>
+                                        <CFormCheck id="flexCheckDefault" label="By Position" value="searchPosition" />
+                                        <CRow>
+                                            <input className="input" type="text" placeholder="enter position" />
+
+                                        </CRow>
+
+                                    </CRow>
+                                    <hr />
+                                    <CRow>
+                                        <CFormCheck id="flexCheckDefault" label="By Heirarchy" value="searchHeirarchy" />
+                                        <CRow>
+                                            <input className="input" type="text" placeholder="enter heirarchy " />
+                                            {/* <Select
+                                                className="select"
+                                            // onChange={heirarchySearchHandler}
+                                            /> */}
+                                        </CRow>
+                                    </CRow>
+                                    <hr />
+                                    <CRow>
+                                        <CFormCheck id="flexCheckDefault" label="By Job Diversity" value="searchBranch" />
+                                        <CRow>
+                                            <input className="input" type="text" placeholder="enter branch" />
+                                        </CRow>
+                                    </CRow>
+                                    <hr />
+                                    {/* <CRow>
+                                        <CFormCheck id="flexCheckDefault" label="By Cooling Period" value="searchCooling" onChange={changeValueHandler} />
+                                        <CRow>
+                                            <CFormControl
+                                                className="select"
+                                                type="number"
+                                                id="age"
+
+                                                onChange={coolingSearchHandler}
+                                            // required
+                                            />
+                                        </CRow>
+                                    </CRow>
+                                    <hr />
+                                    <CRow>
+                                        <CFormCheck id="flexCheckDefault" label="By TAT" value="searchTAT" />
+                                        <CRow>
+                                            <CFormControl
+                                                className="select"
+                                                type="number"
+                                                id="age"
+
+                                            // onChange={ageChangeHandler}
+                                            // required
+                                            />
+                                        </CRow>
+                                    </CRow> */}
+                                    <hr />
+                                    <CRow>
+                                        <CFormCheck id="flexCheckDefault" label="By Location" value="searchApprover" />
+                                        <CRow>
+                                            <input className="input" type="text" placeholder="enter approver" />
+                                        </CRow>
+                                    </CRow>
+                                    <CRow className="mt-4">
+                                        <CCol className="col-sm-2"></CCol>
+                                        <CCol className="col-sm-9">
+                                            <CButton >APPLY FILTER</CButton>
+
+                                        </CCol>
+
+                                        <CCol className="col-sm-2"></CCol>
+
+                                    </CRow>
+
+                                </CRow>
                             </CCol>
-                            <CCol md={10} className="mainContent align-self-end align-items-center justify-content-center">
+                            <CCol className="col-sm-8 col-md-10 ">
                                 <CContainer fluid >
                                     <MDBDataTableV5
                                         small
