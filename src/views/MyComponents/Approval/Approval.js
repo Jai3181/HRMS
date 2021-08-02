@@ -3,15 +3,18 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import '../MRF/MRFform.css'
 import { MDBDataTableV5 } from 'mdbreact';
-import { CContainer, CRow, CCol, CBadge, CButton, CFormCheck, CFormControl } from '@coreui/react'
+import {
+    CContainer, CRow, CCol, CButton, CFormCheck,
+    CFormControl
+} from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index';
 import endPoints from "../../../utils/EndPointApi";
-import { AiOutlineMinusCircle } from "react-icons/ai";
-import { BsEyeFill } from "react-icons/bs";
+// import { AiOutlineMinusCircle } from "react-icons/ai";
+// import { BsEyeFill } from "react-icons/bs";
 import "./Approval.css";
-import ViewApprovalForm from '../MRF/ViewApprovalForm';
-import Select from 'react-select';
-import CreatableSelect from 'react-select/creatable';
+// import ViewApprovalForm from '../MRF/ViewApprovalForm';
+// import Select from 'react-select';
+// import CreatableSelect from 'react-select/creatable';
 import { useStateValue } from "../../../StateProvider"
 
 
@@ -323,6 +326,7 @@ function Approval(props) {
 
     const filteredRows = [];
     const filterHandler = (event) => {
+
         if (checkList.includes("searchPosition")) {
             DataRows.filter(data => data.position.toUpperCase().includes(searchPosition.toUpperCase())).map(data => filteredRows.push(data));
             // console.log(pos);
@@ -341,10 +345,15 @@ function Approval(props) {
 
         }
         if (checkList.includes("searchApprover")) {
+<<<<<<< HEAD
+            const app = DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase()))
+            console.log(app);
+=======
             DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase())).map(data => filteredRows.push(data));
             // console.log(app);
             // filteredRows.push(app);
 
+>>>>>>> 9bbcd57c6192b591aec96db3a06105f73a011a72
         }
         console.log(filteredRows);
         let updatedRows = [...new Set(filteredRows)];

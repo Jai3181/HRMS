@@ -13,7 +13,8 @@ import "../Approval/Approval.css";
 
 export default function MRFform(props) {
     const [reducerState, dispatch] = useStateValue()
-    const token = reducerState.token
+    // const token = reducerState.token
+    const token = sessionStorage.getItem("token");
     const [mrfList, setMRFList] = useState()
     const [userList, setUserList] = useState()
     const [hierarchyList, setHierarchyList] = useState()
@@ -21,15 +22,15 @@ export default function MRFform(props) {
     const [approvalList, setApprovalList] = useState()
 
 
-    if (approvalList) { localStorage.setItem("approvalList", JSON.stringify(approvalList)) }
-    if (userList) { localStorage.setItem("userList", JSON.stringify(userList)) }
-    if (hierarchyList) { localStorage.setItem("hierarchyList", JSON.stringify(hierarchyList)) }
-    if (branchList) { localStorage.setItem("branchList", JSON.stringify(branchList)) }
+    if (approvalList) { sessionStorage.setItem("approvalList", JSON.stringify(approvalList)) }
+    if (userList) { sessionStorage.setItem("userList", JSON.stringify(userList)) }
+    if (hierarchyList) { sessionStorage.setItem("hierarchyList", JSON.stringify(hierarchyList)) }
+    if (branchList) { sessionStorage.setItem("branchList", JSON.stringify(branchList)) }
 
     const showButtonHandler = (event) => {
         console.log("event id: ", event.target.id)
         const mrfSelected = mrfList.filter((item) => item._id === event.target.id)
-        localStorage.setItem("ViewMRF", JSON.stringify(mrfSelected))
+        sessionStorage.setItem("ViewMRF", JSON.stringify(mrfSelected))
         // dispatch({
         //     type: "VIEW_MRF",
         //     // mrfID: event.target.id,
@@ -207,6 +208,42 @@ export default function MRFform(props) {
             })
     }, [])
     console.log("reducerState::::::: ", reducerState)
+
+    // const checkList = []
+    // const changeValueHandler = (event) => {
+    //     if (event.target.checked) {
+    //         checkList.push(event.target.value);
+
+    //     } else if (event.target.checked == false) {
+    //         const index1 = checkList.indexOf(event.target.value);
+    //         checkList.splice(index1, 1);
+    //     }
+    //     console.log(checkList);
+    // }
+
+
+    // const filterHandler = (event) => {
+    //     if (checkList.includes("searchPosition")) {
+    //         const pos = tableRows.filter(data => data.position.toUpperCase().includes(searchPosition.toUpperCase()))
+    //         console.log(pos);
+    //     }
+    //     if (checkList.includes("searchHeirarchy")) {
+    //         const hei = tableRows.filter(data => data.heirarchy.toUpperCase().includes(searchHierarchy.toUpperCase()))
+    //         console.log(hei);
+
+    //     }
+    //     if (checkList.includes("searchBranch")) {
+    //         const branch = tableRows.filter(data => data.branchname.toUpperCase().includes(searchBranch.toUpperCase()))
+    //         console.log(branch);
+
+    //     }
+    //     if (checkList.includes("searchApprover")) {
+    //         const app = tableRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase()))
+    //         console.log(app);
+    //     }
+    // }
+
+
     return (
         <div>
             {/* <AppSidebar /> */}
@@ -223,80 +260,42 @@ export default function MRFform(props) {
                             <CCol md={2} className="filterbar align-self-start align-items-center justify-content-center">
                                 FILTER BAR
                                 <hr />
-                                <CRow>
+                                {/* <CRow>
                                     <CRow>
-                                        <CFormCheck id="flexCheckDefault" label="By Position" value="searchPosition" />
+                                        <CFormCheck id="flexCheckDefault" label="By Position" value="searchPosition" onChange={changeValueHandler} />
                                         <CRow>
-                                            <input className="input" type="text" placeholder="enter position" />
-
-                                        </CRow>
-
-                                    </CRow>
-                                    <hr />
-                                    <CRow>
-                                        <CFormCheck id="flexCheckDefault" label="By Heirarchy" value="searchHeirarchy" />
-                                        <CRow>
-                                            <input className="input" type="text" placeholder="enter heirarchy " />
-                                            {/* <Select
-                                                className="select"
-                                            // onChange={heirarchySearchHandler}
-                                            /> */}
+                                            <input className="input" type="text" placeholder="enter position" onChange={positionSearchHandler} />
                                         </CRow>
                                     </CRow>
                                     <hr />
                                     <CRow>
-                                        <CFormCheck id="flexCheckDefault" label="By Job Diversity" value="searchBranch" />
+                                        <CFormCheck id="flexCheckDefault" label="By Heirarchy" value="searchHeirarchy" onChange={changeValueHandler} />
                                         <CRow>
-                                            <input className="input" type="text" placeholder="enter branch" />
-                                        </CRow>
-                                    </CRow>
-                                    <hr />
-                                    {/* <CRow>
-                                        <CFormCheck id="flexCheckDefault" label="By Cooling Period" value="searchCooling" onChange={changeValueHandler} />
-                                        <CRow>
-                                            <CFormControl
-                                                className="select"
-                                                type="number"
-                                                id="age"
-
-                                                onChange={coolingSearchHandler}
-                                            // required
-                                            />
+                                            <input className="input" type="text" placeholder="enter heirarchy " onChange={heirarchySearchHandler} />
                                         </CRow>
                                     </CRow>
                                     <hr />
                                     <CRow>
-                                        <CFormCheck id="flexCheckDefault" label="By TAT" value="searchTAT" />
+                                        <CFormCheck id="flexCheckDefault" label="By Branch" value="searchBranch" onChange={changeValueHandler} />
                                         <CRow>
-                                            <CFormControl
-                                                className="select"
-                                                type="number"
-                                                id="age"
-
-                                            // onChange={ageChangeHandler}
-                                            // required
-                                            />
+                                            <input className="input" type="text" placeholder="enter branch" onChange={branchSearchHandler} />
                                         </CRow>
-                                    </CRow> */}
+                                    </CRow>
                                     <hr />
                                     <CRow>
-                                        <CFormCheck id="flexCheckDefault" label="By Location" value="searchApprover" />
+                                        <CFormCheck id="flexCheckDefault" label="By Approver" value="searchApprover" onChange={changeValueHandler} />
                                         <CRow>
-                                            <input className="input" type="text" placeholder="enter approver" />
+                                            <input className="input" type="text" placeholder="enter approver" onChange={approverSearchHandler} />
                                         </CRow>
                                     </CRow>
                                     <CRow className="mt-4">
                                         <CCol className="col-sm-2"></CCol>
                                         <CCol className="col-sm-9">
-                                            <CButton >APPLY FILTER</CButton>
-
+                                            <CButton onClick={filterHandler}>APPLY FILTER</CButton>
                                         </CCol>
-
                                         <CCol className="col-sm-2"></CCol>
-
                                     </CRow>
-
-                                </CRow>
+                                </CRow> */}
                             </CCol>
                             <CCol className="col-sm-8 col-md-10 ">
                                 <CContainer fluid >
