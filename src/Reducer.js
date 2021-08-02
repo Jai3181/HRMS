@@ -6,7 +6,14 @@ export const initialState = {
     branchName: {},
     branchLocation: {},
     selectedApproval: "",
-    token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGY1NTIzYjljMmNhZjAwMTUxMDQyNTIiLCJlbWFpbCI6ImpheWt1bWFyOTI0NkBnbWFpbC5jb20iLCJSb2xlIjoiU3VwZXItQWRtaW4iLCJpYXQiOjE2Mjc4MDUwMTksImV4cCI6MTYyNzg0MTAxOX0.gnYV2o_hVJI_PhNgwuJLyHnpJiP6B0cdhSUmvDvh89w",
+
+
+
+    "token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGZiZjlmZTg2OGM0YTAwMTU0ZmQwY2YiLCJlbWFpbCI6InNhbmthbHAxNzI4QGdtYWlsLmNvbSIsIlJvbGUiOiJTdXBlci1BZG1pbiIsImlhdCI6MTYyNzg5MDQwNywiZXhwIjoxNjI3OTI2NDA3fQ.n3Df0jsw9hku6HXDJ2F0I06cNPCDXLmbjuNq91f5JoE",
+
+
+
+
     userRole: "",
 }
 
