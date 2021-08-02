@@ -209,8 +209,10 @@ function Approval(props) {
                 // setTableRows(DataRows);
             }
         });
+        setTableRows(DataRows);
         // tableRows.push(...DataRows);
     }
+
 
 
 
@@ -286,7 +288,7 @@ function Approval(props) {
         ],
 
 
-        rows: DataRows
+        rows: tableRows
     }
     const widerData = {
         columns: [
