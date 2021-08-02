@@ -177,10 +177,10 @@ function CreateMRFPage(props) {
     const [formState, dispatchForm] = useReducer(formReducer, InitialFormState)
     const [reducerState, dispatch] = useStateValue()
     const token = reducerState.token
-    const userList = JSON.parse(localStorage.getItem("userList"))
-    const hierarchyList = JSON.parse(localStorage.getItem("hierarchyList"))
-    const branchList = JSON.parse(localStorage.getItem("branchList"))
-    const approvalList = JSON.parse(localStorage.getItem("approvalList"))
+    const userList = JSON.parse(sessionStorage.getItem("userList"))
+    const hierarchyList = JSON.parse(sessionStorage.getItem("hierarchyList"))
+    const branchList = JSON.parse(sessionStorage.getItem("branchList"))
+    const approvalList = JSON.parse(sessionStorage.getItem("approvalList"))
 
     const positionNameOptions = []
     if (approvalList) {
@@ -331,7 +331,7 @@ function CreateMRFPage(props) {
         dispatchForm({ type: "REQ_INPUT", val: event.target.value })
         console.log(event.target.value)
     }
-    
+
     const addMrfHandler = (event) => {
         event.preventDefault()
         const skillList = []
@@ -422,33 +422,6 @@ function CreateMRFPage(props) {
     }
     useEffect(() => {
         console.log("in use effect")
-        // showData(endPoints.searchUser)
-        //     .then(Data => {
-        //         console.log("user:", Data)
-        //         setUserList(Data)
-        //     })
-        // showData(endPoints.searchHierarchy)
-        //     .then(Data => {
-        //         console.log("hierarchy:", Data)
-        //         setHierarchyList(Data)
-        //     })
-        // showData(endPoints.searchBranch)
-        //     .then(Data => {
-        //         console.log("branch:", Data)
-        //         setBranchList(Data)
-        //     })
-        // showData(endPoints.searchApproval)
-        //     .then(Data => {
-        //         console.log("approvals:", Data)
-        //         setApprovalList(Data)
-        //     })
-
-        // const userNameOptions = JSON.parse(localStorage.getItem("userNameOptions"))
-        // console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn", userNameOptions)
-        // const hierarchyNameOptions = JSON.parse(localStorage.getItem("hierarchyNameOptions"))
-        // const branchNameOptions = JSON.parse(localStorage.getItem("branchNameOptions"))
-        // const branchLocationOptions = JSON.parse(localStorage.getItem("branchLocationOptions"))
-        // const positionNameOptions = JSON.parse(localStorage.getItem("positionNameOptions"))
     }, [])
 
     return (
@@ -739,8 +712,8 @@ function CreateMRFPage(props) {
                                     type="radio"
                                     name="j_type"
                                     id="job_type2"
-                                    value="Permanent"
-                                    label="Permanent"
+                                    value="Full-Time"
+                                    label="Full-Time"
                                     onChange={choosenJobTypeHandler}
                                     required
                                 />

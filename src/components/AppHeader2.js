@@ -5,7 +5,7 @@ import {
     CContainer,
     CHeader,
     CHeaderBrand,
-    CHeaderDivider,
+    // CHeaderDivider,
     CHeaderNav,
     CHeaderToggler,
     CNavLink,

@@ -176,10 +176,10 @@ function EditMRFPage(props) {
     const [reducerState, dispatch] = useStateValue()
     const token = reducerState.token
     const [formState, dispatchForm] = useReducer(formReducer, InitialFormState)
-    const userList = JSON.parse(localStorage.getItem("userList"))
-    const hierarchyList = JSON.parse(localStorage.getItem("hierarchyList"))
-    const branchList = JSON.parse(localStorage.getItem("branchList"))
-    const approvalList = JSON.parse(localStorage.getItem("approvalList"))
+    const userList = JSON.parse(sessionStorage.getItem("userList"))
+    const hierarchyList = JSON.parse(sessionStorage.getItem("hierarchyList"))
+    const branchList = JSON.parse(sessionStorage.getItem("branchList"))
+    const approvalList = JSON.parse(sessionStorage.getItem("approvalList"))
 
     const positionNameOptions = []
     {

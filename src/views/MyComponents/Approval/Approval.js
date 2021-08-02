@@ -3,15 +3,18 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import '../MRF/MRFform.css'
 import { MDBDataTableV5 } from 'mdbreact';
-import { CContainer, CRow, CCol, CBadge, CButton, CFormCheck, CFormControl } from '@coreui/react'
+import {
+    CContainer, CRow, CCol, CButton, CFormCheck,
+    CFormControl
+} from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index';
 import endPoints from "../../../utils/EndPointApi";
-import { AiOutlineMinusCircle } from "react-icons/ai";
-import { BsEyeFill } from "react-icons/bs";
+// import { AiOutlineMinusCircle } from "react-icons/ai";
+// import { BsEyeFill } from "react-icons/bs";
 import "./Approval.css";
-import ViewApprovalForm from '../MRF/ViewApprovalForm';
-import Select from 'react-select';
-import CreatableSelect from 'react-select/creatable';
+// import ViewApprovalForm from '../MRF/ViewApprovalForm';
+// import Select from 'react-select';
+// import CreatableSelect from 'react-select/creatable';
 import { useStateValue } from "../../../StateProvider"
 
 
@@ -335,6 +338,7 @@ function Approval(props) {
 
 
     const filterHandler = (event) => {
+
         if (checkList.includes("searchPosition")) {
             const pos = DataRows.filter(data => data.position.toUpperCase().includes(searchPosition.toUpperCase()))
             console.log(pos);
@@ -352,7 +356,6 @@ function Approval(props) {
         if (checkList.includes("searchApprover")) {
             const app = DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase()))
             console.log(app);
-
         }
     }
 
@@ -405,34 +408,6 @@ function Approval(props) {
                                             <input className="input" type="text" placeholder="enter branch" onChange={branchSearchHandler} />
                                         </CRow>
                                     </CRow>
-                                    <hr />
-                                    {/* <CRow>
-                                        <CFormCheck id="flexCheckDefault" label="By Cooling Period" value="searchCooling" onChange={changeValueHandler} />
-                                        <CRow>
-                                            <CFormControl
-                                                className="select"
-                                                type="number"
-                                                id="age"
-
-                                                onChange={coolingSearchHandler}
-                                            // required
-                                            />
-                                        </CRow>
-                                    </CRow>
-                                    <hr />
-                                    <CRow>
-                                        <CFormCheck id="flexCheckDefault" label="By TAT" value="searchTAT" />
-                                        <CRow>
-                                            <CFormControl
-                                                className="select"
-                                                type="number"
-                                                id="age"
-
-                                            // onChange={ageChangeHandler}
-                                            // required
-                                            />
-                                        </CRow>
-                                    </CRow> */}
                                     <hr />
                                     <CRow>
                                         <CFormCheck id="flexCheckDefault" label="By Approver" value="searchApprover" onChange={changeValueHandler} />
