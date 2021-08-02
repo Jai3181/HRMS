@@ -5,7 +5,7 @@ import './MRFform.css'
 import { BsEyeFill } from "react-icons/bs";
 import { MDBDataTableV5 } from 'mdbreact';
 import {
-    CContainer, CRow, CCol, CButton,
+    CContainer, CRow, CCol, CButton, CFormCheck
 } from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index'
 import { useStateValue } from "../../../StateProvider";
