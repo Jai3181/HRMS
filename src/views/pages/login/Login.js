@@ -39,7 +39,7 @@ const Login = () => {
 
         </CRow>
       </CContainer>
-    </div >
+    </div>
   )
 }
 
