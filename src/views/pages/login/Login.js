@@ -6,7 +6,7 @@ import LoginCard from "./LoginCard";
 import logo from "./logof.jpg";
 import { useStateValue } from "../../../StateProvider";
 // import RegisterCard from "../register/RegisterCard"
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 const Login = () => {
   // const history = useHistory();
