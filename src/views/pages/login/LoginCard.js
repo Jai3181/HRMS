@@ -42,7 +42,7 @@ function LoginCard(props) {
                 if (data.email == "Invalid") {
                     setEmailerrorMessage(true);
                 }
-                if (data.password == "Invalid") {
+                else if (data.password = "Invalid") {
                     setPassworderrorMessage(true);
                 }
                 if (data.token) {

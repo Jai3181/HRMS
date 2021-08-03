@@ -57,7 +57,7 @@ function ViewApprovalForm(props) {
 
 
                             <CRow className="mb-3">
-                                <CFormLabel className="col-sm-2 col-form-label">Position Name</CFormLabel>
+                                <CFormLabel  className="col-sm-2 col-form-label">Position Name</CFormLabel>
                                 <CCol sm="4">
                                     <div className="col-sm-12">
                                         <CFormControl
@@ -119,6 +119,17 @@ function ViewApprovalForm(props) {
                             </CRow>
                             <CRow className="mb-3">
 
+                                <CFormLabel htmlFor="location" className="col-sm-2 col-form-label">Branch Location</CFormLabel>
+                                <CCol sm="4">
+                                    <Select
+                                        // options={branchLocationOptions}
+                                        placeholder={finalData.branchID.location}
+                                        isSearchable
+                                    // isClearable
+                                    // onChange={locationChangeHandler}
+                                    />
+                                </CCol>
+
                                 <CFormLabel className="col-sm-2 col-form-label" htmlFor="branchID">Branch Name</CFormLabel>
                                 <CCol sm="4">
                                     <Select
@@ -135,7 +146,7 @@ function ViewApprovalForm(props) {
                             <h4><b>Approver Details</b></h4>
                             <CRow className="mb-3">
                                 <CFormLabel htmlFor="pos_id" className="col-sm-2 col-form-label">Cooling Period</CFormLabel>
-                                <CCol sm="10" lg="6">
+                                <CCol sm="4">
                                     <div className="col-sm-12">
                                         <CFormControl
                                             type="number"
@@ -148,7 +159,7 @@ function ViewApprovalForm(props) {
                             </CRow>
                             <CRow className="mb-3">
                                 <CFormLabel htmlFor="pos_id" className="col-sm-2 col-form-label">TAT</CFormLabel>
-                                <CCol sm="10" lg="6">
+                                <CCol sm="4">
                                     <div className="col-sm-12">
                                         <CFormControl
                                             type="number"
@@ -160,27 +171,15 @@ function ViewApprovalForm(props) {
                                 </CCol>
                             </CRow>
                             <CRow className="mb-3">
-                                <CFormLabel className="col-sm-2 col-form-label">Approvers</CFormLabel>
-                                <CCol sm="10" lg="6" md="6">
-                                    {finalData.approversID.map((approver, index) => (
-                                        <CRow key={index}>
-                                            <CCol sm="3" lg="2" className="my-2">
-                                                <CFormLabel >Approver-{index + 1}:</CFormLabel>
-                                            </CCol>
-                                            <CCol sm="8" lg="10" >
-                                                <Select
-                                                    name="approver"
-                                                    placeholder={approver._id.name.firstName + " " + approver._id.name.lastName}
-                                                    isSearchable
-                                                    required
-                                                // onChange={e => onChangeApprover(e, index)}
-                                                />
-                                            </CCol>
-
-
-
-                                        </CRow>
-                                    ))}
+                                <CFormLabel htmlFor="pos_id" className="col-sm-2 col-form-label">Appprovers</CFormLabel>
+                                <CCol sm="4">
+                                    <Select
+                                        // options={positionNameOptions}
+                                        isSearchable
+                                        // isClearable
+                                        // onChange={positionIDChangeHandler}
+                                        required
+                                    />
                                 </CCol>
                             </CRow>
                             <br />

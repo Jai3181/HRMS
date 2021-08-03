@@ -1183,7 +1183,7 @@ function AddUserForm(props) {
                     <CButton color="secondary" onClick={modal2CloseHandler}>Close</CButton>
                 </CModalFooter>
             </CModal>
-        </CContainer >
+        </CContainer>
     );
 }
 

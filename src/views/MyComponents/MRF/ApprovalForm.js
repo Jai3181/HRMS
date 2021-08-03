@@ -4,15 +4,14 @@ import {
     CButton, CCol, CForm, CFormControl, CRow, CFormLabel, CFormSelect
 } from '@coreui/react';
 import endPoints from "../../../utils/EndPointApi";
-import "../Approval/Approval.css";
+// import "./ApprovalForm.css";
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { useStateValue } from "../../../StateProvider";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link } from 'react-router-dom';
-import { MdDelete } from "react-icons/md";
-import { BsPersonPlusFill } from "react-icons/bs";
-// import { filter } from 'core-js/core/array';
+import { AiOutlineMinusCircle } from "react-icons/ai";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 
 
 
@@ -50,16 +49,10 @@ function ApprovalForm(props) {
         setSelectApprover([...selectApprover, approverTemplate]);
 
     }
-    const deleteApprover = (index) => {
-        const filteredApprover = [...selectApprover];
-        filteredApprover.splice(index, 1);
-        setSelectApprover(filteredApprover);
-        console.log(filteredApprover);
-    }
 
     const onChangeApprover = (e, index) => {
         const updatedApprover = selectApprover.map((approver, i) =>
-            index == i ? Object.assign(approver, { "_id": e.value }) : approver);
+            index == i ? Object.assign(approver, { "approverID": e.value }) : approver);
         setSelectApprover(updatedApprover);
         console.log(selectApprover);
         console.log(updatedApprover);
@@ -80,7 +73,7 @@ function ApprovalForm(props) {
             branchNameOptions.push({ label: branch.name, value: branch._id, location: branch.location })
         })
     }
-    // console.log("branchNameOptions", branchNameOptions)
+    console.log("branchNameOptions", branchNameOptions)
 
     const ApproverNameOptions = []
     {
@@ -188,11 +181,10 @@ function ApprovalForm(props) {
         setBranch(event.value);
 
     }
-    // const ApproverChangeHandler = (event) => {
-    //     console.log(event);
-    //     setApprover(event);
+    const ApproverChangeHandler = (event) => {
+        setApprover(event);
 
-    // }
+    }
     const approver_id = [];
     for (var i = 0; i < approver.length; i++) {
 
@@ -216,7 +208,7 @@ function ApprovalForm(props) {
         }
         // console.log(newEmp.TAT);
         console.log(newEmp)
-        postData(endPoints.addApprovalMatrix, newEmp).then(Data => { console.log(Data) });
+        // postData(endPoints.addApprovalMatrix, newEmp).then(Data => { console.log(Data) });
         event.target.reset()
     }
 
@@ -241,9 +233,9 @@ function ApprovalForm(props) {
                     <CRow className="pt-2 justify-content-between bg-light">
                         <CCol md={6} className="d-flex align-self-start align-items-center"><Link to="/approval"><CButton color="light"><IoIosArrowBack /></CButton></Link><h3>ADD APPROVAL</h3></CCol>
                         <CForm onSubmit={formSubmitHandler} className="form bg-white">
-                            <h4><b>Position </b></h4>
+                            <h4><b>Position</b></h4>
                             <CRow className="mb-3">
-                                <CFormLabel htmlFor="pos_id" className="col-sm-2 col-form-label">Position Name :</CFormLabel>
+                                <CFormLabel htmlFor="pos_id" className="col-sm-2 col-form-label">Position Name</CFormLabel>
                                 <CCol sm="4">
                                     <div className="col-sm-12">
                                         <CFormControl
@@ -273,7 +265,7 @@ function ApprovalForm(props) {
                                 </CCol>
 
                                 <CFormLabel htmlFor="h_name" className="col-sm-2 col-form-label">
-                                    Hierarchy Name :
+                                    Hierarchy Name
                                 </CFormLabel>
                                 <CCol className="col-sm-4">
                                     <Select
@@ -287,7 +279,7 @@ function ApprovalForm(props) {
                             </CRow>
                             <CRow className="mb-3">
 
-                                <CFormLabel htmlFor="location" className="col-sm-2 col-form-label">Branch Name :</CFormLabel>
+                                <CFormLabel htmlFor="location" className="col-sm-2 col-form-label">Branch Name</CFormLabel>
                                 <CCol className="col-sm-4">
                                     <Select
                                         options={branchNameOptions}
@@ -303,8 +295,8 @@ function ApprovalForm(props) {
                             <br />
                             <h4><b>Approver Details</b></h4>
                             <CRow className="mb-3">
-                                <CFormLabel htmlFor="pos_id" className="col-sm-2 col-form-label">Cooling Period :</CFormLabel>
-                                <CCol sm="10" lg="6">
+                                <CFormLabel htmlFor="pos_id" className="col-sm-2 col-form-label">Cooling Period</CFormLabel>
+                                <CCol sm="5">
                                     <div className="col-sm-12">
                                         <CFormControl type="number"
                                             onChange={CoolingPeriodChangeHandler}
@@ -313,8 +305,8 @@ function ApprovalForm(props) {
                                 </CCol>
                             </CRow>
                             <CRow className="mb-3">
-                                <CFormLabel className="col-sm-2 col-form-label">TAT :</CFormLabel>
-                                <CCol sm="10" lg="6">
+                                <CFormLabel className="col-sm-2 col-form-label">TAT</CFormLabel>
+                                <CCol sm="5">
                                     <div className="col-sm-12">
                                         <CFormControl type="number"
                                             onChange={TATChangeHandler}
@@ -325,14 +317,14 @@ function ApprovalForm(props) {
                             <CRow className="mb-3">
                                 <CFormLabel className="col-sm-2 col-form-label">Approvers</CFormLabel>
 
-                                <CCol sm="10" lg="6">
+                                <CCol sm="10">
                                     {selectApprover.map((approver, index) => (
 
                                         <CRow key={index}>
-                                            <CCol sm="3" lg="2" className="my-2">
-                                                <CFormLabel >Approver-{index + 1}:</CFormLabel>
+                                            <CCol sm="2" className="my-2">
+                                                <CFormLabel >Approver-{index + 1} :</CFormLabel>
                                             </CCol>
-                                            <CCol sm="7" lg="9">
+                                            <CCol sm="4">
                                                 <Select
                                                     name="approver"
                                                     options={ApproverNameOptions}
@@ -341,10 +333,13 @@ function ApprovalForm(props) {
                                                     onChange={e => onChangeApprover(e, index)}
                                                 />
                                             </CCol>
-                                            <CCol sm="2" lg="1">
+                                            <CCol sm="2">
                                                 <div className="my-2">
+                                                    <AiOutlineMinusCircle className="mx-1"
 
-                                                    <MdDelete size={23} className="mx-1 remove" onClick={() => deleteApprover(index)} />
+                                                    />
+                                                    <AiOutlinePlusCircle className="mx-1 " onClick={addApprover} />
+
                                                 </div>
                                             </CCol>
 
@@ -352,11 +347,6 @@ function ApprovalForm(props) {
 
 
                                     ))}
-                                    <div className="my-3 center">
-                                        <CButton size="sm" shape="rounded-pill" onClick={addApprover}><BsPersonPlusFill size={15} className="mb-1 mx-1" />  Add Approver</CButton>
-
-                                    </div>
-
                                 </CCol>
 
 
@@ -364,17 +354,8 @@ function ApprovalForm(props) {
 
 
                             </CRow>
-                            <hr />
-                            {/* <CCol className="mb-2">
-                                <CreatableSelect
-                                    isMulti
-                                    onChange={ApproverChangeHandler}
-                                    options={ApproverNameOptions}
-                                    ActionTypes='clear-option'
-                                />
-                            </CCol> */}
                             <div className="center mt-3 mb-3">
-                                <CButton type="submit" size="lg" >Submit</CButton>
+                                <CButton type="submit" >Submit</CButton>
                             </div>
 
 

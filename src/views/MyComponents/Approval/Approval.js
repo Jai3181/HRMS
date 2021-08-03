@@ -22,21 +22,6 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-    },
-    button: {
-        marginTop: theme.spacing(1),
-        marginRight: theme.spacing(1),
-    },
-    actionsContainer: {
-        marginBottom: theme.spacing(2),
-    },
-    resetContainer: {
-        padding: theme.spacing(3),
-    },
-}));
 
 
 
@@ -49,9 +34,8 @@ function Approval(props) {
     const [hierarchyList, setHierarchyList] = useState()
     const [branchList, setBranchList] = useState()
     const [userList, setUserList] = useState()
-    const [tableRows, setTableRows] = useState([]);
-    const [visible, setVisible] = useState(false);
-    // console.log(tableRows);
+
+
     var searchPosition;
     var searchHierarchy;
     var searchBranch;
@@ -61,40 +45,6 @@ function Approval(props) {
     if (userList) { localStorage.setItem("userList", JSON.stringify(userList)) }
     if (hierarchyList) { localStorage.setItem("hierarchyList", JSON.stringify(hierarchyList)) }
     if (branchList) { localStorage.setItem("branchList", JSON.stringify(branchList)) }
-
-
-    const classes = useStyles();
-    const [activeStep, setActiveStep] = React.useState(0);
-    const steps = getSteps();
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
-    const handleReset = () => {
-        setActiveStep(0);
-    };
-
-    function getSteps() {
-        return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
-    }
-
-    function getStepContent(step) {
-        switch (step) {
-            case 0:
-                return `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`;
-            case 1:
-                return 'An ad group contains one or more ads which target a shared set of keywords.';
-            case 2:
-                return `Try out different ad text to see what brings in the most customers,
-                 they're running and how to resolve approval issues.`;
-            default:
-                return 'Unknown step';
-        }
-    }
 
 
     async function showData(url) {
@@ -133,7 +83,6 @@ function Approval(props) {
                 console.log("branch:", Data)
                 setBranchList(Data)
             })
-
     }, []);
 
     const pageChangeHandler = (event) => {
@@ -183,7 +132,8 @@ function Approval(props) {
         approvalMatrix?.map(data => {
             {
                 for (var i = 0; i < data.approversID.length; i++) {
-                    approverList += [i + 1] + "." + "" + data.approversID[i]._id.name.firstName + " " + data.approversID[i]._id.name.lastName + " ";
+
+                    approverList += [i + 1] + "." + "" + data.approversID[i]._id.name.firstName + "  " + data.approversID[i]._id.name.lastName + " ";
                     var approverListfinal = approverList;
                 }
                 approverList = "";
@@ -195,7 +145,7 @@ function Approval(props) {
                     document_id: data._id,
                     delete: <div className="icons">
                         <Link to="/viewapprovalform"><CButton size="sm" color="primary" variant="ghost" id={data._id} className="icon1" onClick={pageChangeHandler}>Edit</CButton></Link>
-                        <CButton variant="ghost" color="info" size="sm" className="icon2" id={data._id} onClick={() => setVisible(!visible)} >View</CButton>
+                        {/* <CButton variant="ghost" color="info" size="sm" className="icon2" id={data._id} onClick={() => setVisible(!visible)} >View</CButton> */}
                         <CButton variant="ghost" color="danger" size="sm" className="icon3" onClick={dataDeleteHandler} id={data._id} >Delete</CButton>
                     </div>,
                     position: data.position,
@@ -206,24 +156,26 @@ function Approval(props) {
                     tatdate: data.tat,
                     approverName: approverListfinal,
                 })
-                // setTableRows(DataRows);
             }
-        });
-        setTableRows(DataRows);
-        // tableRows.push(...DataRows);
+
+        })
+
+
     }
 
 
 
 
     console.log(approvalMatrix);
-    console.log(tableRows);
 
     // console.log(DataRows)
 
     const positionSearchHandler = (event) => {
         searchPosition = event.target.value;
-        // console.log(searchPosition);
+        console.log(searchPosition);
+
+
+
     }
     const heirarchySearchHandler = (event) => {
         searchHierarchy = event.target.value;
@@ -234,6 +186,30 @@ function Approval(props) {
     const approverSearchHandler = (event) => {
         searchApprover = event.target.value;
     }
+
+
+
+    // const rows = [
+    //     {
+    //         position: "data.position",
+    //         heirarchy: "data.hierarchyID.name",
+    //         branchname: "data.branchID.name",
+    //         cooling: "data.coolingPeriod",
+    //         verificationstatus: "data.verified",
+    //         tatdate: "data.tat",
+    //         approverName: "data.approversID[i]._id.name.firstName ",
+    //     },
+    //     {
+    //         position: "data.position",
+    //         heirarchy: "data.hierarchyID.name",
+    //         branchname: "data.branchID.name",
+    //         cooling: "data.coolingPeriod",
+    //         verificationstatus: "data.verified",
+    //         tatdate: "data.tat",
+    //         approverName: "data.approversID[i]._id.name.firstName ",
+    //     }
+    // ];
+
 
 
     const datatable = {
@@ -314,42 +290,28 @@ function Approval(props) {
         console.log(checkList);
     }
 
-    const filteredRows = [];
+
     const filterHandler = (event) => {
 
         if (checkList.includes("searchPosition")) {
-            DataRows.filter(data => data.position.toUpperCase().includes(searchPosition.toUpperCase())).map(data => filteredRows.push(data));
-            // console.log(pos);
-            // filteredRows.push(pos);
+            const pos = DataRows.filter(data => data.position.toUpperCase().includes(searchPosition.toUpperCase()))
+            console.log(pos);
         }
         if (checkList.includes("searchHeirarchy")) {
-            DataRows.filter(data => data.heirarchy.toUpperCase().includes(searchHierarchy.toUpperCase())).map(data => filteredRows.push(data));
-            // console.log(hei);
-            // filteredRows.push(hei);
+            const hei = DataRows.filter(data => data.heirarchy.toUpperCase().includes(searchHierarchy.toUpperCase()))
+            console.log(hei);
+
         }
         if (checkList.includes("searchBranch")) {
-            DataRows.filter(data => data.branchname.toUpperCase().includes(searchBranch.toUpperCase())).map(data => filteredRows.push(data))
-            // console.log(branch);
-            // filteredRows.push(branch);
+            const branch = DataRows.filter(data => data.branchname.toUpperCase().includes(searchBranch.toUpperCase()))
+            console.log(branch);
+
         }
         if (checkList.includes("searchApprover")) {
-
-            DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase())).map(data => filteredRows.push(data));
-            // console.log(app);
-            // filteredRows.push(app);
+            const app = DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase()))
+            console.log(app);
 
         }
-        console.log(filteredRows);
-        let updatedRows = [...new Set(filteredRows)];
-        console.log(updatedRows);
-        // tableRows = [];
-        // setTableRows([]);
-        // setTableRows(updatedRows);
-    }
-
-    const clearFilterHandler = () => {
-        // setTableRows([]);
-        // setTableRows(DataRows);
     }
 
 
@@ -400,6 +362,34 @@ function Approval(props) {
                                         </CRow>
                                     </CRow>
                                     <hr />
+                                    {/* <CRow>
+                                        <CFormCheck id="flexCheckDefault" label="By Cooling Period" value="searchCooling" onChange={changeValueHandler} />
+                                        <CRow>
+                                            <CFormControl
+                                                className="select"
+                                                type="number"
+                                                id="age"
+
+                                                onChange={coolingSearchHandler}
+                                            // required
+                                            />
+                                        </CRow>
+                                    </CRow>
+                                    <hr />
+                                    <CRow>
+                                        <CFormCheck id="flexCheckDefault" label="By TAT" value="searchTAT" />
+                                        <CRow>
+                                            <CFormControl
+                                                className="select"
+                                                type="number"
+                                                id="age"
+
+                                            // onChange={ageChangeHandler}
+                                            // required
+                                            />
+                                        </CRow>
+                                    </CRow> */}
+                                    <hr />
                                     <CRow>
                                         <CFormCheck id="flexCheckDefault" label="By Approver" value="searchApprover" onChange={changeValueHandler} />
                                         <CRow>
@@ -407,26 +397,40 @@ function Approval(props) {
                                         </CRow>
                                     </CRow>
                                     <CRow className="mt-4">
-                                        <CCol className="col-sm-4 mx-3">
-                                            <CButton shape="rounded-pill" onClick={filterHandler}>APPLY</CButton>
+                                        <CCol className="col-sm-2"></CCol>
+                                        <CCol className="col-sm-9">
+                                            <CButton onClick={filterHandler}>APPLY FILTER</CButton>
+
                                         </CCol>
-                                        {/* <CCol className="col-sm-4"></CCol> */}
-                                        <CCol className="col-sm-4 mx-3" >
-                                            <CButton onClick={clearFilterHandler} shape="rounded-pill" color="danger">CLEAR</CButton>
-                                        </CCol>
+
+                                        <CCol className="col-sm-2"></CCol>
+
                                     </CRow>
                                 </CRow>
                             </CCol>
 
                             <CCol className="col-sm-8 col-md-10 ">
                                 <CContainer fluid >
+                                    {/* <MDBDataTableV5
+                                        // small
+                                        hover
+                                        striped
+                                        fullPagination
+                                        entriesOptions={[5, 20, 25]}
+                                        entries={5}
+                                        bordered
+                                        
+                                        searchTop
+                                        searchBottom={false}
+                                        data={datatable}
+                                    />; */}
                                     <MDBDataTableV5 hover bordered
                                         entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4} scrollX data={widerData} fullPagination />
                                 </CContainer>
                             </CCol>
                         </CRow>
                     </CContainer>
-                    <CModal alignment="center" visible={visible}>
+                    {/* <CModal alignment="center" visible={visible}>
                         <CModalHeader onDismiss={() => setVisible(false)}>
                             <CModalTitle>Approval Status</CModalTitle>
                         </CModalHeader>
@@ -478,7 +482,7 @@ function Approval(props) {
                             </CButton>
                             <CButton color="primary">Save changes</CButton>
                         </CModalFooter>
-                    </CModal>
+                    </CModal>*/}
                 </div>
                 <AppFooter />
             </div>
