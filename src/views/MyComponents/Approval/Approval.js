@@ -291,27 +291,34 @@ function Approval(props) {
     }
 
 
+    const filteredRows = [];
     const filterHandler = (event) => {
-
         if (checkList.includes("searchPosition")) {
-            const pos = DataRows.filter(data => data.position.toUpperCase().includes(searchPosition.toUpperCase()))
-            console.log(pos);
+            DataRows.filter(data => data.position.toUpperCase().includes(searchPosition.toUpperCase())).map(data => filteredRows.push(data));
+            // console.log(pos);
+            // filteredRows.push(pos);
         }
         if (checkList.includes("searchHeirarchy")) {
-            const hei = DataRows.filter(data => data.heirarchy.toUpperCase().includes(searchHierarchy.toUpperCase()))
-            console.log(hei);
-
+            DataRows.filter(data => data.heirarchy.toUpperCase().includes(searchHierarchy.toUpperCase())).map(data => filteredRows.push(data));
+            // console.log(hei);
+            // filteredRows.push(hei);
         }
         if (checkList.includes("searchBranch")) {
-            const branch = DataRows.filter(data => data.branchname.toUpperCase().includes(searchBranch.toUpperCase()))
-            console.log(branch);
-
+            DataRows.filter(data => data.branchname.toUpperCase().includes(searchBranch.toUpperCase())).map(data => filteredRows.push(data))
+            // console.log(branch);
+            // filteredRows.push(branch);
         }
         if (checkList.includes("searchApprover")) {
-            const app = DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase()))
-            console.log(app);
-
+            DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase())).map(data => filteredRows.push(data));
+            // console.log(app);
+            // filteredRows.push(app);
         }
+        console.log(filteredRows);
+        let updatedRows = [...new Set(filteredRows)];
+        console.log(updatedRows);
+        // tableRows = [];
+        // setTableRows([]);
+        // setTableRows(updatedRows);
     }
 
 
