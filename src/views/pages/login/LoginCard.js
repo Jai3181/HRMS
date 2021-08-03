@@ -48,7 +48,7 @@ function LoginCard(props) {
                 if (data.token) {
                     console.log("entered here")
                     sessionStorage.setItem('token', JSON.stringify(data.token));
-                    // history.push("/mydashboard");
+                    history.push("/mydashboard");
                 }
 
                 dispatch({

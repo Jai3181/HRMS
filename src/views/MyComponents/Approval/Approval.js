@@ -333,11 +333,9 @@ function Approval(props) {
             // filteredRows.push(branch);
         }
         if (checkList.includes("searchApprover")) {
-
             DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase())).map(data => filteredRows.push(data));
             // console.log(app);
-            // filteredRows.push(app);
-
+            // filteredRows.push(app)
         }
         console.log(filteredRows);
         let updatedRows = [...new Set(filteredRows)];
