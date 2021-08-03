@@ -9,7 +9,7 @@ import { useStateValue } from "../../../StateProvider";
 import { useHistory } from "react-router-dom";
 
 const Login = () => {
-  const history = useHistory();
+  // const history = useHistory();
   const [reducerState, dispatch] = useStateValue()
   const token = reducerState.token
   const token2 = sessionStorage.getItem("token");
@@ -53,7 +53,7 @@ const Login = () => {
 
         </CRow>
       </CContainer>
-    </div >
+    </div>
   )
 }
 

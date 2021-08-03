@@ -4,7 +4,7 @@
 }
 
 .icon1{
-    left: 2%; position: relative; 
+    left: -2%; position: relative; 
     color: blue;
 }
 
@@ -12,7 +12,11 @@
     color: red;
 } */
 .icon2{
-    left: 10%; position: relative; 
+    left: 2%; position: relative; 
+    /* color: black; */
+}
+.icon3{
+    left: 6%; position: relative; 
     color:red;
 }
 
