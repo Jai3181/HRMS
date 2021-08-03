@@ -1,8 +1,5 @@
 import React from 'react'
 
-// examples
-// const MyDashboard = React.lazy(() => import('./views/dashboard/MyDashboard'))
-
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
@@ -75,7 +72,7 @@ const routes = [
   { path: '/branchManager', name: 'BranchManager', component: BranchManager },
   { path: '/hierarchyManager', name: 'HierarchyManager', component: HierarchyManager },
   { path: '/approval', name: 'Approval', component: Approval },
-  { path: '/viewapprovals', name: 'View Approval', component: ViewApprovals},
+  { path: '/viewapprovals', name: 'View Approval', component: ViewApprovals },
   { path: '/userprofile', name: 'User Profile', component: userProfile },
   // { path: '/approval', name: 'Approval', component: Approval },
 
