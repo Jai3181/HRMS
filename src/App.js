@@ -45,7 +45,8 @@ class App extends Component {
             <Route exact path="/approvalform" name="ApprovalForm" render={(props) => <ApprovalForm {...props} />} />
             <Route exact path="/viewapprovalform" name="ViewApprovalForm" render={(props) => <ViewApprovalForm {...props} />} />
             <Route exact path="/approval" name="Approval" render={(props) => <Approval {...props} />} />
-            <Route path="/" name="Home" render={(props) => <DefaultLayout {...props} />} />
+            <Route path="/dashboard" name="Home" render={(props) => <DefaultLayout {...props} />} />
+            <Route exact path="/" name="Login Page" render={(props) => <Login {...props} />} />
           </Switch>
         </React.Suspense>
       </BrowserRouter>

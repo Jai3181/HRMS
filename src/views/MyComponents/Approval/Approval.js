@@ -5,8 +5,8 @@ import { MDBDataTableV5 } from 'mdbreact';
 import { CContainer, CRow, CCol, CBadge, CButton, CFormCheck, CFormControl, CModalFooter, CModalBody, CModalTitle, CModalHeader, CModal } from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index';
 import endPoints from "../../../utils/EndPointApi";
-import { AiOutlineMinusCircle } from "react-icons/ai";
-import { BsEyeFill } from "react-icons/bs";
+// import { AiOutlineMinusCircle } from "react-icons/ai";
+// import { BsEyeFill } from "react-icons/bs";
 import "./Approval.css";
 import ViewApprovalForm from '../MRF/ViewApprovalForm';
 import Select from 'react-select';
@@ -288,7 +288,7 @@ function Approval(props) {
         ],
 
 
-        rows: tableRows
+        rows: DataRows
     }
     const widerData = {
         columns: [
@@ -316,6 +316,7 @@ function Approval(props) {
 
     const filteredRows = [];
     const filterHandler = (event) => {
+
         if (checkList.includes("searchPosition")) {
             DataRows.filter(data => data.position.toUpperCase().includes(searchPosition.toUpperCase())).map(data => filteredRows.push(data));
             // console.log(pos);
@@ -332,9 +333,11 @@ function Approval(props) {
             // filteredRows.push(branch);
         }
         if (checkList.includes("searchApprover")) {
+
             DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase())).map(data => filteredRows.push(data));
             // console.log(app);
             // filteredRows.push(app);
+
         }
         console.log(filteredRows);
         let updatedRows = [...new Set(filteredRows)];

@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import "./Login.css"
+import { BrowserRouter, Route, Switch, Router, withRouter, Redirect } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { CButton, CCard, CCardBody, CCol, CForm, CFormControl, CRow, CFormFloating, CFormLabel, CAlert } from '@coreui/react'
 import PropTypes from "prop-types";
 import endPoints from 'src/utils/EndPointApi';
 import { useStateValue } from "../../../StateProvider"
 import LoadingOverlay from 'react-loading-overlay';
+import { useHistory } from "react-router-dom";
 function LoginCard(props) {
-
+    // const history = useHistory();
+    const MyDashboard = React.lazy(() => import('../../dashboard/MyDashboard'))
     // const createAccountHandler = (event) => {
     //     props?.isNewUser(false);
     // }
@@ -16,6 +19,7 @@ function LoginCard(props) {
     const [enteredPassword, setEnteredPassword] = useState("");
     const [emailerrorMessage, setEmailerrorMessage] = useState(false);
     const [passworderrorMessage, setPassworderrorMessage] = useState(false);
+    // const [okLogin, setOkLogin] = useState(false);
 
 
     const emailChangeHandler = (event) => {
@@ -35,12 +39,16 @@ function LoginCard(props) {
         postData(endPoints.loginURL, credentials)
             .then(data => {
                 console.log(data);
-
                 if (data.email == "Invalid") {
                     setEmailerrorMessage(true);
                 }
                 if (data.password == "Invalid") {
                     setPassworderrorMessage(true);
+                }
+                if (data.token) {
+                    console.log("entered here")
+                    sessionStorage.setItem('token', JSON.stringify(data.token));
+                    // history.push("/mydashboard");
                 }
 
                 dispatch({
@@ -49,7 +57,9 @@ function LoginCard(props) {
                     userRole: data.role
                 }) // JSON data parsed by data.json() call
 
+
             });
+
         setEnteredEmail("");
         setEnteredPassword("");
     };
@@ -59,18 +69,15 @@ function LoginCard(props) {
         console.log(data)
         const response = await fetch(url, {
             // mode: 'no-cors',
-            method: 'POST', // *GET, POST, PUT, DELETE, etvc.
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
             headers: {
                 // "Access-Control-Allow-Origin": "*",
                 'Content-Type': 'application/json'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify(data)// body data type must match "Content-Type" header
         });
         return response.json(); // parses JSON response into native JavaScript objects
     }
-
-
     return (
         <CCard className="card_component mt-5">
             <CCardBody>
@@ -111,10 +118,6 @@ function LoginCard(props) {
 
                     </CFormFloating>
 
-
-
-
-
                     <CRow >
                         <CCol className="col-sm-8"></CCol>
                         <CCol className="col-sm-4"><CButton color="link" className="px-0 heading text-decoration-none">Forgot password?</CButton></CCol>
@@ -130,9 +133,7 @@ function LoginCard(props) {
                             <Link to="/register">
                                 <CButton color="link" className="px-0 heading text-decoration-none" >Create Account</CButton>
                             </Link>
-
                         </div>
-
                     </CCol>
 
                     <CCol className="col-sm-2"></CCol>
