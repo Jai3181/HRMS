@@ -345,15 +345,10 @@ function Approval(props) {
 
         }
         if (checkList.includes("searchApprover")) {
-<<<<<<< HEAD
-            const app = DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase()))
-            console.log(app);
-=======
             DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase())).map(data => filteredRows.push(data));
             // console.log(app);
             // filteredRows.push(app);
 
->>>>>>> 9bbcd57c6192b591aec96db3a06105f73a011a72
         }
         console.log(filteredRows);
         let updatedRows = [...new Set(filteredRows)];

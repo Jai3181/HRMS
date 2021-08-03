@@ -23,6 +23,7 @@ const EditMRFPage = React.lazy(() => import('./views/MyComponents/MRF/EditMRFPag
 const Approval = React.lazy(() => import('./views/MyComponents/Approval/Approval.js'))
 const ApprovalForm = React.lazy(() => import('./views/MyComponents/MRF/ApprovalForm.js'))
 const ViewApprovalForm = React.lazy(() => import('./views/MyComponents/MRF/ViewApprovalForm.js'))
+const NewUser = React.lazy(() => import('./views/MyComponents/UserManager/AddUserForm.js'))
 // const serviceWorker = React.lazy(() => import('../public/serviceWorker'))
 
 
@@ -40,13 +41,14 @@ class App extends Component {
             <Route exact path="/500" name="Page 500" render={(props) => <Page500 {...props} />} />
             <Route exact path="/mydashboard" name="My Dashboard" render={(props) => <MyDashboard {...props} />} />
             <Route exact path="/mrf" name="MRF" render={(props) => <MRF {...props} />} />
+            <Route exact path="/newuser" name="NewUser" render={(props) => <NewUser {...props} />} />
             <Route exact path="/CreateMRFPage" name="CreateMRFPage" render={(props) => <CreateMRFPage {...props} />} />
             <Route exact path="/EditMRFPage" name="EditMRFPage" render={(props) => <EditMRFPage {...props} />} />
             <Route exact path="/approvalform" name="ApprovalForm" render={(props) => <ApprovalForm {...props} />} />
             <Route exact path="/viewapprovalform" name="ViewApprovalForm" render={(props) => <ViewApprovalForm {...props} />} />
             <Route exact path="/approval" name="Approval" render={(props) => <Approval {...props} />} />
-            <Route path="/dashboard" name="Home" render={(props) => <DefaultLayout {...props} />} />
-            <Route exact path="/" name="Login Page" render={(props) => <Login {...props} />} />
+            <Route path="/" name="Home" render={(props) => <DefaultLayout {...props} />} />
+            {/* <Route exact path="/" name="Login Page" render={(props) => <Login {...props} />} /> */}
           </Switch>
         </React.Suspense>
       </BrowserRouter>

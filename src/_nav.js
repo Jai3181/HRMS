@@ -35,13 +35,6 @@ const _nav = [
   {
     _component: 'CNavItem',
     as: NavLink,
-    anchor: 'Settings',
-    to: '/settings',
-    icon: <CIcon name="cil-pencil" customClasses="nav-icon" />,
-  },
-  {
-    _component: 'CNavItem',
-    as: NavLink,
     anchor: 'UserManager',
     to: '/userManager',
     icon: <CIcon name="cil-pencil" customClasses="nav-icon" />,
