@@ -40,7 +40,7 @@ const AppHeader2 = () => {
                         </CNavLink>
                     </CNavItem>
                     <CNavItem>
-                        <CNavLink href="#">Users</CNavLink>
+                        <CNavLink href="/usermanager">Users</CNavLink>
                     </CNavItem>
                     {/* <CNavItem>
             <CNavLink href="#">Settings</CNavLink>
@@ -63,7 +63,7 @@ const AppHeader2 = () => {
                         </CNavLink>
                     </CNavItem>
                     <CNavItem>
-                        <CNavLink href="#">
+                        <CNavLink href="/settings">
                             <CIcon name="cilSettings" size="lg" />
                         </CNavLink>
                     </CNavItem>
