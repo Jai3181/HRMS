@@ -30,7 +30,7 @@ function ApprovalForm(props) {
     const [Approvers, setApprovers] = React.useState([]);
 
 
-    const token = reducerState.token;
+    const token = JSON.parse(sessionStorage.getItem("token"));
     const approverTemplate = {};
 
 

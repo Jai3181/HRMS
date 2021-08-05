@@ -6,7 +6,11 @@ export const initialState = {
     branchName: {},
     branchLocation: {},
     selectedApproval: "",
+<<<<<<< HEAD
+    token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGY1NTIzYjljMmNhZjAwMTUxMDQyNTIiLCJlbWFpbCI6ImpheWt1bWFyOTI0NkBnbWFpbC5jb20iLCJSb2xlIjoiU3VwZXItQWRtaW4iLCJpYXQiOjE2Mjc5ODE0NDIsImV4cCI6MTYyODAxNzQ0Mn0.hW71hR-Dlo81pPj_O2kQP7LJp3QmkURi3a0LzF_MYj8",
+=======
     token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGZiZjlmZTg2OGM0YTAwMTU0ZmQwY2YiLCJlbWFpbCI6InNhbmthbHAxNzI4QGdtYWlsLmNvbSIsIlJvbGUiOiJTdXBlci1BZG1pbiIsImlhdCI6MTYyNzk3NjE5MywiZXhwIjoxNjI4MDEyMTkzfQ.9uEnpf3p91I0EBS0wl2xa1zQz_ArN2PP62AeyYF5kqw",
+>>>>>>> deb25cb4f1a608a84031ca55d54daa053b4c2652
     userRole: "",
 }
 

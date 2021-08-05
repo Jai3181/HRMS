@@ -4,18 +4,21 @@ import { Link } from 'react-router-dom'
 import './MRFform.css'
 import { BsEyeFill } from "react-icons/bs";
 import { MDBDataTableV5 } from 'mdbreact';
-import {
-    CContainer, CRow, CCol, CButton, CFormCheck
-} from '@coreui/react'
+import { CContainer, CRow, CCol, CButton } from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index'
 import { useStateValue } from "../../../StateProvider";
 import "../Approval/Approval.css";
 
 export default function MRFform(props) {
     const [reducerState, dispatch] = useStateValue()
+<<<<<<< HEAD
+    // const token = reducerState.token
+    const token = JSON.parse(sessionStorage.getItem("token"));
+=======
     const token = reducerState.token
     // const token = sessionStorage.getItem("token");
 
+>>>>>>> deb25cb4f1a608a84031ca55d54daa053b4c2652
     const [mrfList, setMRFList] = useState()
     const [userList, setUserList] = useState()
     const [hierarchyList, setHierarchyList] = useState()
@@ -32,16 +35,6 @@ export default function MRFform(props) {
         console.log("event id: ", event.target.id)
         const mrfSelected = mrfList.filter((item) => item._id === event.target.id)
         sessionStorage.setItem("ViewMRF", JSON.stringify(mrfSelected))
-        // dispatch({
-        //     type: "VIEW_MRF",
-        //     // mrfID: event.target.id,
-        //     mrf: mrfSelected[0],
-        //     positions: positionNameOptions,
-        //     users: userNameOptions,
-        //     hierarchies: hierarchyNameOptions,
-        //     branchName: branchNameOptions,
-        //     branchLocation: branchLocationOptions,
-        // })
     }
     const createButtonHandler = () => {
         // console.log("event : ", event.target.id)
@@ -55,11 +48,9 @@ export default function MRFform(props) {
         //     branchLocation: branchLocationOptions,
         // })
     }
-    {/* <BsEyeFill className={item._id} id={item._id} /> */ }
     const tableRows = []
     {
         mrfList?.map(item => {
-            // console.log("item:", item)
             tableRows.push({
                 showButton: <Link to="/EditMrfPage"><BsEyeFill id={item._id} onClick={showButtonHandler} /></Link>,
                 position_id: item.designation.positionID.position,
@@ -153,7 +144,6 @@ export default function MRFform(props) {
             body: JSON.stringify(data)
         });
         const Data = await response.json();
-        // setIsLoading(false)
         return Data
     }
     const axios = require('axios').default;
