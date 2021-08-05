@@ -124,7 +124,7 @@ function AddUserForm(props) {
     const [objAccess, setObjAccess] = useState({})
     const [formState, dispatchForm] = useReducer(formReducer, InitialFormState)
     const [reducerState, dispatch] = useStateValue()
-    const token = reducerState.token
+    const token = JSON.parse(sessionStorage.getItem("token"));
 
     const clearHandler = (event) => {
         console.log("search cleared")
