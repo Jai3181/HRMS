@@ -11,7 +11,7 @@ import { MDBDataTableV5 } from 'mdbreact';
 
 function BranchManager(props) {
     const [reducerState, dispatch] = useStateValue()
-    const token = reducerState.token
+    const token = JSON.parse(sessionStorage.getItem("token"));
     const [isLoading, setIsLoading] = useState()
     const [visible, setVisible] = useState(false)
     const [enteredBranchLocation, setEnteredBranchLocation] = useState()

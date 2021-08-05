@@ -566,14 +566,14 @@ function AddUserForm(props) {
         }
         console.log("selectedUserRole", selectedUserRole)
         const selectedBranchLocation = {
-            label:"",
-            value:""
+            label: "",
+            value: ""
         }
         console.log("selectedBranchLocation", selectedBranchLocation)
         const selectedBranchName = {
-            label:"",
-            value:"",
-            location:""
+            label: "",
+            value: "",
+            location: ""
         }
         console.log("selectedBranchName", selectedBranchName)
     }
@@ -1174,7 +1174,7 @@ function AddUserForm(props) {
 
                             <CButton type="submit" color="primary" onClick={modalCloseHandler}>Add User</CButton>
 
-                            
+
 
                         </CCol>
                     </CForm>

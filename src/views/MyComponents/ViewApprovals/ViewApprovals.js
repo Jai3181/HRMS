@@ -18,7 +18,7 @@ function ViewApprovals() {
     const [activeKey, setActiveKey] = useState(1)
     const [showApproval, setShowApproval] = useState([]);
     const [remarks, setRemarks] = useState("");
-    const token = reducerState.token
+    const token = JSON.parse(sessionStorage.getItem("token"));
 
 
     const cardInfo = [

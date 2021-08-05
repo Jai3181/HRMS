@@ -23,7 +23,10 @@ import { useStateValue } from "../../../StateProvider"
 function Approval(props) {
     const [approvalMatrix, setApprovalMatrix] = useState([]);
     const [reducerState, dispatch] = useStateValue();
-    const token = reducerState.token;
+    // const token = reducerState.token;
+    const token = JSON.parse(sessionStorage.getItem("token"));
+    // console.log("token1: ", token, typeof (token))
+    console.log("token2: ", token, typeof (token2))
     // const [documentID, setDocumentID] = useState("");
     const [hierarchyList, setHierarchyList] = useState()
     const [branchList, setBranchList] = useState()
