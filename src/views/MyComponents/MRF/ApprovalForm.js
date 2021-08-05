@@ -10,8 +10,8 @@ import CreatableSelect from 'react-select/creatable';
 import { useStateValue } from "../../../StateProvider";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link } from 'react-router-dom';
-import { AiOutlineMinusCircle } from "react-icons/ai";
-import { AiOutlinePlusCircle } from "react-icons/ai";
+import { MdDelete } from "react-icons/md";
+import { BsPersonPlusFill } from "react-icons/bs";
 
 
 
@@ -49,10 +49,16 @@ function ApprovalForm(props) {
         setSelectApprover([...selectApprover, approverTemplate]);
 
     }
+    const deleteApprover = (index) => {
+        const filteredApprover = [...selectApprover];
+        filteredApprover.splice(index, 1);
+        setSelectApprover(filteredApprover);
+        console.log(filteredApprover);
+    }
 
     const onChangeApprover = (e, index) => {
         const updatedApprover = selectApprover.map((approver, i) =>
-            index == i ? Object.assign(approver, { "approverID": e.value }) : approver);
+            index == i ? Object.assign(approver, { "_id": e.value }) : approver);
         setSelectApprover(updatedApprover);
         console.log(selectApprover);
         console.log(updatedApprover);
@@ -317,14 +323,14 @@ function ApprovalForm(props) {
                             <CRow className="mb-3">
                                 <CFormLabel className="col-sm-2 col-form-label">Approvers</CFormLabel>
 
-                                <CCol sm="10">
+                                <CCol sm="10" lg="6">
                                     {selectApprover.map((approver, index) => (
 
                                         <CRow key={index}>
-                                            <CCol sm="2" className="my-2">
-                                                <CFormLabel >Approver-{index + 1} :</CFormLabel>
+                                            <CCol sm="3" lg="2" className="my-2">
+                                                <CFormLabel >Approver-{index + 1}:</CFormLabel>
                                             </CCol>
-                                            <CCol sm="4">
+                                            <CCol sm="7" lg="9">
                                                 <Select
                                                     name="approver"
                                                     options={ApproverNameOptions}
@@ -333,13 +339,10 @@ function ApprovalForm(props) {
                                                     onChange={e => onChangeApprover(e, index)}
                                                 />
                                             </CCol>
-                                            <CCol sm="2">
+                                            <CCol sm="2" lg="1">
                                                 <div className="my-2">
-                                                    <AiOutlineMinusCircle className="mx-1"
 
-                                                    />
-                                                    <AiOutlinePlusCircle className="mx-1 " onClick={addApprover} />
-
+                                                    <MdDelete size={23} className="mx-1 remove" onClick={() => deleteApprover(index)} />
                                                 </div>
                                             </CCol>
 
@@ -347,6 +350,11 @@ function ApprovalForm(props) {
 
 
                                     ))}
+                                    <div className="my-3 center">
+                                        <CButton size="sm" shape="rounded-pill" onClick={addApprover}><BsPersonPlusFill size={15} className="mb-1 mx-1" />  Add Approver</CButton>
+
+                                    </div>
+
                                 </CCol>
 
 
@@ -355,7 +363,7 @@ function ApprovalForm(props) {
 
                             </CRow>
                             <div className="center mt-3 mb-3">
-                                <CButton type="submit" >Submit</CButton>
+                                <CButton type="submit" size="lg" >Submit</CButton>
                             </div>
 
 

@@ -8,7 +8,7 @@ import endPoints from "../../../utils/EndPointApi";
 // import { AiOutlineMinusCircle } from "react-icons/ai";
 // import { BsEyeFill } from "react-icons/bs";
 import "./Approval.css";
-import ViewApprovalForm from '../MRF/ViewApprovalForm'; 
+import ViewApprovalForm from '../MRF/ViewApprovalForm';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { useStateValue } from "../../../StateProvider";
@@ -321,6 +321,11 @@ function Approval(props) {
         // setTableRows(updatedRows);
     }
 
+    const clearFilterHandler = () => {
+        // setTableRows([]);
+        // setTableRows(DataRows);
+    }
+
 
 
 
@@ -404,33 +409,19 @@ function Approval(props) {
                                         </CRow>
                                     </CRow>
                                     <CRow className="mt-4">
-                                        <CCol className="col-sm-2"></CCol>
-                                        <CCol className="col-sm-9">
-                                            <CButton onClick={filterHandler}>APPLY FILTER</CButton>
-
+                                        <CCol className="col-sm-4 mx-3">
+                                            <CButton shape="rounded-pill" onClick={filterHandler}>APPLY</CButton>
                                         </CCol>
-
-                                        <CCol className="col-sm-2"></CCol>
-
+                                        {/* <CCol className="col-sm-4"></CCol> */}
+                                        <CCol className="col-sm-4 mx-3" >
+                                            <CButton onClick={clearFilterHandler} shape="rounded-pill" color="danger">CLEAR</CButton>
+                                        </CCol>
                                     </CRow>
                                 </CRow>
                             </CCol>
 
                             <CCol className="col-sm-8 col-md-10 ">
                                 <CContainer fluid >
-                                    {/* <MDBDataTableV5
-                                        // small
-                                        hover
-                                        striped
-                                        fullPagination
-                                        entriesOptions={[5, 20, 25]}
-                                        entries={5}
-                                        bordered
-                                        
-                                        searchTop
-                                        searchBottom={false}
-                                        data={datatable}
-                                    />; */}
                                     <MDBDataTableV5 hover bordered
                                         entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4} scrollX data={widerData} fullPagination />
                                 </CContainer>
