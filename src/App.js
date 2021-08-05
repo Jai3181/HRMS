@@ -24,7 +24,10 @@ const EditMRFPage = React.lazy(() => import('./views/MyComponents/MRF/EditMRFPag
 const Approval = React.lazy(() => import('./views/MyComponents/Approval/Approval.js'))
 const ApprovalForm = React.lazy(() => import('./views/MyComponents/MRF/ApprovalForm.js'))
 const ViewApprovalForm = React.lazy(() => import('./views/MyComponents/MRF/ViewApprovalForm.js'))
+
+
 const NewUser = React.lazy(() => import('./views/MyComponents/UserManager/AddUserForm.js'))
+const ApprovalStatus = React.lazy(() => import('./views/MyComponents/ApprovalStatus/ApprovalStatus.js'));
 // const serviceWorker = React.lazy(() => import('../public/serviceWorker'))
 
 
@@ -48,6 +51,7 @@ class App extends Component {
             <Route exact path="/approvalform" name="ApprovalForm" render={(props) => <ApprovalForm {...props} />} />
             <Route exact path="/viewapprovalform" name="ViewApprovalForm" render={(props) => <ViewApprovalForm {...props} />} />
             <Route exact path="/approval" name="Approval" render={(props) => <Approval {...props} />} />
+            <Route exact path="/ApprovalStatus" name="ApprovalStatus" render={(props) => <ApprovalStatus {...props} />} />
             <Route path="/" name="Home" render={(props) => <DefaultLayout {...props} />} />
             {/* <Route exact path="/" name="Login Page" render={(props) => <Login {...props} />} /> */}
           </Switch>

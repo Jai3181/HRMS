@@ -89,6 +89,13 @@ const _nav = [
     icon: <CIcon name="cil-pencil" customClasses="nav-icon" />,
   },
   {
+    _component: 'CNavItem',
+    as: NavLink,
+    anchor: 'Approval Status',
+    to: '/ApprovalStatus',
+    icon: <CIcon name="cil-pencil" customClasses="nav-icon" />,
+  },
+  {
     _component: 'CNavTitle',
     anchor: 'Theme',
   },

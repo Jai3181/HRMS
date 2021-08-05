@@ -53,14 +53,3 @@
      background-color : #EBEDEF !important;
 }
 
-.add:hover{
-    color :blue;
-    /* box-shadow: 0 0 5px blue; */
-
-}
-.remove:hover{
-    color: red;
-    /* box-shadow: 10px 10px 10px red; */
-
-}
-
