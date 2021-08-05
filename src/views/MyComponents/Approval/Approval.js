@@ -1,21 +1,42 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import '../MRF/MRFform.css'
 import { MDBDataTableV5 } from 'mdbreact';
-import {
-    CContainer, CRow, CCol, CButton, CFormCheck,
-    CFormControl
-} from '@coreui/react'
+import { CContainer, CRow, CCol, CBadge, CButton, CFormCheck, CFormControl, CModalFooter, CModalBody, CModalTitle, CModalHeader, CModal } from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index';
 import endPoints from "../../../utils/EndPointApi";
 // import { AiOutlineMinusCircle } from "react-icons/ai";
 // import { BsEyeFill } from "react-icons/bs";
 import "./Approval.css";
-// import ViewApprovalForm from '../MRF/ViewApprovalForm';
-// import Select from 'react-select';
-// import CreatableSelect from 'react-select/creatable';
-import { useStateValue } from "../../../StateProvider"
+import ViewApprovalForm from '../MRF/ViewApprovalForm';
+import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
+import { useStateValue } from "../../../StateProvider";
+import { makeStyles } from '@material-ui/core/styles';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepContent from '@material-ui/core/StepContent';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+    },
+    button: {
+        marginTop: theme.spacing(1),
+        marginRight: theme.spacing(1),
+    },
+    actionsContainer: {
+        marginBottom: theme.spacing(2),
+    },
+    resetContainer: {
+        padding: theme.spacing(3),
+    },
+}));
 
 
 
@@ -32,10 +53,8 @@ function Approval(props) {
     const [branchList, setBranchList] = useState()
     const [userList, setUserList] = useState()
     const [tableRows, setTableRows] = useState([]);
-
+    const [visible, setVisible] = useState(false);
     // console.log(tableRows);
-
-
     var searchPosition;
     var searchHierarchy;
     var searchBranch;
@@ -46,6 +65,39 @@ function Approval(props) {
     if (hierarchyList) { localStorage.setItem("hierarchyList", JSON.stringify(hierarchyList)) }
     if (branchList) { localStorage.setItem("branchList", JSON.stringify(branchList)) }
 
+
+    const classes = useStyles();
+    const [activeStep, setActiveStep] = React.useState(0);
+    const steps = getSteps();
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+    const handleReset = () => {
+        setActiveStep(0);
+    };
+
+    function getSteps() {
+        return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+    }
+
+    function getStepContent(step) {
+        switch (step) {
+            case 0:
+                return `For each ad campaign that you create, you can control how much
+              you're willing to spend on clicks and conversions, which networks
+              and geographical locations you want your ads to show on, and more.`;
+            case 1:
+                return 'An ad group contains one or more ads which target a shared set of keywords.';
+            case 2:
+                return `Try out different ad text to see what brings in the most customers,
+                 they're running and how to resolve approval issues.`;
+            default:
+                return 'Unknown step';
+        }
+    }
 
 
     async function showData(url) {
@@ -97,27 +149,8 @@ function Approval(props) {
             type: "VIEW_APPROVAL",
             approvalID: event.target.id
         })
-
     }
 
-
-
-
-    async function showApprovalMatrix(url) {
-        // console.log("in show users")
-        // setIsLoading(true)
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-        });
-        const Data = await response.json();
-        // setIsLoading(false)
-        // console.log(Data2);
-        return Data
-    }
 
     async function deleteMatrix(url, data) {
         // console.log("in post data")
@@ -136,57 +169,37 @@ function Approval(props) {
         return Data1
     }
 
-    // useEffect(() => {
-
-    //     showApprovalMatrix(endPoints.showApprovalMatrix).then(Data => {
-    //         setApprovalMatrix(Data)
-
-    //     });
-
-    // }, [])
-    // var documentID = "";
-
     const dataDeleteHandler = (event) => {
         console.log("deleted")
         const documentID = event.target.id;
         // approvalMatrix?.map(data => {
         //     documentID = data._id;
         // })
-
         deleteMatrix(endPoints.deleteApprovalMatrix, { _id: documentID }).then(Data => { console.log(Data) });
         console.log(typeof (documentID));
-
-
     }
 
 
     var approverList = "";
-
     const DataRows = []
     {
         approvalMatrix?.map(data => {
             {
-
                 for (var i = 0; i < data.approversID.length; i++) {
-
                     approverList += [i + 1] + "." + "" + data.approversID[i]._id.name.firstName + " " + data.approversID[i]._id.name.lastName + " ";
                     var approverListfinal = approverList;
-
                 }
-
                 approverList = "";
-
                 console.log(approverListfinal);
             }
-
             console.log(data)
             {
                 DataRows.push({
                     document_id: data._id,
                     delete: <div className="icons">
-                        <Link to="/viewapprovalform"><CButton variant="ghost" id={data._id} className="icon1" onClick={pageChangeHandler}>View</CButton></Link>
-                        <CButton variant="ghost" color="danger" className="icon2" onClick={dataDeleteHandler} id={data._id} >Delete</CButton>
-
+                        <Link to="/viewapprovalform"><CButton size="sm" color="primary" variant="ghost" id={data._id} className="icon1" onClick={pageChangeHandler}>Edit</CButton></Link>
+                        <CButton variant="ghost" color="info" size="sm" className="icon2" id={data._id} onClick={() => setVisible(!visible)} >View</CButton>
+                        <CButton variant="ghost" color="danger" size="sm" className="icon3" onClick={dataDeleteHandler} id={data._id} >Delete</CButton>
                     </div>,
                     position: data.position,
                     heirarchy: data.hierarchyID.name,
@@ -195,19 +208,13 @@ function Approval(props) {
                     verified: data.verified.toString(),
                     tatdate: data.tat,
                     approverName: approverListfinal,
-
                 })
                 // setTableRows(DataRows);
-
             }
-
         });
-
-        tableRows.push(...DataRows);
-
-
+        setTableRows(DataRows);
+        // tableRows.push(...DataRows);
     }
-
 
 
 
@@ -220,35 +227,24 @@ function Approval(props) {
     const positionSearchHandler = (event) => {
         searchPosition = event.target.value;
         // console.log(searchPosition);
-
-
-
     }
-
     const heirarchySearchHandler = (event) => {
         searchHierarchy = event.target.value;
-
     }
-
     const branchSearchHandler = (event) => {
         searchBranch = event.target.value;
-
     }
     const approverSearchHandler = (event) => {
         searchApprover = event.target.value;
-
     }
-
 
 
     const datatable = {
         columns: [
-
             {
                 label: '',
                 field: 'delete',
-                width: 20
-
+                width: 200
             },
             {
                 label: 'position',
@@ -262,8 +258,6 @@ function Approval(props) {
                 sort: 'asc',
                 width: 50
             },
-
-
             {
                 label: 'Branch Name',
                 field: 'branchname',
@@ -276,7 +270,6 @@ function Approval(props) {
                 sort: 'asc',
                 width: 50
             },
-
             {
                 label: 'TAT',
                 field: 'tatdate',
@@ -298,7 +291,7 @@ function Approval(props) {
         ],
 
 
-        rows: tableRows
+        rows: DataRows
     }
     const widerData = {
         columns: [
@@ -317,9 +310,6 @@ function Approval(props) {
     const changeValueHandler = (event) => {
         if (event.target.checked) {
             checkList.push(event.target.value);
-
-
-
         } else if (event.target.checked == false) {
             const index1 = checkList.indexOf(event.target.value);
             checkList.splice(index1, 1);
@@ -339,31 +329,28 @@ function Approval(props) {
             DataRows.filter(data => data.heirarchy.toUpperCase().includes(searchHierarchy.toUpperCase())).map(data => filteredRows.push(data));
             // console.log(hei);
             // filteredRows.push(hei);
-
         }
         if (checkList.includes("searchBranch")) {
             DataRows.filter(data => data.branchname.toUpperCase().includes(searchBranch.toUpperCase())).map(data => filteredRows.push(data))
             // console.log(branch);
             // filteredRows.push(branch);
-
         }
         if (checkList.includes("searchApprover")) {
             DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase())).map(data => filteredRows.push(data));
             // console.log(app);
-            // filteredRows.push(app);
-
+            // filteredRows.push(app)
         }
         console.log(filteredRows);
         let updatedRows = [...new Set(filteredRows)];
         console.log(updatedRows);
         // tableRows = [];
-        setTableRows([]);
-        setTableRows(updatedRows);
+        // setTableRows([]);
+        // setTableRows(updatedRows);
     }
 
     const clearFilterHandler = () => {
-        setTableRows([]);
-        setTableRows(DataRows);
+        // setTableRows([]);
+        // setTableRows(DataRows);
     }
 
 
@@ -393,9 +380,7 @@ function Approval(props) {
                                         <CFormCheck id="flexCheckDefault" label="By Position" value="searchPosition" onChange={changeValueHandler} />
                                         <CRow>
                                             <input className="input" type="text" placeholder="enter position" onChange={positionSearchHandler} />
-
                                         </CRow>
-
                                     </CRow>
                                     <hr />
                                     <CRow>
@@ -423,20 +408,15 @@ function Approval(props) {
                                         </CRow>
                                     </CRow>
                                     <CRow className="mt-4">
-
                                         <CCol className="col-sm-4 mx-3">
                                             <CButton shape="rounded-pill" onClick={filterHandler}>APPLY</CButton>
-
                                         </CCol>
                                         {/* <CCol className="col-sm-4"></CCol> */}
                                         <CCol className="col-sm-4 mx-3" >
                                             <CButton onClick={clearFilterHandler} shape="rounded-pill" color="danger">CLEAR</CButton>
-
                                         </CCol>
                                     </CRow>
-
                                 </CRow>
-
                             </CCol>
 
                             <CCol className="col-sm-8 col-md-10 ">
@@ -447,6 +427,59 @@ function Approval(props) {
                             </CCol>
                         </CRow>
                     </CContainer>
+                    <CModal alignment="center" visible={visible}>
+                        <CModalHeader onDismiss={() => setVisible(false)}>
+                            <CModalTitle>Approval Status</CModalTitle>
+                        </CModalHeader>
+                        <CModalBody>
+                            <div className={classes.root}>
+                                <Stepper activeStep={activeStep} orientation="vertical">
+                                    {steps.map((label, index) => (
+                                        <Step key={label}>
+                                            <StepLabel>{label}</StepLabel>
+                                            <StepContent>
+                                                <Typography>{getStepContent(index)}</Typography>
+                                                <div className={classes.actionsContainer}>
+                                                    <div>
+                                                        <Button
+                                                            disabled={activeStep === 0}
+                                                            onClick={handleBack}
+                                                            className={classes.button}
+                                                        >
+                                                            Back
+                                                        </Button>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            onClick={handleNext}
+                                                            className={classes.button}
+                                                        >
+                                                            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </StepContent>
+                                        </Step>
+                                    ))}
+                                </Stepper>
+                                {activeStep === steps.length && (
+                                    <Paper square elevation={0} className={classes.resetContainer}>
+                                        <Typography>All steps completed - you&apos;re finished</Typography>
+                                        <Button onClick={handleReset} className={classes.button}>
+                                            Reset
+                                        </Button>
+                                    </Paper>
+                                )}
+                            </div>
+
+                        </CModalBody>
+                        <CModalFooter>
+                            <CButton color="secondary" onClick={() => setVisible(false)}>
+                                Close
+                            </CButton>
+                            <CButton color="primary">Save changes</CButton>
+                        </CModalFooter>
+                    </CModal>
                 </div>
                 <AppFooter />
             </div>
@@ -454,6 +487,3 @@ function Approval(props) {
     );
 }
 export default Approval;
-
-//filterbar align-self-start align-items-center justify-content-center
-//mainContent align-self-end align-items-center justify-content-center

@@ -9,7 +9,7 @@ import { useStateValue } from "../../../StateProvider"
 import LoadingOverlay from 'react-loading-overlay';
 import { useHistory } from "react-router-dom";
 function LoginCard(props) {
-    const history = useHistory();
+    // const history = useHistory();
     const MyDashboard = React.lazy(() => import('../../dashboard/MyDashboard'))
     // const createAccountHandler = (event) => {
     //     props?.isNewUser(false);

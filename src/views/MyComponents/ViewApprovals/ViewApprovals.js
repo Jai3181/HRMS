@@ -114,10 +114,11 @@ function ViewApprovals() {
                         </div>
 
                     </CCardBody>
-                    <CModal visible={visible} onDismiss={() => setVisible(false)} className="align-align-items-center mt-5">
+                    <CModal alignment="center" visible={visible}>
                         <CModalHeader onDismiss={() => setVisible(false)}>
-                            <CModalTitle>REMARKS!</CModalTitle>
+                            <CModalTitle>Remarks!</CModalTitle>
                         </CModalHeader>
+
                         <CModalBody>
                             <CFormControl
                                 size="sm"
