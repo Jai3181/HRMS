@@ -125,6 +125,15 @@ export default function MRFform(props) {
         ],
         rows: tableRows
     }
+    const widerData = {
+        columns: [
+            ...dataTable.columns.map((col) => {
+                col.width = 200;
+                return col;
+            }),
+        ],
+        rows: [...dataTable.rows],
+    }
 
     async function postData(url, data) {
         // setIsLoading(true)
@@ -294,7 +303,7 @@ export default function MRFform(props) {
                                         scrollX
                                         searchTop
                                         searchBottom={false}
-                                        data={dataTable}
+                                        data={widerData}
                                     />;
                                 </CContainer>
                             </CCol>

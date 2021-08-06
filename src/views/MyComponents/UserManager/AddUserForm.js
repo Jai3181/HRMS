@@ -503,9 +503,12 @@ function AddUserForm(props) {
             userList?.map(user => {
                 tableRows.push({
                     // removeButton: <button className="remove_button" onClick={deleteUserHandler}><AiOutlineMinusCircle className={user._id} /></button>,
-                    removeButton: <CButton variant="ghost" color="danger" size="sm" className="icon3" onClick={deleteUserHandler} id={user._id} >Delete</CButton>,
+                    Buttons: <div className="d-flex justify-content-around">
+                        <CButton variant="ghost" color="danger" size="sm" className="icon3" onClick={deleteUserHandler} id={user._id} >Delete</CButton>
+                        <CButton variant="ghost" color="primary" size="sm" className="icon3" onClick={viewUserHandler} id={user._id} >View</CButton>
+                    </div>,
                     // showButton: <button className="remove_button" id={user._id} onClick={viewUserHandler}><GrView className={user._id} /></button>,
-                    showButton: <CButton variant="ghost" color="primary" size="sm" className="icon3" onClick={viewUserHandler} id={user._id} >View</CButton>,
+                    // showButton: 
                     full_name: user.name.firstName + " " + user.name.lastName,
                     // first_name: user.name.firstName,
                     // last_name: user.name.lastName,
@@ -528,14 +531,14 @@ function AddUserForm(props) {
         columns: [
             {
                 label: '',
-                field: 'removeButton',
+                field: 'Buttons',
                 width: 50,
             },
-            {
-                label: '',
-                field: 'showButton',
-                width: 50,
-            },
+            // {
+            //     label: '',
+            //     field: 'showButton',
+            //     width: 50,
+            // },
             {
                 label: 'Full Name',
                 field: 'full_name',
@@ -592,6 +595,15 @@ function AddUserForm(props) {
             },
         ],
         rows: tableRows
+    }
+    const widerData = {
+        columns: [
+            ...dataTable.columns.map((col) => {
+                col.width = 200;
+                return col;
+            }),
+        ],
+        rows: [...dataTable.rows],
     }
 
     const modalCloseHandler = () => {
@@ -659,17 +671,17 @@ function AddUserForm(props) {
                 </CForm>
             </CRow>
             <MDBDataTableV5
-                small
+                // small
                 hover
                 // striped
                 fullPagination
                 entriesOptions={[5, 10, 20]}
                 entries={5}
-                // bordered
+                bordered
                 scrollX
                 searchTop={false}
                 searchBottom={false}
-                data={dataTable}
+                data={widerData}
             />;
             <CModal size="xl" alignment="center" visible={visible} backdrop={true}>
                 <CModalHeader onDismiss={modalCloseHandler}>
@@ -1199,10 +1211,7 @@ function AddUserForm(props) {
 
                         <CCol className="d-flex align-items-center justify-content-center">
 
-                            <CButton type="submit" color="primary" onClick={modalCloseHandler}>Save Changes</CButton>
-
-
-
+                            <CButton type="submit" color="primary" onClick={modal2CloseHandler}>Save Changes</CButton>
                         </CCol>
                     </CForm>
                 </CModalBody>
