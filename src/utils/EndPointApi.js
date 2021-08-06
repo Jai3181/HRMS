@@ -30,6 +30,7 @@ const endPoints = {
     getRecruiter: baseLink + "/recruiter",
     settings: baseLink + "/settings"
 
+
 }
 
 module.exports = endPoints;

@@ -16,7 +16,7 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 // import { Stepper } from "@progress/kendo-react-layout";
-import '@progress/kendo-theme-default/dist/all.css';
+// import '@progress/kendo-theme-default/dist/all.css';
 
 
 const useStyles = makeStyles((theme) => ({

@@ -495,12 +495,6 @@ function RecruiterManager(props) {
         sort: 'disabled',
         width: 200,
       },
-      // {
-      //   label: 'User Type',
-      //   field: 'user_type',
-      //   sort: 'disabled',
-      //   width: 150,
-      // },
       {
         label: 'User Role',
         field: 'user_role',
