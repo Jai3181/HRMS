@@ -12,19 +12,23 @@ import ViewApprovalForm from '../MRF/ViewApprovalForm';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { useStateValue } from "../../../StateProvider";
-
-
-
+import { makeStyles } from '@material-ui/core/styles';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepContent from '@material-ui/core/StepContent';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 
 
 function Approval(props) {
     const [approvalMatrix, setApprovalMatrix] = useState([]);
     const [reducerState, dispatch] = useStateValue();
-    // const token = reducerState.token;
     const token = JSON.parse(sessionStorage.getItem("token"));
     // console.log("token1: ", token, typeof (token))
-    // console.log("token2: ", token, typeof (token2))
+    console.log("token2: ", token, typeof (token2))
     // const [documentID, setDocumentID] = useState("");
     const [hierarchyList, setHierarchyList] = useState()
     const [branchList, setBranchList] = useState()
@@ -36,10 +40,10 @@ function Approval(props) {
     var searchBranch;
     var searchApprover;
 
-    if (approvalMatrix) { sessionStorage.setItem("approvalMatrix", JSON.stringify(approvalMatrix)) }
-    if (userList) { sessionStorage.setItem("userList", JSON.stringify(userList)) }
-    if (hierarchyList) { sessionStorage.setItem("hierarchyList", JSON.stringify(hierarchyList)) }
-    if (branchList) { sessionStorage.setItem("branchList", JSON.stringify(branchList)) }
+    if (approvalMatrix) { localStorage.setItem("approvalMatrix", JSON.stringify(approvalMatrix)) }
+    if (userList) { localStorage.setItem("userList", JSON.stringify(userList)) }
+    if (hierarchyList) { localStorage.setItem("hierarchyList", JSON.stringify(hierarchyList)) }
+    if (branchList) { localStorage.setItem("branchList", JSON.stringify(branchList)) }
 
 
     async function showData(url) {
@@ -85,7 +89,7 @@ function Approval(props) {
         // const ApprovalSelected = approvalMatrix.filter((item) => item._id === event.target.id)
         // localStorage.setItem("approval selected", JSON.stringify(ApprovalSelected))
         console.log("event id: ", event.target.id)
-        sessionStorage.setItem("eventID", JSON.stringify(event.target.id));
+        localStorage.setItem("eventID", JSON.stringify(event.target.id));
         dispatch({
             type: "VIEW_APPROVAL",
             approvalID: event.target.id
@@ -180,6 +184,29 @@ function Approval(props) {
     const approverSearchHandler = (event) => {
         searchApprover = event.target.value;
     }
+
+
+
+    // const rows = [
+    //     {
+    //         position: "data.position",
+    //         heirarchy: "data.hierarchyID.name",
+    //         branchname: "data.branchID.name",
+    //         cooling: "data.coolingPeriod",
+    //         verificationstatus: "data.verified",
+    //         tatdate: "data.tat",
+    //         approverName: "data.approversID[i]._id.name.firstName ",
+    //     },
+    //     {
+    //         position: "data.position",
+    //         heirarchy: "data.hierarchyID.name",
+    //         branchname: "data.branchID.name",
+    //         cooling: "data.coolingPeriod",
+    //         verificationstatus: "data.verified",
+    //         tatdate: "data.tat",
+    //         approverName: "data.approversID[i]._id.name.firstName ",
+    //     }
+    // ];
 
 
 
@@ -399,6 +426,59 @@ function Approval(props) {
                             </CCol>
                         </CRow>
                     </CContainer>
+                    {/* <CModal alignment="center" visible={visible}>
+                        <CModalHeader onDismiss={() => setVisible(false)}>
+                            <CModalTitle>Approval Status</CModalTitle>
+                        </CModalHeader>
+                        <CModalBody>
+                            <div className={classes.root}>
+                                <Stepper activeStep={activeStep} orientation="vertical">
+                                    {steps.map((label, index) => (
+                                        <Step key={label}>
+                                            <StepLabel>{label}</StepLabel>
+                                            <StepContent>
+                                                <Typography>{getStepContent(index)}</Typography>
+                                                <div className={classes.actionsContainer}>
+                                                    <div>
+                                                        <Button
+                                                            disabled={activeStep === 0}
+                                                            onClick={handleBack}
+                                                            className={classes.button}
+                                                        >
+                                                            Back
+                                                        </Button>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            onClick={handleNext}
+                                                            className={classes.button}
+                                                        >
+                                                            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </StepContent>
+                                        </Step>
+                                    ))}
+                                </Stepper>
+                                {activeStep === steps.length && (
+                                    <Paper square elevation={0} className={classes.resetContainer}>
+                                        <Typography>All steps completed - you&apos;re finished</Typography>
+                                        <Button onClick={handleReset} className={classes.button}>
+                                            Reset
+                                        </Button>
+                                    </Paper>
+                                )}
+                            </div>
+
+                        </CModalBody>
+                        <CModalFooter>
+                            <CButton color="secondary" onClick={() => setVisible(false)}>
+                                Close
+                            </CButton>
+                            <CButton color="primary">Save changes</CButton>
+                        </CModalFooter>
+                    </CModal>*/}
                 </div>
                 <AppFooter />
             </div>
