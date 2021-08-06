@@ -63,12 +63,12 @@ function MrfDistribution() {
             </div>
 
           </CCardBody>
-          <CModal size="lg" alignment="center" visible={visible}>
+          <CModal size="lg" alignment="center" visible={visible} backdrop={true}>
             <CModalHeader onDismiss={() => setVisible(false)}>
               <CModalTitle>MRF Distribution</CModalTitle>
             </CModalHeader>
 
-            <CModalBody>
+            <CModalBody className="bg-light">
               <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat aliquid odit aspernatur voluptatum beatae aliquam, repellendus molestias. Nulla praesentium dolore tempore fuga ex tenetur. Aut ullam illum, totam commodi vel velit dicta eveniet quas assumenda similique enim, harum, eligendi architecto ut id mollitia ipsum doloremque sequi nostrum soluta minima! Assumenda esse laudantium dolorem ad dolore distinctio, eius debitis fugiat libero?</p>
               <h4 alignment="center">Distribution :</h4>
               <h6>No.of Approvals left : {leftApprovals}</h6>

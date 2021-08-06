@@ -24,8 +24,8 @@ function ViewApprovalForm(props) {
     const [BranchData, setBranchData] = React.useState([]);
     const [Approvers, setApprovers] = React.useState([]);
 
-    const getData = localStorage.getItem("approvalMatrix");
-    const getID = JSON.parse(localStorage.getItem("eventID"));
+    const getData = sessionStorage.getItem("approvalMatrix");
+    const getID = JSON.parse(sessionStorage.getItem("eventID"));
     console.log(getID);
     // const newdata = JSON.parse(getData);
     // console.log(getData)
@@ -193,7 +193,7 @@ function ViewApprovalForm(props) {
                                         placeholder={finalData.hierarchyID.type}
                                         // onChange={hNameChangeHandler}
                                         required
-                                        readonly
+                                        readOnly
                                     />
                                 </CCol>
 

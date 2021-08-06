@@ -146,38 +146,6 @@ function UserProfile() {
         postData(endPoints.postUserProfile, { role: newRole, access: Access }).then(res => console.log(res));
 
     }
-
-
-    // const permissions = {
-    //     columns: [
-    //         {
-    //             label: 'Roles',
-    //             field: 'roles',
-    //             width: 100
-
-    //         },
-
-    //     ],
-    //     rows: [
-    //         {
-    //             roles: <div className="column1 ">
-    //                 <h6 className="mx-5">ADD User</h6>
-    //                 <CFormCheck
-    //                     className="mx-5"
-    //                     switch
-    //                     id="formSwitchCheckDefault"
-    //                 /></div>
-    //         }
-    //     ]
-
-    // }
-
-
-
-
-
-
-
     const datatable = {
         columns: [
 
@@ -213,7 +181,7 @@ function UserProfile() {
                 <CContainer fluid className="justify-content-between">
                     <CRow>
                         <CContainer fluid >
-                            <MDBDataTableV5 hover data={datatable} searchBottom={false} searchTop={false} scrollY paging={false} />
+                            <MDBDataTableV5 hover data={datatable} searchBottom={false} searchTop={false} paging={false} fullPagination />
                         </CContainer>
 
                     </CRow>
@@ -223,7 +191,7 @@ function UserProfile() {
                     <CModalHeader onDismiss={() => setVisible(false)}>
                         <CModalTitle>{userRole}-Permissions</CModalTitle>
                     </CModalHeader>
-                    <CModalBody>
+                    <CModalBody className="bg-light">
                         <CTable>
                             <CTableHead>
                                 <CTableRow>
@@ -295,7 +263,7 @@ function UserProfile() {
                     <CModalHeader onDismiss={() => setVisibleOne(false)}>
                         <CModalTitle>ADD NEW ROLE</CModalTitle>
                     </CModalHeader>
-                    <CModalBody>
+                    <CModalBody className="bg-light">
                         <CRow className="mb-3">
                             <CFormLabel htmlFor="roleName" className="col-sm-2 col-form-label">
                                 Role Title
