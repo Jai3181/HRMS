@@ -51,6 +51,7 @@ const TryAnything2 = React.lazy(() => import('./TryAnything2'))
 
 
 // const MRF = React.lazy(() => import('./views/MyComponents/MRF/MRFform.js'))
+const RecruiterManager = React.lazy(() => import('./views/MyComponents/UserManager/RecruiterManager.js'))
 const UserManager = React.lazy(() => import('./views/MyComponents/UserManager/AddUserForm.js'))
 const BranchManager = React.lazy(() => import('./views/MyComponents/BranchManager/BranchManager.js'))
 const HierarchyManager = React.lazy(() => import('./views/MyComponents/HierarchyManager/Hierarchy.js'))
@@ -71,13 +72,16 @@ const routes = [
   { path: '/tryAnything2', name: 'TryAnything2', component: TryAnything2 },
 
   // { path: '/mrf', name: 'MRF', component: MRF },
+  { path: '/recruiterManager', name: 'RecruiterManager', component: RecruiterManager },
   { path: '/userManager', name: 'UserManager', component: UserManager },
   { path: '/branchManager', name: 'BranchManager', component: BranchManager },
   { path: '/hierarchyManager', name: 'HierarchyManager', component: HierarchyManager },
   { path: '/approval', name: 'Approval', component: Approval },
   { path: '/viewapprovals', name: 'View Approval', component: ViewApprovals },
   { path: '/userprofile', name: 'User Profile', component: userProfile },
+
   { path: '/mrfDistribution', name: 'MRF Distribution', component: MrfDistribution },
+
 
   // { path: '/approval', name: 'Approval', component: Approval },
 

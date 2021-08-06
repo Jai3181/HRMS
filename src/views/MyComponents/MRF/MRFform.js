@@ -11,9 +11,7 @@ import "../Approval/Approval.css";
 
 export default function MRFform(props) {
     const [reducerState, dispatch] = useStateValue()
-    const token = reducerState.token
-    // const token = sessionStorage.getItem("token");
-
+    const token = JSON.parse(sessionStorage.getItem("token"));
     const [mrfList, setMRFList] = useState()
     const [userList, setUserList] = useState()
     const [hierarchyList, setHierarchyList] = useState()

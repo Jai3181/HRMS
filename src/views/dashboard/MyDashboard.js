@@ -7,11 +7,11 @@ import CIcon from '@coreui/icons-react'
 
 function MyDashboard(props) {
     return (
-        <div className="wrapper d-flex flex-column min-vh-100 bg-light">
+        <div className="wrapper d-flex flex-column bg-light">
             <AppHeader2 />
             <div className="body flex-grow-1 px-3">
                 <CContainer>
-                    <CRow className="d-flex justify-content-around align-items-center">
+                    <CRow className="d-flex justify-content-around align-items-center" style={{ marginTop: "100px" }}>
                         {/* <CRow> */}
                         <CCol sm="6" lg="3"><DashboardButtons image="https://img.icons8.com/ios/50/000000/dashboard.png" path="/mydashboard" title="Dashboard" /></CCol>
                         <CCol sm="6" lg="3"><DashboardButtons image="https://img.icons8.com/ios/50/000000/add-user-male.png" path="/userManager" title="Search/Add Candidate" /></CCol>
