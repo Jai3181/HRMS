@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import '../MRF/MRFform.css'
 import { MDBDataTableV5 } from 'mdbreact';
-import { CContainer, CRow, CCol, CBadge, CButton, CFormCheck, CFormControl, CModalFooter, CModalBody, CModalTitle, CModalHeader, CModal } from '@coreui/react'
+import { CContainer, CRow, CCol, CForm, CBadge, CButton, CFormCheck, CFormControl, CModalFooter, CModalBody, CModalTitle, CModalHeader, CModal } from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index';
 import endPoints from "../../../utils/EndPointApi";
 // import { AiOutlineMinusCircle } from "react-icons/ai";
@@ -27,18 +27,18 @@ function Approval(props) {
     const [approvalMatrix, setApprovalMatrix] = useState([]);
     const [reducerState, dispatch] = useStateValue();
     const token = JSON.parse(sessionStorage.getItem("token"));
-    // console.log("token1: ", token, typeof (token))
-    console.log("token2: ", token, typeof (token2))
     // const [documentID, setDocumentID] = useState("");
     const [hierarchyList, setHierarchyList] = useState()
     const [branchList, setBranchList] = useState()
     const [userList, setUserList] = useState()
+    const [mdbDataRows, setMdbDataRows] = useState([])
+    const [isFiltered, setIsFiltered] = useState(false)
 
 
-    var searchPosition;
-    var searchHierarchy;
-    var searchBranch;
-    var searchApprover;
+    var searchPosition = "";
+    var searchHierarchy = "";
+    var searchBranch = "";
+    var searchApprover = "";
 
     if (approvalMatrix) { localStorage.setItem("approvalMatrix", JSON.stringify(approvalMatrix)) }
     if (userList) { localStorage.setItem("userList", JSON.stringify(userList)) }
@@ -142,7 +142,7 @@ function Approval(props) {
             {
                 DataRows.push({
                     document_id: data._id,
-                    delete: <div className="icons">
+                    delete: <div className="d-flex justify-content-around">
                         <Link to="/viewapprovalform"><CButton size="sm" color="primary" variant="ghost" id={data._id} className="icon1" onClick={pageChangeHandler}>Edit</CButton></Link>
                         <CButton variant="ghost" color="danger" size="sm" className="icon3" onClick={dataDeleteHandler} id={data._id} >Delete</CButton>
                     </div>,
@@ -155,25 +155,15 @@ function Approval(props) {
                     approverName: approverListfinal,
                 })
             }
-
         })
-
-
+        // setMdbDataRows(DataRows)
+        console.log("DataRows **********", DataRows)
     }
-
-
-
-
     console.log(approvalMatrix);
-
-    // console.log(DataRows)
 
     const positionSearchHandler = (event) => {
         searchPosition = event.target.value;
         console.log(searchPosition);
-
-
-
     }
     const heirarchySearchHandler = (event) => {
         searchHierarchy = event.target.value;
@@ -184,31 +174,6 @@ function Approval(props) {
     const approverSearchHandler = (event) => {
         searchApprover = event.target.value;
     }
-
-
-
-    // const rows = [
-    //     {
-    //         position: "data.position",
-    //         heirarchy: "data.hierarchyID.name",
-    //         branchname: "data.branchID.name",
-    //         cooling: "data.coolingPeriod",
-    //         verificationstatus: "data.verified",
-    //         tatdate: "data.tat",
-    //         approverName: "data.approversID[i]._id.name.firstName ",
-    //     },
-    //     {
-    //         position: "data.position",
-    //         heirarchy: "data.hierarchyID.name",
-    //         branchname: "data.branchID.name",
-    //         cooling: "data.coolingPeriod",
-    //         verificationstatus: "data.verified",
-    //         tatdate: "data.tat",
-    //         approverName: "data.approversID[i]._id.name.firstName ",
-    //     }
-    // ];
-
-
 
     const datatable = {
         columns: [
@@ -260,9 +225,7 @@ function Approval(props) {
                 width: 100
             },
         ],
-
-
-        rows: DataRows
+        rows: isFiltered ? mdbDataRows : DataRows
     }
     const widerData = {
         columns: [
@@ -274,11 +237,9 @@ function Approval(props) {
         rows: [...datatable.rows],
     }
 
-    // console.log(typeof (rows))
-    // console.log(searchHierarchy);
-
     const checkList = []
     const changeValueHandler = (event) => {
+        console.log(event.target)
         if (event.target.checked) {
             checkList.push(event.target.value);
         } else if (event.target.checked == false) {
@@ -290,41 +251,55 @@ function Approval(props) {
 
 
     const filteredRows = [];
-    const filterHandler = (event) => {
-        if (checkList.includes("searchPosition")) {
-            DataRows.filter(data => data.position.toUpperCase().includes(searchPosition.toUpperCase())).map(data => filteredRows.push(data));
-            // console.log(pos);
-            // filteredRows.push(pos);
-        }
-        if (checkList.includes("searchHeirarchy")) {
-            DataRows.filter(data => data.heirarchy.toUpperCase().includes(searchHierarchy.toUpperCase())).map(data => filteredRows.push(data));
-            // console.log(hei);
-            // filteredRows.push(hei);
-        }
-        if (checkList.includes("searchBranch")) {
-            DataRows.filter(data => data.branchname.toUpperCase().includes(searchBranch.toUpperCase())).map(data => filteredRows.push(data))
-            // console.log(branch);
-            // filteredRows.push(branch);
-        }
-        if (checkList.includes("searchApprover")) {
-            DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase())).map(data => filteredRows.push(data));
-            // console.log(app);
-            // filteredRows.push(app);
-        }
-        console.log(filteredRows);
-        let updatedRows = [...new Set(filteredRows)];
-        console.log(updatedRows);
-        // tableRows = [];
-        // setTableRows([]);
-        // setTableRows(updatedRows);
-    }
 
     const clearFilterHandler = () => {
+        setIsFiltered(false)
         // setTableRows([]);
         // setTableRows(DataRows);
     }
 
-
+    const formSubmitHandler = (event) => {
+        event.preventDefault()
+        console.log("event: ", event)
+        if (checkList.includes("searchPosition")) {
+            if (searchPosition.length > 0) {
+                DataRows.filter(data => data.position.toUpperCase().includes(searchPosition.toUpperCase())).map(data => filteredRows.push(data));
+            }
+            console.log("filteredRows:", filteredRows);
+            // console.log(pos);
+            // filteredRows.push(pos);
+        }
+        if (checkList.includes("searchHeirarchy")) {
+            if (searchHierarchy.length > 0) {
+                DataRows.filter(data => data.heirarchy.toUpperCase().includes(searchHierarchy.toUpperCase())).map(data => filteredRows.push(data));
+            }
+            console.log("filteredRows:", filteredRows);
+            // console.log(hei);
+            // filteredRows.push(hei);
+        }
+        if (checkList.includes("searchBranch")) {
+            if (searchBranch.length > 0) {
+                DataRows.filter(data => data.branchname.toUpperCase().includes(searchBranch.toUpperCase())).map(data => filteredRows.push(data))
+            }
+            console.log("filteredRows:", filteredRows);
+            // console.log(branch);
+            // filteredRows.push(branch);
+        }
+        if (checkList.includes("searchApprover")) {
+            if (searchApprover.length > 0) {
+                DataRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase())).map(data => filteredRows.push(data));
+            }
+            console.log("filteredRows:", filteredRows);
+            // console.log(app);
+            // filteredRows.push(app);
+        }
+        // console.log("filteredRows final:", filteredRows);
+        let updatedRows = [...new Set(filteredRows)];
+        console.log("updatedRows:", updatedRows);
+        setMdbDataRows(updatedRows)
+        setIsFiltered(true)
+        event.target.reset()
+    }
 
 
 
@@ -346,7 +321,7 @@ function Approval(props) {
                             <CCol className=" col-sm-4 col-md-2 filter ">
                                 FILTER BAR
                                 <hr />
-                                <CRow>
+                                <CForm onSubmit={formSubmitHandler}>
                                     <CRow>
                                         <CFormCheck id="flexCheckDefault" label="By Position" value="searchPosition" onChange={changeValueHandler} />
                                         <CRow>
@@ -408,14 +383,14 @@ function Approval(props) {
                                     </CRow>
                                     <CRow className="mt-4">
                                         <CCol className="col-sm-4 mx-3">
-                                            <CButton shape="rounded-pill" onClick={filterHandler}>APPLY</CButton>
+                                            <CButton type="submit" shape="rounded-pill" >APPLY</CButton>
                                         </CCol>
                                         {/* <CCol className="col-sm-4"></CCol> */}
                                         <CCol className="col-sm-4 mx-3" >
                                             <CButton onClick={clearFilterHandler} shape="rounded-pill" color="danger">CLEAR</CButton>
                                         </CCol>
                                     </CRow>
-                                </CRow>
+                                </CForm>
                             </CCol>
 
                             <CCol className="col-sm-8 col-md-10 ">
