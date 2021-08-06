@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CNavbar, CContainer, CNavbarBrand, CNavbarToggler, CCollapse, CNavbarNav, CNavLink, CRow, CTabContent, CTabPane, CCol, CButton, CButtonGroup, CModal, CModalBody, CModalHeader, CModalTitle, CModalFooter, CFormControl, CCard, CCardTitle, CCardBody, CCardSubtitle, CCardText, CNav } from "@coreui/react";
 // import "../Approval/Approval.css"
-import "./ViewApproval.css"
+import "./ViewApproval.css";
 
 // import { Button, Card, Image } from '../../../../node_modules/semantic-ui-react';
 // import "../../../../node_modules/semantic-ui-css/semantic.min.css";
@@ -149,30 +149,6 @@ function ViewApprovals() {
 
                 <div >
                     <CRow >
-                        {/* <CNavbar expand="lg" colorScheme="light" className=" navbar bg-light ">
-                            <CContainer fluid>
-                                <CNavbarToggler onClick={() => setVisible1(!visible1)} />
-                                <CCollapse className="navbar-collapse" visible={visible1}>
-                                    <CNavbarNav component="nav ">
-                                        <CNavLink href="#"
-                                            style={{ fontsize: 20 }}
-                                            active={activeKey === 1}
-                                            onClick={() => setActiveKey(1)}
-                                        >
-                                            PENDING
-                                        </CNavLink>
-                                        <CNavLink href="#"
-                                            active={activeKey === 2}
-                                            onClick={() => setActiveKey(2)}
-                                        >ACCEPTED</CNavLink>
-                                        <CNavLink href="#"
-                                            active={activeKey === 3}
-                                            onClick={() => setActiveKey(3)}
-                                        >ANYTHING</CNavLink>
-                                    </CNavbarNav>
-                                </CCollapse>
-                            </CContainer>
-                        </CNavbar> */}
                         <CNavbar colorScheme="light" className="bg-light" variant="tabs">
                             <CContainer fluid>
                                 {/* <CNavbarToggler onClick={() => setVisible1(!visible1)} />
@@ -186,10 +162,7 @@ function ViewApprovals() {
                                     onClick={() => setActiveKey(3)}>REJECTED</CNavbarBrand>
                                 <CNavbarBrand className="mx-auto nav1 " active={activeKey === 4}
                                     onClick={() => setActiveKey(4)}>ESCALATED</CNavbarBrand>
-
-
                                 {/* </CCollapse> */}
-
                             </CContainer>
                         </CNavbar>
                     </CRow>
@@ -200,81 +173,11 @@ function ViewApprovals() {
                             <CTabContent >
                                 <CTabPane visible={activeKey === 1}>
                                     <div className="docs-example-row">
-
                                         <CCol  >
                                             <CRow xs={{ gutterX: 5 }}>
                                                 {cardInfo.map(renderCard)}
-
                                             </CRow>
-
-
-
-
-
-                                            {/*} <CCol className="col-sm-4">
-
-                                            </CCol>
-                                            <CCol className="col-sm-4">
-                                                <Card>
-                                                    <Card.Content>
-                                                        {/* <Image
-                                                    floated='right'
-                                                    size='mini'
-                                                    src='https://picsum.photos/200'
-                                                /> *
-                                                        <Card.Header>Steve Sanders</Card.Header>
-                                                        <Card.Meta>Friends of Elliot</Card.Meta>
-                                                        <Card.Description>
-                                                            Steve wants to add you to the group <strong>best friends</strong>
-                                                            Steve wants to add you to the group <strong>best friends</strong>
-                                                            Steve wants to add you to the group <strong>best friends</strong>
-                                                            Steve wants to add you to the group <strong>best friends</strong>
-                                                        </Card.Description>
-                                                    </Card.Content>
-                                                    <Card.Content extra>
-                                                        <div className='ui two buttons'>
-                                                            <Button basic color='green'>
-                                                                Approve
-                                                            </Button>
-                                                            <Button basic color='red'>
-                                                                Decline
-                                                            </Button>
-                                                        </div>
-                                                    </Card.Content>
-                                                </Card>
-                                            </CCol>
-                                            <CCol className="col-sm-4">
-                                                <Card>
-                                                    <Card.Content>
-                                                        {/* <Image
-                                                    floated='right'
-                                                    size='mini'
-                                                    src='https://picsum.photos/200'
-                                                /> *
-                                                        <Card.Header>Steve Sanders</Card.Header>
-                                                        <Card.Meta>Friends of Elliot</Card.Meta>
-                                                        <Card.Description>
-                                                            Steve wants to add you to the group <strong>best friends</strong>
-                                                            Steve wants to add you to the group <strong>best friends</strong>
-                                                            Steve wants to add you to the group <strong>best friends</strong>
-                                                            Steve wants to add you to the group <strong>best friends</strong>
-                                                        </Card.Description>
-                                                    </Card.Content>
-                                                    <Card.Content extra>
-                                                        <div className='ui two buttons'>
-                                                            <Button basic color='green'>
-                                                                Approve
-                                                            </Button>
-                                                            <Button basic color='red'>
-                                                                Decline
-                                                            </Button>
-                                                        </div>
-                                                    </Card.Content>
-                                                </Card>
-                                            </CCol>*/}
                                         </CCol>
-
-
                                     </div>
                                 </CTabPane>
                                 <CTabPane visible={activeKey === 2}>
@@ -286,14 +189,11 @@ function ViewApprovals() {
                                 <CTabPane visible={activeKey === 4}>
                                     <h1> escalated approvals</h1>
                                 </CTabPane>
-
                             </CTabContent>
                         </CCol>
-
                     </CRow>
                 </div>
             </div>
-
         </>
     );
 

@@ -103,6 +103,13 @@ const _nav = [
     icon: <CIcon name="cil-pencil" customClasses="nav-icon" />,
   },
   {
+    _component: 'CNavItem',
+    as: NavLink,
+    anchor: 'MRF Distribution',
+    to: '/mrfDistribution',
+    icon: <CIcon name="cil-pencil" customClasses="nav-icon" />,
+  },
+  {
     _component: 'CNavTitle',
     anchor: 'Theme',
   },
