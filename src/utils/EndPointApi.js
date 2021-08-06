@@ -1,5 +1,5 @@
-const baseLink = "https://crm1728.herokuapp.com";
-// const baseLink = "https://33ed70a37797.ngrok.io";
+// const baseLink = "https://crm1728.herokuapp.com";
+const baseLink = "https://7aa3bea91ddf.ngrok.io";
 
 
 
@@ -26,7 +26,7 @@ const endPoints = {
     patchUserProfile: baseLink + "/userprofile",
     searchUserProfile: baseLink + "/userprofile",
     getApprovals: baseLink + "/approval",
-    getRecruiter: baseLink + "/recruiter",
+    getRecruiter: baseLink + "/recruitermanagement",
 
 }
 

@@ -1,17 +1,16 @@
 import React, { useState, useReducer, useEffect } from 'react';
-import SelectSearch, { fuzzySearch } from 'react-select-search';
 import "./AddUserForm.css"
 import endPoints from 'src/utils/EndPointApi';
-import { AiOutlineMinusCircle } from "react-icons/ai";
-import { GrView } from "react-icons/gr";
 import {
   CButton, CCol, CForm, CFormControl, CRow, CFormLabel, CFormSelect, CFormCheck, CContainer,
-  CTable, CTableHead, CTableBody, CTableHeaderCell, CTableDataCell, CTableRow,
-  CSpinner, CModal, CModalHeader, CModalFooter, CModalTitle, CModalBody, CBUtton
+  CSpinner, CModal, CModalHeader, CModalFooter, CModalTitle, CModalBody,
 } from '@coreui/react'
 import Select from 'react-select';
 import { MDBDataTableV5 } from 'mdbreact';
 import { useStateValue } from "../../../StateProvider"
+// import SelectSearch, { fuzzySearch } from 'react-select-search';
+// import { AiOutlineMinusCircle } from "react-icons/ai";
+// import { GrView } from "react-icons/gr";
 
 const InitialFormState = {
   fName: "",
@@ -27,7 +26,8 @@ const InitialFormState = {
   email: "",
   designation: "",
   location: "",
-  BID: ""
+  BID: "",
+  depList: []
 }
 
 const formReducer = (formState, action) => {
@@ -52,14 +52,6 @@ const formReducer = (formState, action) => {
         ...formState,
         uRole: action.val
       }
-    // case "CHANGE_ACCESS":
-    //     return {
-    //         ...formState,
-    //         access: {
-    //             ...formstate.access, 
-    //             action.val
-    //         }
-    //     }
     case "HTYPE_INPUT":
       return {
         ...formState,
@@ -104,6 +96,11 @@ const formReducer = (formState, action) => {
       return {
         ...formState,
         BID: action.val
+      }
+    case "DEPLIST_INPUT":
+      return {
+        ...formState,
+        depList: action.val
       }
     default: return formState
   }
@@ -238,131 +235,102 @@ function RecruiterManager(props) {
     dispatchForm({ type: "BID_INPUT", val: event.value })
     console.log(event.value)
   };
+  const departmentsAllotedHandler = (event) => {
+    const depList = []
+    {
+      event.map(item => {
+        depList.push(item.value)
+      })
+    }
+    console.log("depList:", depList)
+    dispatchForm({ type: "DEPLIST_INPUT", val: depList })
+  }
 
 
   const formSubmitHandler = (event) => {
     event.preventDefault()
     let newEmp = {}
     console.log("formState.uRole.label::::", formState.uRole.label)
-    if (formState.uRole.label != "Special") {
-      newEmp = {
-        name: {
-          firstName: formState.fName,
-          lastName: formState.lName,
-        },
-        userType: formState.uType,
-        userRole: {
-          name: formState.uRole.label,
-          _id: formState.uRole.value
-        },
-        hierarchyID: formState.hName,
-        gender: formState.gender,
-        designation: formState.designation,
-        jobType: formState.jType,
-        diversity: formState.diversity,
-        email: formState.email,
-        location: formState.location,
-        branchID: formState.BID
-      }
-    }
-    else {
-      newEmp = {
-        name: {
-          firstName: formState.fName,
-          lastName: formState.lName,
-        },
-        userType: formState.uType,
-        userRole: {
-          name: formState.uRole.label,
-        },
-        access: objAccess,
-        hierarchyID: formState.hName,
-        gender: formState.gender,
-        designation: formState.designation,
-        jobType: formState.jType,
-        diversity: formState.diversity,
-        email: formState.email,
-        location: formState.location,
-        branchID: formState.BID
-      }
+    newEmp = {
+      _id: clicked,
+      departments: formState.depList
     }
     console.log("adding new emp ::::::::::::::::::::::::::: ", newEmp)
-    postData(endPoints.addUser, newEmp)
+    postData(endPoints.getRecruiter, newEmp)
       .then(data => {
         console.log(data)
         if (data.Success === true) {
-          showData(endPoints.searchUser)
+          showData(endPoints.getRecruiter)
             .then(Data => {
+              console.log(Data)
               setUserList(Data)
             })
         }
       })
-    event.target.reset()
+    // event.target.reset()
   }
 
-  const deleteUserHandler = (event) => {
-    const delUser = {
-      _id: event.target.id
-    }
-    console.log("deleting user: ", delUser)
-    removeData(endPoints.removeUser, delUser)
-      .then(data => {
-        if (data.Success === true) {
-          showData(endPoints.searchUser)
-            .then(Data => {
-              setUserList(Data)
-            })
-        }
-      })
-  }
   const viewUserHandler = (event) => {
-    setClicked(true)
+    setClicked(event.target.id)
     const et = event.target.id
-    console.log("viewUserHandler: ", et)
+    console.log("viewUserHandler Event.target.id: ", et)
     selectedUser = userList.filter(user => user._id == et)
-    console.log("*************", selectedUser)
+    console.log("user selected to view", selectedUser)
+    let userAccess = ""
+    if (selectedUser[0].userID.userRole.name != "Special") {
+      userAccess = userProfile?.filter(item => item.role == selectedUser[0].userID.userRole.name)[0].access
+      console.log("userAccess:::::::", userAccess)
+    }
+    else {
+      userAccess = selectedUser[0].userID.access
+      console.log("userAccess:::::::", userAccess)
+    }
+
     const selectedUserRole = {
-      label: selectedUser[0].userRole.name,
-      value: selectedUser[0].userRole._id
+      label: selectedUser[0].userID.userRole.name,
+      value: selectedUser[0].userID.userRole._id
     }
     console.log("selectedUserRole", selectedUserRole)
 
     const selectedBranchLocation = {
-      label: selectedUser[0].branchID.location,
-      value: selectedUser[0].branchID.location
+      label: selectedUser[0].userID.branchID.location,
+      value: selectedUser[0].userID.branchID.location
     }
     console.log("selectedBranchLocation", selectedBranchLocation)
 
     const selectedBranchName = {
-      label: selectedUser[0].branchID.name,
-      value: selectedUser[0].branchID._id,
-      location: selectedUser[0].branchID.location
+      label: selectedUser[0].userID.branchID.name,
+      value: selectedUser[0].userID.branchID._id,
+      location: selectedUser[0].userID.branchID.location
     }
     console.log("selectedBranchName", selectedBranchName)
 
-    console.log(userList.filter(user => user._id == et))
     const selectedUserhName = {
-      label: selectedUser[0].hierarchyID.name,
-      value: selectedUser[0].hierarchyID._id
+      label: selectedUser[0].userID.hierarchyID.name,
+      value: selectedUser[0].userID.hierarchyID._id
     }
 
-    setObjAccess(userProfile?.filter(item => item.role == selectedUserRole.label)[0].access)
+    const departmentList = []
+    selectedUser[0].departments.map(dep => {
+      departmentList.push({ label: dep.name, value: dep._id })
+    })
 
     form1 = {
-      fName: selectedUser[0].name.firstName,
-      lName: selectedUser[0].name.lastName,
-      uType: selectedUser[0].userType,
+      fName: selectedUser[0].userID.name.firstName,
+      lName: selectedUser[0].userID.name.lastName,
+      uType: selectedUser[0].userID.userType,
       uRole: selectedUserRole,
-      access: objAccess,
-      hType: selectedUser[0].hierarchyID.type,
+      access: userAccess,
+      hType: selectedUser[0].userID.hierarchyID.type,
       hName: selectedUserhName,
-      jType: selectedUser[0].jobType,
-      gender: selectedUser[0].gender,
-      diversity: selectedUser[0].diversity,
-      email: selectedUser[0].email,
-      designation: selectedUser[0].designation,
+      jType: selectedUser[0].userID.jobType,
+      gender: selectedUser[0].userID.gender,
+      diversity: selectedUser[0].userID.diversity,
+      email: selectedUser[0].userID.email,
+      designation: selectedUser[0].userID.designation,
       location: selectedBranchLocation,
-      BID: selectedBranchName
+      BID: selectedBranchName,
+      depList: departmentList
     }
     setForm1(form1)
     setVisible2(!visible)
@@ -379,10 +347,10 @@ function RecruiterManager(props) {
   }
 
   async function postData(url, data) {
-    console.log("in post data")
+    console.log("in patch data")
     // setIsLoading(true)
     const response = await fetch(url, {
-      method: 'POST',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': token
@@ -407,27 +375,27 @@ function RecruiterManager(props) {
     // setIsLoading(false)
     return Data
   }
-  async function removeData(url, data) {
-    console.log("in remove data")
-    // setIsLoading(true)
-    const response = await fetch(url, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token
-      },
-      body: JSON.stringify(data)
-    });
-    const Data = await response.json();
-    // setIsLoading(false)
-    return Data
-  }
+  // async function removeData(url, data) {
+  //   console.log("in remove data")
+  //   // setIsLoading(true)
+  //   const response = await fetch(url, {
+  //     method: 'DELETE',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': token
+  //     },
+  //     body: JSON.stringify(data)
+  //   });
+  //   const Data = await response.json();
+  //   // setIsLoading(false)
+  //   return Data
+  // }
   useEffect(() => {
     console.log("in use effect")
-    showData(endPoints.searchUser)
+    showData(endPoints.getRecruiter)
       .then(Data => {
         console.log("userList:", Data)
-        setUserList(Data.filter(item => item.userRole.name == "Recruiter"))
+        setUserList(Data)
       })
     showData(endPoints.searchHierarchy)
       .then(Data => {
@@ -498,25 +466,17 @@ function RecruiterManager(props) {
     {
       userList?.map(user => {
         tableRows.push({
-          // removeButton: <button className="remove_button" onClick={deleteUserHandler}><AiOutlineMinusCircle className={user._id} /></button>,
-          // removeButton: <CButton variant="ghost" color="danger" size="sm" className="icon3" onClick={deleteUserHandler} id={user._id} >Delete</CButton>,
           // showButton: <button className="remove_button" id={user._id} onClick={viewUserHandler}><GrView className={user._id} /></button>,
-          showButton: <CButton variant="ghost" color="primary" size="sm" className="icon3" onClick={viewUserHandler} id={user._id} >View</CButton>,
-          full_name: user.name.firstName + " " + user.name.lastName,
-          // first_name: user.name.firstName,
-          // last_name: user.name.lastName,
-          user_type: user.userType,
-          // user_role: user.userRole.name,
-          hierarchy: user.hierarchyID.type + "," + user.hierarchyID.name,
-          // hierarchy_type: user.hierarchyID.type,
-          // hierarchy_name: user.hierarchyID.name,
-          job_type: user.jobType,
-          diversity: user.diversity,
-          email: user.email,
-          designation: user.designation,
-          branch: user.branchID.location + "," + user.branchID.name,
-          // branch_location: user.branchID.location,
-          // branch_name: user.branchID.name,
+          showButton: <div className="d-flex justify-content-around"><CButton variant="ghost" color="primary" size="sm" className="icon3" onClick={viewUserHandler} id={user._id} >View</CButton></div>,
+          full_name: user.userID.name.firstName + " " + user.userID.name.lastName,
+          // user_type: user.userID.userType,
+          user_role: user.userID.userRole.name,
+          hierarchy: user.userID.hierarchyID.type + "," + user.userID.hierarchyID.name,
+          job_type: user.userID.jobType,
+          diversity: user.userID.diversity,
+          email: user.userID.email,
+          designation: user.userID.designation,
+          branch: user.userID.branchID.location + "," + user.userID.branchID.name,
         })
       })
     }
@@ -526,13 +486,8 @@ function RecruiterManager(props) {
     columns: [
       {
         label: '',
-        field: 'removeButton',
-        width: 50,
-      },
-      {
-        label: '',
         field: 'showButton',
-        width: 50,
+        width: 80,
       },
       {
         label: 'Full Name',
@@ -540,18 +495,18 @@ function RecruiterManager(props) {
         sort: 'disabled',
         width: 200,
       },
-      {
-        label: 'User Type',
-        field: 'user_type',
-        sort: 'disabled',
-        width: 100,
-      },
       // {
-      //   label: 'User Role',
-      //   field: 'user_role',
+      //   label: 'User Type',
+      //   field: 'user_type',
       //   sort: 'disabled',
-      //   width: 100,
+      //   width: 150,
       // },
+      {
+        label: 'User Role',
+        field: 'user_role',
+        sort: 'disabled',
+        width: 125,
+      },
       {
         label: 'Hierarchy',
         field: 'hierarchy',
@@ -574,13 +529,13 @@ function RecruiterManager(props) {
         label: 'Email Address',
         field: 'email',
         sort: 'disabled',
-        width: 200,
+        width: 290,
       },
       {
         label: 'Designation',
         field: 'designation',
         sort: 'disabled',
-        width: 200,
+        width: 125,
       },
       {
         label: 'Branch',
@@ -591,14 +546,19 @@ function RecruiterManager(props) {
     ],
     rows: tableRows
   }
+  // const widerData = {
+  //   columns: [
+  //     ...dataTable.columns.map((col) => {
+  //       col.width = 250;
+  //       return col;
+  //     }),
+  //   ],
+  //   rows: [...dataTable.rows],
+  // }
 
-  const modalCloseHandler = () => {
-    setVisible(false)
-    setCurrentUserRole(undefined)
-  }
+
   const modal2CloseHandler = () => {
     setVisible2(false)
-    // setCurrentUserRole(undefined)
   }
 
   const accessChangeHandler = (event) => {
@@ -610,12 +570,8 @@ function RecruiterManager(props) {
     dispatchForm({ type: "SELECT_UROLE", val: { label: "Special", value: "Special" } })
     setCurrentUserRole({ label: "Special", value: "Special" })
   }
-  console.log(objAccess)
-  console.log(formState)
-
-
+  console.log("formState: ", formState)
   let form1 = {}
-  console.log("------------------------------", ViewUserFormState)
   return (
     <CContainer>
       <CRow className="mb-3">
@@ -629,7 +585,7 @@ function RecruiterManager(props) {
                 <option>search by...</option>
                 <option value="name.fName">First Name</option>
                 <option value="uType">User Type</option>
-                {/* <option value="uRole">User Role</option> */}
+                <option value="uRole">User Role</option>
                 <option value="jType">Job Type</option>
                 <option value="hierarchy.hType">Hierarchy</option>
                 <option value="hierarchy.hName">Hierarchy name</option>
@@ -655,14 +611,8 @@ function RecruiterManager(props) {
             <CCol md={1} className="searchBar">
               <CButton type="reset" onClick={clearHandler}>Clear</CButton>
             </CCol>
-            {/* <CCol md={2} className="add">
-              <CButton color="primary" onClick={() => setVisible(!visible)}>+ Add User</CButton>
-            </CCol> */}
           </CRow>
         </CForm>
-        {/* <CCol md={1} className="loadBar">
-                    {isLoading === true && <CSpinner color="primary" />}
-                </CCol> */}
       </CRow>
       <MDBDataTableV5
         small
@@ -678,29 +628,48 @@ function RecruiterManager(props) {
         data={dataTable}
       />;
 
-      <CModal size="xl" alignment="center" visible={visible2} backdrop={true}>
+      <CModal size="xl" alignment="center" visible={visible2} backdrop={true} scrollable>
         <CModalHeader onDismiss={modal2CloseHandler}>
-          <CModalTitle>View/Edit Employee</CModalTitle>
+          <CModalTitle>Add/Edit Allotted Department</CModalTitle>
         </CModalHeader>
         {console.log("selectedUser----------------", ViewUserFormState)}
-        {console.log("selectedUser----------------", ViewUserFormState)}
-        {console.log("selectedUser----------------", selectedUser)}
+        {console.log("selectedUser Access Permissions", clicked ? ViewUserFormState.access : "failed to recognise user")}
         {console.log("selectedUser----------------", clicked)}
-        {console.log("selectedUser----------------", objAccess)}
         <CModalBody className="bg-light">
           <CForm onSubmit={formSubmitHandler}>
+            <CRow className="mb-3">
+              <CFormLabel className="col-sm-2 col-form-label">Select Departments</CFormLabel>
+              <CCol >
+                <Select
+                  defaultValue={clicked ? ViewUserFormState.depList : ""}
+                  isMulti
+                  options={hierarchyNameOptions.filter(hierarchy => hierarchy.type == "Department")}
+                  isSearchable
+                  // isClearable
+                  onChange={departmentsAllotedHandler}
+                // value={clicked ? ViewUserFormState.location : ""}
+                />
+              </CCol>
+            </CRow>
+            <CCol className="d-flex align-items-center justify-content-center">
+              <CButton type="submit" color="primary" onClick={modal2CloseHandler}>Save Changes</CButton>
+            </CCol>
+            <hr />
+            <CCol className="d-flex align-items-center justify-content-center mb-2">
+              <h5>Recruiter Details</h5>
+            </CCol>
             <CRow className="mb-3">
               <CFormLabel htmlFor="f_name" className="col-sm-2 col-form-label">
                 First Name
               </CFormLabel>
               <CCol sm="4">
                 <CFormControl
-                  // defaultValue={selectedUser ? (userList.filter((user) => user._id == selectedUser))[0].name.firstName : ""}
                   defaultValue={clicked ? ViewUserFormState.fName : ""}
                   type="text"
                   id="f_name"
                   onChange={fNameChangeHandler}
                   required
+                  readOnly
                 />
               </CCol>
               <CFormLabel htmlFor="l_name" className="col-sm-2 col-form-label">
@@ -708,12 +677,12 @@ function RecruiterManager(props) {
               </CFormLabel>
               <CCol sm="4">
                 <CFormControl
-                  // defaultValue={selectedUser ? (userList.filter((user) => user._id == selectedUser))[0].name.lastName : ""}
                   defaultValue={clicked ? ViewUserFormState.lName : ""}
                   type="text"
                   id="l_name"
                   onChange={lNameChangeHandler}
                   required
+                  readOnly
                 />
               </CCol>
             </CRow>
@@ -722,8 +691,7 @@ function RecruiterManager(props) {
                 User Type:
               </CFormLabel>
               <CCol sm="4">
-                <CFormSelect id="user_type" required onChange={selectedUserTypeHandler}
-                  // defaultValue={selectedUser ? (userList.filter((user) => user._id == selectedUser))[0].userType : ""}>
+                <CFormSelect id="user_type" required onChange={selectedUserTypeHandler} disabled
                   defaultValue={clicked ? ViewUserFormState.uType : ""}>
                   <option>Choose...</option>
                   <option value="admin">admin</option>
@@ -731,6 +699,7 @@ function RecruiterManager(props) {
                   <option value="vendor">vendor</option>
                   <option value="employee">employee</option>
                   <option value="interviewer">interviewer</option>
+
                 </CFormSelect>
               </CCol>
               <CFormLabel className="col-sm-2 col-form-label" htmlFor="user_role">
@@ -740,43 +709,33 @@ function RecruiterManager(props) {
                 <Select
                   options={userRoleOptions}
                   isSearchable
+                  isDisabled
                   // isClearable
                   onChange={selectedUserRoleHandler}
-                  // value={selectedUser ?
-                  //     { label: (userList.filter((user) => user._id == selectedUser))[0].userRole.name, value: (userList.filter((user) => user._id == selectedUser))[0].userRole._id } :
-                  //     null
-                  // }
-                  value={clicked ? ViewUserFormState.uRole : ""}
+                  // defaultValue={clicked ? ViewUserFormState.depList : ""}
+                  defaultValue={clicked ? ViewUserFormState.uRole : ""}
                 />
               </CCol>
             </CRow>
-            {/* if(clicked){
-                            return(
-                        <CRow classname="mb-3">
-                            {ViewUserFormState.uRole === undefined ? console.log("not yettttttttt") :
-                                ViewUserFormState.uRole.label == "Special" ? Object.entries(objAccess).map(([key, value]) => {
-                                    return (
-                                        <CCol sm="3" key={key}>
-                                            <CFormCheck id={key} label={key} defaultChecked={value} onChange={accessChangeHandler} />
-                                        </CCol>
-                                    )
-                                }) : Object.entries((userProfile?.filter(item => item.role == ViewUserFormState.uRole.label))[0].access).map(([key, value]) => {
-                                    return (
-                                        <CCol sm="3" key={key}>
-                                            <CFormCheck id={key} label={key} defaultChecked={value} onChange={accessChangeHandler} />
-                                        </CCol>
-                                    )
-                                })}
-                        </CRow>
-                        )
-                        } */}
-            <CRow className="mb-3">
+            <CRow classname="mb-3">
+              {
+                clicked ?
+                  Object.entries(ViewUserFormState.access).map(([key, value]) => {
+                    return (
+                      <CCol sm="2" key={key}>
+                        <CFormCheck id={key} label={key} defaultChecked={value} onChange={accessChangeHandler} disabled />
+                      </CCol>
+                    )
+                  }) : "select a User Role to see it's access permissions"
+              }
+            </CRow>
+
+            <CRow className="mt-3 mb-3">
               <CFormLabel className="col-sm-2 col-form-label" htmlFor="hirearchy_type">
                 Hierarchy Type
               </CFormLabel>
               <CCol sm="4">
-                <CFormSelect id="hirearchy_type" required onChange={hirearchyTypeChangeHandler}
-                  // defaultValue={selectedUser ? (userList.filter((user) => user._id == selectedUser))[0].hierarchyID.type : ""}>
+                <CFormSelect id="hirearchy_type" required onChange={hirearchyTypeChangeHandler} disabled
                   defaultValue={clicked ? ViewUserFormState.hType : ""}>
                   <option>Choose...</option>
                   <option value="Department">Department</option>
@@ -790,11 +749,12 @@ function RecruiterManager(props) {
               </CFormLabel>
               <CCol sm="4">
                 <Select
+                  isDisabled
                   options={hierarchyNameOptions.filter(hierarchy => hierarchy.type == formState.hType)}
                   isSearchable
                   // isClearable
                   onChange={hiearchyNameChangeHandler}
-                  value={clicked ? ViewUserFormState.hName : ""}
+                  defaultValue={clicked ? ViewUserFormState.hName : ""}
                 />
               </CCol>
             </CRow>
@@ -802,7 +762,7 @@ function RecruiterManager(props) {
               <CFormLabel className="col-sm-2 col-form-label" htmlFor="job_type">Job Type : </CFormLabel>
               <CCol className="align-items-end">
                 <CFormCheck
-                  // defaultChecked={selectedUser ? ((userList.filter((user) => user._id == selectedUser))[0].jobType == "Internship" ? true : false) : false}
+
                   defaultChecked={clicked ? (ViewUserFormState.jType == "Internship" ? true : false) : false}
                   inline
                   type="radio"
@@ -812,9 +772,9 @@ function RecruiterManager(props) {
                   label="Internship"
                   onChange={choosenJobTypeHandler}
                   required
+                  disabled
                 />
                 <CFormCheck
-                  // defaultChecked={selectedUser ? ((userList.filter((user) => user._id == selectedUser))[0].jobType == "Full-Time" ? true : false) : false}
                   defaultChecked={clicked ? (ViewUserFormState.jType == "Full-Time" ? true : false) : false}
                   inline
                   type="radio"
@@ -824,9 +784,9 @@ function RecruiterManager(props) {
                   label="Full-Time"
                   onChange={choosenJobTypeHandler}
                   required
+                  disabled
                 />
                 <CFormCheck
-                  // defaultChecked={selectedUser ? ((userList.filter((user) => user._id == selectedUser))[0].jobType == "Temporary" ? true : false) : false}
                   defaultChecked={clicked ? (ViewUserFormState.jType == "Temporary" ? true : false) : false}
                   inline
                   type="radio"
@@ -836,6 +796,7 @@ function RecruiterManager(props) {
                   label="Temporary"
                   onChange={choosenJobTypeHandler}
                   required
+                  disabled
                 />
               </CCol>
 
@@ -851,6 +812,7 @@ function RecruiterManager(props) {
                   label="General"
                   onChange={diversityHandler}
                   required
+                  disabled
                 />
                 <CFormCheck
                   defaultChecked={clicked ? (ViewUserFormState.diversity == "Female" ? true : false) : false}
@@ -862,6 +824,7 @@ function RecruiterManager(props) {
                   label="Female"
                   onChange={diversityHandler}
                   required
+                  disabled
                 />
                 <CFormCheck
                   defaultChecked={clicked ? (ViewUserFormState.diversity == "Physically Challenged" ? true : false) : false}
@@ -873,6 +836,7 @@ function RecruiterManager(props) {
                   label="Physically Challenged"
                   onChange={diversityHandler}
                   required
+                  disabled
                 />
               </CCol>
 
@@ -890,6 +854,7 @@ function RecruiterManager(props) {
                   label="Male"
                   onChange={genderHandler}
                   required
+                  disabled
                 />
                 <CFormCheck
                   defaultChecked={clicked ? (ViewUserFormState.gender == "Female" ? true : false) : false}
@@ -901,6 +866,7 @@ function RecruiterManager(props) {
                   label="Female"
                   onChange={genderHandler}
                   required
+                  disabled
                 />
                 <CFormCheck
                   defaultChecked={clicked ? (ViewUserFormState.gender == "Others" ? true : false) : false}
@@ -912,6 +878,7 @@ function RecruiterManager(props) {
                   label="Others"
                   onChange={genderHandler}
                   required
+                  disabled
                 />
               </CCol>
             </CRow>
@@ -925,6 +892,7 @@ function RecruiterManager(props) {
                   id="email"
                   placeholder=""
                   required
+                  readOnly
                   onChange={emailChangeHandler}
                 />
               </CCol>
@@ -936,6 +904,7 @@ function RecruiterManager(props) {
                   id="designation"
                   placeholder=""
                   required
+                  readOnly
                   onChange={designationChangeHandler}
                 />
               </CCol>
@@ -945,36 +914,28 @@ function RecruiterManager(props) {
               <CFormLabel htmlFor="location" className="col-sm-2 col-form-label">Branch Location</CFormLabel>
               <CCol sm="4">
                 <Select
+                  isDisabled
                   options={branchLocationOptions}
                   isSearchable
                   // isClearable
                   onChange={locationChangeHandler}
-                  value={clicked ? ViewUserFormState.location : ""}
+                  defaultValue={clicked ? ViewUserFormState.location : ""}
                 />
               </CCol>
 
               <CFormLabel className="col-sm-2 col-form-label" htmlFor="branchID">Branch Name</CFormLabel>
               <CCol sm="4">
                 <Select
+                  isDisabled
                   options={branchNameOptions.filter(branch => branch.location == formState.location)}
                   isSearchable
                   // isClearable
                   onChange={branchIDHandler}
-                  value={clicked ? ViewUserFormState.BID : ""}
+                  defaultValue={clicked ? ViewUserFormState.BID : ""}
                 />
               </CCol>
-
             </CRow>
-
             <br />
-
-            <CCol className="d-flex align-items-center justify-content-center">
-
-              <CButton type="submit" color="primary" onClick={modalCloseHandler}>Save Changes</CButton>
-
-
-
-            </CCol>
           </CForm>
         </CModalBody>
         <CModalFooter>
