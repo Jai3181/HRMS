@@ -42,6 +42,13 @@ const _nav = [
   {
     _component: 'CNavItem',
     as: NavLink,
+    anchor: 'Recruiter Manager',
+    to: '/recruiterManager',
+    icon: <CIcon name="cil-pencil" customClasses="nav-icon" />,
+  },
+  {
+    _component: 'CNavItem',
+    as: NavLink,
     anchor: 'UserManager',
     to: '/userManager',
     icon: <CIcon name="cil-pencil" customClasses="nav-icon" />,

@@ -7,9 +7,9 @@ import PropTypes from "prop-types";
 import endPoints from 'src/utils/EndPointApi';
 import { useStateValue } from "../../../StateProvider"
 import LoadingOverlay from 'react-loading-overlay';
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 function LoginCard(props) {
-    // const history = useHistory();
+    const history = useHistory();
     const MyDashboard = React.lazy(() => import('../../dashboard/MyDashboard'))
     // const createAccountHandler = (event) => {
     //     props?.isNewUser(false);
@@ -42,7 +42,7 @@ function LoginCard(props) {
                 if (data.email == "Invalid") {
                     setEmailerrorMessage(true);
                 }
-                else if (data.password = "Invalid") {
+                else if (data.password == "Invalid") {
                     setPassworderrorMessage(true);
                 }
                 if (data.token) {
