@@ -5,12 +5,7 @@ import { MDBDataTableV5 } from 'mdbreact';
 import { CContainer, CRow, CCol, CBadge, CButton, CFormCheck, CFormControl, CModalFooter, CModalBody, CModalTitle, CModalHeader, CModal } from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index';
 import endPoints from "../../../utils/EndPointApi";
-// import { AiOutlineMinusCircle } from "react-icons/ai";
-// import { BsEyeFill } from "react-icons/bs";
 import "./Approval.css";
-import ViewApprovalForm from '../MRF/ViewApprovalForm';
-import Select from 'react-select';
-import CreatableSelect from 'react-select/creatable';
 import { useStateValue } from "../../../StateProvider";
 
 
