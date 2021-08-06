@@ -148,7 +148,6 @@ function Approval(props) {
                     document_id: data._id,
                     delete: <div className="icons">
                         <Link to="/viewapprovalform"><CButton size="sm" color="primary" variant="ghost" id={data._id} className="icon1" onClick={pageChangeHandler}>Edit</CButton></Link>
-                        {/* <CButton variant="ghost" color="info" size="sm" className="icon2" id={data._id} onClick={() => setVisible(!visible)} >View</CButton> */}
                         <CButton variant="ghost" color="danger" size="sm" className="icon3" onClick={dataDeleteHandler} id={data._id} >Delete</CButton>
                     </div>,
                     position: data.position,

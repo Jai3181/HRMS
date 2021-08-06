@@ -28,6 +28,7 @@ const endPoints = {
     getApprovals: baseLink + "/approval",
     getRecruiter: baseLink + "/recruitermanagement",
 
+
 }
 
 module.exports = endPoints;
