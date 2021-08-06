@@ -1,10 +1,37 @@
-import React from 'react';
-import { CContainer, CRow, CCol, CButton } from '@coreui/react'
+import React, { useState } from 'react';
+import { CContainer, CRow, CCol, CButton, CFormSelect } from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index'
 import { Link } from 'react-router-dom'
-import "./Settings.css"
+import "./Settings.css";
+import endPoints from "../../../utils/EndPointApi";
 
 function Settings(props) {
+
+  const [distribution, setDistribution] = useState("");
+
+  async function postData(url, data) {
+    console.log("in post data")
+    // setIsLoading(true)
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Authorization': token
+      },
+      body: JSON.stringify(data)
+    });
+    const Data3 = await response.json();
+    // console.log(Data3);
+    // setIsLoading(false)
+    return Data3
+  }
+
+  const distributionHandler = (event) => {
+    postData(endPoints.settings, { distribution: distribution }).then(data => console.log(data))
+
+
+
+  }
   return (
     <div>
       {/* <AppSidebar /> */}
@@ -82,14 +109,38 @@ function Settings(props) {
                 </CRow>
               </CCol>
 
+              <CCol className="setting_section" sm="6" lg="2">
+                <CRow><h4 className="setting_heading"><b>Distribution</b></h4></CRow>
+                <CRow>
+                  <CCol className="col-sm-12">
+                    <CFormSelect id="hirearchy_type" required onChange={(e) => setDistribution(e.target.value)}>
+                      {console.log(distribution)}
+                      <option>Choose...</option>
+                      <option value="manual">Manual</option>
+                      <option value="odd-even">odd-even</option>
+                      <option value="department">department</option>
+                    </CFormSelect>
+                  </CCol>
+
+
+                </CRow>
+                <CRow className="my-5 col-sm-6 center" >
+                  <CButton onClick={distributionHandler}>
+                    Send
+
+                  </CButton>
+
+                </CRow>
+              </CCol>
+
 
             </CRow>
 
-          </CContainer >
+          </CContainer>
         </div>
         {/* <AppFooter /> */}
       </div>
-    </div >
+    </div>
   );
 }
 
