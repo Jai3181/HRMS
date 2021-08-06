@@ -17,7 +17,12 @@ import { useStateValue } from "../../../StateProvider";
 function ViewApprovalForm(props) {
 
     const [reducerState, dispatch] = useStateValue();
+    // const [reducerState, dispatch] = useStateValue();
+    // const token = reducerState.token;
     // const [finalData, setFinalData] = useState([]);
+    const [heirarchyList, setHeirarchyList] = React.useState([]);
+    const [BranchData, setBranchData] = React.useState([]);
+    const [Approvers, setApprovers] = React.useState([]);
 
     const getData = localStorage.getItem("approvalMatrix");
     const getID = JSON.parse(localStorage.getItem("eventID"));
@@ -29,6 +34,95 @@ function ViewApprovalForm(props) {
     // console.log("reducer STATE: ", reducerState);
     console.log("selectedApproval: ", reducerState.selectedApproval)
     const eventID = reducerState.selectedApproval;
+
+    const token = JSON.parse(sessionStorage.getItem("token"));
+
+
+
+    const hierarchyNameOptions = []
+    {
+        heirarchyList?.map(hierarchy => {
+            hierarchyNameOptions.push({ label: hierarchy.name, value: hierarchy._id, type: hierarchy.type })
+        })
+    }
+    // console.log("hierarchyNameOptions", hierarchyNameOptions)
+
+    const branchNameOptions = []
+    {
+        BranchData?.map(branch => {
+            branchNameOptions.push({ label: branch.name, value: branch._id, location: branch.location })
+        })
+    }
+    console.log("branchNameOptions", branchNameOptions)
+
+    const ApproverNameOptions = []
+    {
+        Approvers?.map(user => {
+            ApproverNameOptions.push({ label: user.name.firstName + " " + user.name.lastName, value: user._id })
+        })
+    }
+
+
+    async function showHeirarchyData(url) {
+        // console.log("in show data")
+        // setIsLoading(true)
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+        });
+        const Data = await response.json();
+        // setIsLoading(false)
+        // console.log(Data);
+        return Data
+    }
+
+    async function showBranchData(url) {
+        // console.log("in show data")
+        // setIsLoading(true)
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+        });
+        const Data1 = await response.json();
+        // setIsLoading(false)
+        // console.log(Data1);
+        return Data1
+    }
+
+    async function showApprovers(url) {
+        // console.log("in show users")
+        // setIsLoading(true)
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+        });
+        const Data2 = await response.json();
+        // setIsLoading(false)
+        // console.log(Data2);
+        return Data2
+    }
+
+    useEffect(() => {
+        showHeirarchyData(endPoints.searchHierarchy).then(Data => setHeirarchyList(Data));
+        showBranchData(endPoints.searchBranch).then(Data1 => {
+            setBranchData(Data1)
+            console.log("branchData", BranchData);
+        });
+        showApprovers(endPoints.searchUser).then(Data2 => {
+            setApprovers(Data2)
+            // console.log(Approvers);
+
+        });
+    }, [])
 
     const finalData = {};
     {
@@ -108,7 +202,7 @@ function ViewApprovalForm(props) {
                                 </CFormLabel>
                                 <CCol sm="4">
                                     <Select
-                                        // options={hierarchyNameOptions.filter(hierarchy => hierarchy.type == formState.hierarchyType)}
+                                        // options={hierarchyNameOptions.filter(hierarchy => hierarchy.type == heirarchy)}
                                         isSearchable
                                         placeholder={finalData.hierarchyID.name}
                                         // onChange={hNameChangeHandler}
@@ -133,7 +227,7 @@ function ViewApprovalForm(props) {
                                 <CFormLabel className="col-sm-2 col-form-label" htmlFor="branchID">Branch Name</CFormLabel>
                                 <CCol sm="4">
                                     <Select
-                                        // options={branchNameOptions.filter(branch => branch.location == formState.branch_location)}
+                                        options={branchNameOptions}
                                         isSearchable
                                         placeholder={finalData.branchID.name}
                                     // isClearable

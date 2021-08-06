@@ -59,6 +59,8 @@ const Approval = React.lazy(() => import('./views/MyComponents/Approval/Approval
 
 const ViewApprovals = React.lazy(() => import('./views/MyComponents/ViewApprovals/ViewApprovals.js'))
 const userProfile = React.lazy(() => import('./views/MyComponents/userProfile/userProfile.js'))
+
+const MrfDistribution = React.lazy(() => import('./views/MyComponents/MRFDistribution/MRFDistribution.js'));
 // const approvalStatus = React.lazy(() => import('./views/MyComponents/Approval Status/approvalStatus.js'));
 // const Approval = React.lazy(() => import('./views/MyComponents/Approval/Approval.js'))
 
@@ -77,6 +79,9 @@ const routes = [
   { path: '/approval', name: 'Approval', component: Approval },
   { path: '/viewapprovals', name: 'View Approval', component: ViewApprovals },
   { path: '/userprofile', name: 'User Profile', component: userProfile },
+
+  { path: '/mrfDistribution', name: 'MRF Distribution', component: MrfDistribution },
+
 
   // { path: '/approval', name: 'Approval', component: Approval },
 

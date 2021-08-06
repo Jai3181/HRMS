@@ -15,6 +15,8 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+// import { Stepper } from "@progress/kendo-react-layout";
+import '@progress/kendo-theme-default/dist/all.css';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   actionsContainer: {
     marginBottom: theme.spacing(2),
+    // color: theme.color(#fff),
   },
   resetContainer: {
     padding: theme.spacing(3),
@@ -36,12 +39,20 @@ const useStyles = makeStyles((theme) => ({
 
 function ApprovalStatus() {
   const [reducerState, dispatch] = useStateValue();
-  const token = reducerState.token;
+  // const token = reducerState.token;
+  const token = JSON.parse(sessionStorage.getItem("token"));
   const [mrfData, setMrfData] = useState([]);
   const [visible, setVisible] = useState(false)
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(1);
   const steps = getSteps();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (e) => {
+    console.log(e.value);
+    console.log("event:", e)
+    setValue(e.value);
+  }
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -78,12 +89,20 @@ function ApprovalStatus() {
     );
   }, []);
 
+
+  const viewModalHandler = (event) => {
+    setVisible(!visible);
+
+
+
+  }
+
   const tableRows = []
   {
     mrfData?.filter(item => item.status == "unapproved").map(item => {
       // console.log("item:", item)
       tableRows.push({
-        showButton: <CButton variant="ghost" color="info" className="icon2 bold" id={item._id} onClick={() => setVisible(!visible)} >View</CButton>,
+        showButton: <CButton variant="ghost" color="info" className="icon2 bold" id={item._id} onClick={viewModalHandler} >View</CButton>,
         position_id: item.designation.positionID.position,
         position_type: item.designation.positionType,
         hierarchy: item.hierarchyID.type + ": " + item.hierarchyID.name,
@@ -166,25 +185,58 @@ function ApprovalStatus() {
 
 
   function getSteps() {
-    return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+    return ['waiting for approval', 'Approver-1', 'Approver-2', 'Approver-3', 'accepted'];
   }
 
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`;
+        return `approved`;
       case 1:
-        return 'An ad group contains one or more ads which target a shared set of keywords.';
+        return 'unapproved';
       case 2:
-        return `Try out different ad text to see what brings in the most customers,
-              and learn how to enhance your ads using features like ad extensions.
-              If you run into any problems with your ads, find out how to tell if
-              they're running and how to resolve approval issues.`;
+        return `unapproved`;
+      case 3:
+        return 'approved';
       default:
         return 'Unknown step';
     }
+  }
+  const items = [
+    {
+      label: "Cart",
+      icon: "k-i-cart",
+    },
+    {
+      label: "Delivery Address",
+      icon: "k-i-marker-pin-target",
+    },
+    {
+      label: "Payment Method",
+      icon: "k-i-dollar",
+    },
+    {
+      label: "Preview",
+      icon: "k-i-preview",
+      optional: true,
+    },
+    {
+      label: "Finish Order",
+      icon: "k-i-track-changes-accept",
+    },
+  ];
+
+
+  var i = 0
+  const checkStatus = () => {
+    if (getStepContent(i) == "approved") {
+      handleNext();
+      console.log("done", getStepContent(i), i);
+      i++;
+
+    }
+
+    // console.log("clicked", index);
   }
   return (
     <div>
@@ -256,10 +308,21 @@ function ApprovalStatus() {
                 <Stepper activeStep={activeStep} orientation="vertical">
                   {steps.map((label, index) => (
                     <Step key={label}>
-                      <StepLabel>{label}</StepLabel>
+                      <StepLabel color="success">{label}</StepLabel>
                       <StepContent>
-                        <Typography>{getStepContent(index)}</Typography>
-                        <div className={classes.actionsContainer}>
+                        {/* <Typography>{getStepContent(index)}</Typography> */}
+                        {/* {console.log(label, index)} */}
+                        {/* {checkStatus(index)} */}
+
+
+
+
+
+
+
+
+
+                        {/* <div className={classes.actionsContainer}>
                           <div>
                             <Button
                               disabled={activeStep === 0}
@@ -277,7 +340,7 @@ function ApprovalStatus() {
                               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                             </Button>
                           </div>
-                        </div>
+                        </div> */}
                       </StepContent>
                     </Step>
                   ))}
@@ -290,7 +353,10 @@ function ApprovalStatus() {
                     </Button>
                   </Paper>
                 )}
+                {/* <CButton onClick={checkStatus}>update</CButton> */}
               </div>
+
+              {/* <Stepper value={value} onChange={handleChange} items={items} /> */}
 
             </CModalBody>
             <CModalFooter>
@@ -307,6 +373,7 @@ function ApprovalStatus() {
   );
 
 }
+
 
 
 export default ApprovalStatus;
