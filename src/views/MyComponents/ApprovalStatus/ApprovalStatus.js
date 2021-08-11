@@ -82,9 +82,9 @@ function ApprovalStatus() {
 
 
   useEffect(() => {
-    showData(endPoints.searchMrf).then(data => {
-      console.log("mrfList:", data)
-      setMrfData(data)
+    showData(endPoints.getApprovals).then(data => {
+      console.log(data)
+
     }
     );
   }, []);
@@ -99,11 +99,11 @@ function ApprovalStatus() {
 
   const tableRows = []
   {
-    mrfData?.filter(item => item.status == "unapproved").map(item => {
-      // console.log("item:", item)
+    mrfData?.map(item => {
+      console.log(item.mrfRequestID.designation.positionID);
       tableRows.push({
         showButton: <CButton variant="ghost" color="info" className="icon2 bold" id={item._id} onClick={viewModalHandler} >View</CButton>,
-        position_id: item.designation.positionID.position,
+        position_id: item.mrfRequestID.designation.positionID,
         position_type: item.designation.positionType,
         hierarchy: item.hierarchyID.type + ": " + item.hierarchyID.name,
         repoting_manager: item.reportingManager.name.firstName + " " + item.reportingManager.name.lastName,
@@ -294,7 +294,7 @@ function ApprovalStatus() {
 
               <CCol className="col-sm-8 col-md-10 ">
                 <CContainer fluid >
-                  <MDBDataTableV5 hover bordered entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4} scrollX data={dataTable} fullPagination />
+                  {/* <MDBDataTableV5 hover bordered entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4} scrollX data={dataTable} fullPagination /> */}
                 </CContainer>
               </CCol>
             </CRow>
