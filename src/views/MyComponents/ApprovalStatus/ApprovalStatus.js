@@ -44,7 +44,7 @@ function ApprovalStatus() {
   const [mrfData, setMrfData] = useState([]);
   const [visible, setVisible] = useState(false)
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(1);
+  const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
   const [value, setValue] = React.useState(0);
 
@@ -83,7 +83,7 @@ function ApprovalStatus() {
 
   useEffect(() => {
     showData(endPoints.getApprovals).then(data => {
-      console.log(data)
+      setMrfData(data);
 
     }
     );
@@ -96,22 +96,22 @@ function ApprovalStatus() {
 
 
   }
-
+  console.log("mrfData:", mrfData);
   const tableRows = []
   {
     mrfData?.map(item => {
       console.log(item.mrfRequestID.designation.positionID);
       tableRows.push({
         showButton: <CButton variant="ghost" color="info" className="icon2 bold" id={item._id} onClick={viewModalHandler} >View</CButton>,
-        position_id: item.mrfRequestID.designation.positionID,
-        position_type: item.designation.positionType,
-        hierarchy: item.hierarchyID.type + ": " + item.hierarchyID.name,
-        repoting_manager: item.reportingManager.name.firstName + " " + item.reportingManager.name.lastName,
-        startDate: item.startDate.toString().slice(0, 10),
-        endDate: item.endDate.toString().slice(0, 10),
-        diversity: item.diversity,
-        job_type: item.jobType,
-        job_location: item.branchID.name + ", " + item.branchID.location
+        position_id: item.mrfRequestID.designation.positionID.position,
+        position_type: item.mrfRequestID.designation.positionType,
+        hierarchy: item.mrfRequestID.hierarchyID.type + ": " + item.mrfRequestID.hierarchyID.name,
+        reporting_manager: item.mrfRequestID.reportingManager.name.firstName + " " + item.mrfRequestID.reportingManager.name.lastName,
+        startDate: item.mrfRequestID.startDate.toString().slice(0, 10),
+        // endDate: item.endDate.toString().slice(0, 10),
+        diversity: item.mrfRequestID.diversity,
+        job_type: item.mrfRequestID.jobType,
+        job_location: item.mrfRequestID.branchID.name + ", " + item.mrfRequestID.branchID.location
       })
     })
   }
@@ -144,7 +144,7 @@ function ApprovalStatus() {
       },
       {
         label: 'Repoting Manager',
-        field: 'repoting_manager',
+        field: 'reporting_manager',
         sort: 'disabled',
         width: 200,
       },
@@ -154,12 +154,12 @@ function ApprovalStatus() {
         sort: 'disabled',
         width: 150,
       },
-      {
-        label: 'End date',
-        field: 'endDate',
-        sort: 'disabled',
-        width: 150,
-      },
+      // {
+      //   label: 'End date',
+      //   field: 'endDate',
+      //   sort: 'disabled',
+      //   width: 150,
+      // },
       {
         label: 'Diversity',
         field: 'diversity',
@@ -182,6 +182,16 @@ function ApprovalStatus() {
     ],
     rows: tableRows
   }
+  const widerData = {
+    columns: [
+      ...dataTable.columns.map((col) => {
+        col.width = 200;
+        return col;
+      }),
+    ],
+    rows: [...dataTable.rows],
+  }
+
 
 
   function getSteps() {
@@ -260,41 +270,12 @@ function ApprovalStatus() {
                       <input className="input" type="text" placeholder="enter position" onChange={positionSearchHandler} />
                     </CRow>
                   </CRow>
-                  <hr />
-                  <CRow>
-                    <CFormCheck id="flexCheckDefault" label="By Heirarchy" value="searchHeirarchy" onChange={changeValueHandler} />
-                    <CRow>
-                      <input className="input" type="text" placeholder="enter heirarchy " onChange={heirarchySearchHandler} />
-                    </CRow>
-                  </CRow>
-                  <hr />
-                  <CRow>
-                    <CFormCheck id="flexCheckDefault" label="By Branch" value="searchBranch" onChange={changeValueHandler} />
-                    <CRow>
-                      <input className="input" type="text" placeholder="enter branch" onChange={branchSearchHandler} />
-                    </CRow>
-                  </CRow>
-                  <hr />
-                  <CRow>
-                    <CFormCheck id="flexCheckDefault" label="By Approver" value="searchApprover" onChange={changeValueHandler} />
-                    <CRow>
-                      <input className="input" type="text" placeholder="enter approver" onChange={approverSearchHandler} />
-                    </CRow>
-                  </CRow>
-                  <CRow className="mt-4">
-                    <CCol className="col-sm-4 mx-3">
-                      <CButton shape="rounded-pill" onClick={filterHandler}>APPLY</CButton>
-                    </CCol>
-                    <CCol className="col-sm-4 mx-3" >
-                      <CButton onClick={clearFilterHandler} shape="rounded-pill" color="danger">CLEAR</CButton>
-                    </CCol>
-                  </CRow>
-                </CRow> */}
+                 */}
               </CCol>
 
               <CCol className="col-sm-8 col-md-10 ">
                 <CContainer fluid >
-                  {/* <MDBDataTableV5 hover bordered entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4} scrollX data={dataTable} fullPagination /> */}
+                  <MDBDataTableV5 hover bordered entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4} scrollX data={widerData} fullPagination />
                 </CContainer>
               </CCol>
             </CRow>

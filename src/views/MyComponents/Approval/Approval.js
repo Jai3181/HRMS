@@ -33,6 +33,7 @@ function Approval(props) {
     const [userList, setUserList] = useState()
     const [mdbDataRows, setMdbDataRows] = useState([])
     const [isFiltered, setIsFiltered] = useState(false)
+    const [checkList, setCheckList] = useState([])
 
 
     var searchPosition = "";
@@ -161,19 +162,7 @@ function Approval(props) {
     }
     console.log(approvalMatrix);
 
-    const positionSearchHandler = (event) => {
-        searchPosition = event.target.value;
-        console.log(searchPosition);
-    }
-    const heirarchySearchHandler = (event) => {
-        searchHierarchy = event.target.value;
-    }
-    const branchSearchHandler = (event) => {
-        searchBranch = event.target.value;
-    }
-    const approverSearchHandler = (event) => {
-        searchApprover = event.target.value;
-    }
+
 
     const datatable = {
         columns: [
@@ -237,26 +226,43 @@ function Approval(props) {
         rows: [...datatable.rows],
     }
 
-    const checkList = []
+    const positionSearchHandler = (event) => {
+        searchPosition = event.target.value;
+        console.log(searchPosition);
+    }
+    const heirarchySearchHandler = (event) => {
+        searchHierarchy = event.target.value;
+    }
+    const branchSearchHandler = (event) => {
+        searchBranch = event.target.value;
+    }
+    const approverSearchHandler = (event) => {
+        searchApprover = event.target.value;
+    }
+
+    // const checkList = []
     const changeValueHandler = (event) => {
         console.log(event.target)
-        if (event.target.checked) {
-            checkList.push(event.target.value);
+        if (event.target.checked == true) {
+            setCheckList([...checkList, event.target.value])
         } else if (event.target.checked == false) {
             const index1 = checkList.indexOf(event.target.value);
-            checkList.splice(index1, 1);
+            let newCheckList = [...checkList]
+            newCheckList.splice(index1, 1);
+            console.log(newCheckList)
+            setCheckList(newCheckList)
         }
         console.log(checkList);
     }
 
 
     const filteredRows = [];
-
     const clearFilterHandler = () => {
+        document.querySelector("#filterForm").reset()
         setIsFiltered(false)
-        // setTableRows([]);
-        // setTableRows(DataRows);
+        setCheckList([])
     }
+
 
     const formSubmitHandler = (event) => {
         event.preventDefault()
@@ -321,65 +327,37 @@ function Approval(props) {
                             <CCol className=" col-sm-4 col-md-2 filter ">
                                 FILTER BAR
                                 <hr />
-                                <CForm onSubmit={formSubmitHandler}>
+                                <CForm onSubmit={formSubmitHandler} id="filterForm">
                                     <CRow>
                                         <CFormCheck id="flexCheckDefault" label="By Position" value="searchPosition" onChange={changeValueHandler} />
-                                        <CRow>
-                                            <input className="input" type="text" placeholder="enter position" onChange={positionSearchHandler} />
-                                        </CRow>
+                                        {checkList.includes("searchPosition") ?
+                                            <CRow>
+                                                <input className="input" type="text" placeholder="enter position" onChange={positionSearchHandler} />
+                                            </CRow> : ""}
                                     </CRow>
                                     <hr />
                                     <CRow>
                                         <CFormCheck id="flexCheckDefault" label="By Heirarchy" value="searchHeirarchy" onChange={changeValueHandler} />
-                                        <CRow>
-                                            <input className="input" type="text" placeholder="enter heirarchy " onChange={heirarchySearchHandler} />
-                                            {/* <Select
-                                                className="select"
-                                            // onChange={heirarchySearchHandler}
-                                            /> */}
-                                        </CRow>
+                                        {checkList.includes("searchHeirarchy") ?
+                                            <CRow>
+                                                <input className="input" type="text" placeholder="enter heirarchy " onChange={heirarchySearchHandler} />
+                                            </CRow> : ""}
                                     </CRow>
                                     <hr />
                                     <CRow>
                                         <CFormCheck id="flexCheckDefault" label="By Branch" value="searchBranch" onChange={changeValueHandler} />
-                                        <CRow>
-                                            <input className="input" type="text" placeholder="enter branch" onChange={branchSearchHandler} />
-                                        </CRow>
+                                        {checkList.includes("searchBranch") ?
+                                            <CRow>
+                                                <input className="input" type="text" placeholder="enter Branch" onChange={branchSearchHandler} />
+                                            </CRow> : ""}
                                     </CRow>
-                                    <hr />
-                                    {/* <CRow>
-                                        <CFormCheck id="flexCheckDefault" label="By Cooling Period" value="searchCooling" onChange={changeValueHandler} />
-                                        <CRow>
-                                            <CFormControl
-                                                className="select"
-                                                type="number"
-                                                id="age"
-
-                                                onChange={coolingSearchHandler}
-                                            // required
-                                            />
-                                        </CRow>
-                                    </CRow>
-                                    <hr />
-                                    <CRow>
-                                        <CFormCheck id="flexCheckDefault" label="By TAT" value="searchTAT" />
-                                        <CRow>
-                                            <CFormControl
-                                                className="select"
-                                                type="number"
-                                                id="age"
-
-                                            // onChange={ageChangeHandler}
-                                            // required
-                                            />
-                                        </CRow>
-                                    </CRow> */}
                                     <hr />
                                     <CRow>
                                         <CFormCheck id="flexCheckDefault" label="By Approver" value="searchApprover" onChange={changeValueHandler} />
-                                        <CRow>
-                                            <input className="input" type="text" placeholder="enter approver" onChange={approverSearchHandler} />
-                                        </CRow>
+                                        {checkList.includes("searchApprover") ?
+                                            <CRow>
+                                                <input className="input" type="text" placeholder="enter approver" onChange={approverSearchHandler} />
+                                            </CRow> : ""}
                                     </CRow>
                                     <CRow className="mt-4">
                                         <CCol className="col-sm-4 mx-3">
@@ -392,6 +370,7 @@ function Approval(props) {
                                     </CRow>
                                 </CForm>
                             </CCol>
+                            <div className="vertical"></div>
 
                             <CCol className="col-sm-8 col-md-10 ">
                                 <CContainer fluid >
@@ -401,59 +380,6 @@ function Approval(props) {
                             </CCol>
                         </CRow>
                     </CContainer>
-                    {/* <CModal alignment="center" visible={visible}>
-                        <CModalHeader onDismiss={() => setVisible(false)}>
-                            <CModalTitle>Approval Status</CModalTitle>
-                        </CModalHeader>
-                        <CModalBody>
-                            <div className={classes.root}>
-                                <Stepper activeStep={activeStep} orientation="vertical">
-                                    {steps.map((label, index) => (
-                                        <Step key={label}>
-                                            <StepLabel>{label}</StepLabel>
-                                            <StepContent>
-                                                <Typography>{getStepContent(index)}</Typography>
-                                                <div className={classes.actionsContainer}>
-                                                    <div>
-                                                        <Button
-                                                            disabled={activeStep === 0}
-                                                            onClick={handleBack}
-                                                            className={classes.button}
-                                                        >
-                                                            Back
-                                                        </Button>
-                                                        <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            onClick={handleNext}
-                                                            className={classes.button}
-                                                        >
-                                                            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            </StepContent>
-                                        </Step>
-                                    ))}
-                                </Stepper>
-                                {activeStep === steps.length && (
-                                    <Paper square elevation={0} className={classes.resetContainer}>
-                                        <Typography>All steps completed - you&apos;re finished</Typography>
-                                        <Button onClick={handleReset} className={classes.button}>
-                                            Reset
-                                        </Button>
-                                    </Paper>
-                                )}
-                            </div>
-
-                        </CModalBody>
-                        <CModalFooter>
-                            <CButton color="secondary" onClick={() => setVisible(false)}>
-                                Close
-                            </CButton>
-                            <CButton color="primary">Save changes</CButton>
-                        </CModalFooter>
-                    </CModal>*/}
                 </div>
                 <AppFooter />
             </div>
