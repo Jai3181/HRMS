@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import './MRFform.css'
 import { BsEyeFill } from "react-icons/bs";
 import { MDBDataTableV5 } from 'mdbreact';
-import { CContainer, CRow, CCol, CButton } from '@coreui/react'
+import { CContainer, CRow, CCol, CButton, CForm, CFormCheck } from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index'
 import { useStateValue } from "../../../StateProvider";
 import "../Approval/Approval.css";
@@ -16,7 +16,10 @@ export default function MRFform(props) {
     const [userList, setUserList] = useState()
     const [hierarchyList, setHierarchyList] = useState()
     const [branchList, setBranchList] = useState()
+    const [checkList, setCheckList] = useState([])
     const [approvalList, setApprovalList] = useState()
+    const [mdbDataRows, setMdbDataRows] = useState([])
+    const [isFiltered, setIsFiltered] = useState(false)
 
 
     if (approvalList) { sessionStorage.setItem("approvalList", JSON.stringify(approvalList)) }
@@ -45,16 +48,24 @@ export default function MRFform(props) {
     {
         mrfList?.map(item => {
             tableRows.push({
-                showButton: <Link to="/EditMrfPage"><BsEyeFill id={item._id} onClick={showButtonHandler} /></Link>,
+                showButton: <div className="d-flex justify-content-around">
+                    {/* <Link to="/EditMrfPage"><BsEyeFill id={item._id} onClick={showButtonHandler} /></Link> */}
+                    <Link to="#">
+                        <CButton variant="ghost" color="primary" size="sm" onClick={showButtonHandler} id={item._id} >View</CButton>
+                    </Link>
+                </div>,
                 position_id: item.designation.positionID.position,
                 position_type: item.designation.positionType,
-                hierarchy: item.hierarchyID.type + ": " + item.hierarchyID.name,
+                // hierarchy: item.hierarchyID.type + ": " + item.hierarchyID.name,
+                hierarchy: item.hierarchyID.name,
                 repoting_manager: item.reportingManager.name.firstName + " " + item.reportingManager.name.lastName,
                 startDate: item.startDate.toString().slice(0, 10),
                 endDate: item.endDate.toString().slice(0, 10),
                 diversity: item.diversity,
                 job_type: item.jobType,
-                job_location: item.branchID.name + ", " + item.branchID.location
+                // job_location: item.branchID.name + ", " + item.branchID.location
+                job_city: item.branchID.location,
+                job_branch: item.branchID.name,
             })
         })
     }
@@ -64,7 +75,7 @@ export default function MRFform(props) {
             {
                 label: '',
                 field: 'showButton',
-                width: 90,
+                width: 100,
             },
             {
                 label: 'Position Name',
@@ -78,7 +89,7 @@ export default function MRFform(props) {
             {
                 label: 'Type',
                 field: 'position_type',
-                width: 100,
+                width: 150,
             },
             {
                 label: 'Hierarchy',
@@ -116,24 +127,30 @@ export default function MRFform(props) {
                 width: 150,
             },
             {
-                label: 'Job Location',
-                field: 'job_location',
+                label: 'location',
+                field: 'job_city',
+                sort: 'disabled',
+                width: 200,
+            },
+            {
+                label: 'branch',
+                field: 'job_branch',
                 sort: 'disabled',
                 width: 200,
             },
 
         ],
-        rows: tableRows
+        rows: isFiltered ? mdbDataRows : tableRows
     }
-    const widerData = {
-        columns: [
-            ...dataTable.columns.map((col) => {
-                col.width = 200;
-                return col;
-            }),
-        ],
-        rows: [...dataTable.rows],
-    }
+    // const widerData = {
+    //     columns: [
+    //         ...dataTable.columns.map((col) => {
+    //             col.width = 200;
+    //             return col;
+    //         }),
+    //     ],
+    //     rows: [...dataTable.rows],
+    // }
 
     async function postData(url, data) {
         // setIsLoading(true)
@@ -202,41 +219,95 @@ export default function MRFform(props) {
     }, [])
     console.log("reducerState::::::: ", reducerState)
 
+
+    var searchPosition = "";
+    var searchHierarchy = "";
+    var searchLocation = "";
+    var searchBranch = "";
+    var reportingManager = "";
     // const checkList = []
-    // const changeValueHandler = (event) => {
-    //     if (event.target.checked) {
-    //         checkList.push(event.target.value);
+    const changeValueHandler = (event) => {
+        // console.log(event.target)
+        if (event.target.checked == true) {
+            setCheckList([...checkList, event.target.value])
+        } else if (event.target.checked == false) {
+            const index1 = checkList.indexOf(event.target.value);
+            let newCheckList = [...checkList]
+            newCheckList.splice(index1, 1);
+            console.log(newCheckList)
+            setCheckList(newCheckList)
+        }
+    }
 
-    //     } else if (event.target.checked == false) {
-    //         const index1 = checkList.indexOf(event.target.value);
-    //         checkList.splice(index1, 1);
-    //     }
-    //     console.log(checkList);
-    // }
+    const filteredRows = [];
+    const clearFilterHandler = () => {
+        document.querySelector("#filterForm").reset()
+        setIsFiltered(false)
+        setCheckList([])
+    }
 
+    const filterSubmitHandler = (event) => {
+        event.preventDefault()
+        console.log("event: ", event)
+        if (checkList.includes("searchPosition")) {
+            if (searchPosition.length > 0) {
+                tableRows.filter(data => data.position_id.toUpperCase().includes(searchPosition.toUpperCase())).map(data => filteredRows.push(data));
+            }
+            console.log("filteredRows:", filteredRows);
+        }
+        if (checkList.includes("searchHeirarchy")) {
+            if (searchHierarchy.length > 0) {
+                tableRows.filter(data => data.hierarchy.toUpperCase().includes(searchHierarchy.toUpperCase())).map(data => filteredRows.push(data));
+            }
+            console.log("filteredRows:", filteredRows);
+        }
+        if (checkList.includes("searchLocation")) {
+            if (searchLocation.length > 0) {
+                tableRows.filter(data => data.job_city.toUpperCase().includes(searchLocation.toUpperCase())).map(data => filteredRows.push(data))
+            }
+            console.log("filteredRows:", filteredRows);
+        }
+        if (checkList.includes("searchBranch")) {
+            if (searchBranch.length > 0) {
+                tableRows.filter(data => data.job_branch.toUpperCase().includes(searchBranch.toUpperCase())).map(data => filteredRows.push(data))
+            }
+            console.log("filteredRows:", filteredRows);
+        }
+        if (checkList.includes("reportingManager")) {
+            if (reportingManager.length > 0) {
+                tableRows.filter(data => data.repoting_manager.toUpperCase().includes(reportingManager.toUpperCase())).map(data => filteredRows.push(data));
+            }
+            console.log("filteredRows:", filteredRows);
+        }
+        let updatedRows = [...new Set(filteredRows)];
+        console.log("updatedRows:", updatedRows);
+        setMdbDataRows(updatedRows)
+        setIsFiltered(true)
+        event.target.reset()
+    }
 
-    // const filterHandler = (event) => {
-    //     if (checkList.includes("searchPosition")) {
-    //         const pos = tableRows.filter(data => data.position.toUpperCase().includes(searchPosition.toUpperCase()))
-    //         console.log(pos);
-    //     }
-    //     if (checkList.includes("searchHeirarchy")) {
-    //         const hei = tableRows.filter(data => data.heirarchy.toUpperCase().includes(searchHierarchy.toUpperCase()))
-    //         console.log(hei);
+    const positionSearchHandler = (event) => {
+        searchPosition = event.target.value;
+        console.log("searchPosition: ", searchPosition)
+    }
+    const heirarchySearchHandler = (event) => {
+        searchHierarchy = event.target.value;
+        console.log("search hierarchy: ", searchHierarchy)
+    }
+    const locationSearchHandler = (event) => {
+        searchLocation = event.target.value;
+        console.log("searchLocation: ", searchLocation)
+    }
+    const branchSearchHandler = (event) => {
+        searchBranch = event.target.value;
+        console.log("searchBranch: ", searchBranch)
+    }
+    const reportingManagerSearchHandler = (event) => {
+        reportingManager = event.target.value;
+        console.log("reportingManager: ", reportingManager)
+    }
 
-    //     }
-    //     if (checkList.includes("searchBranch")) {
-    //         const branch = tableRows.filter(data => data.branchname.toUpperCase().includes(searchBranch.toUpperCase()))
-    //         console.log(branch);
-
-    //     }
-    //     if (checkList.includes("searchApprover")) {
-    //         const app = tableRows.filter(data => data.approverName.toUpperCase().includes(searchApprover.toUpperCase()))
-    //         console.log(app);
-    //     }
-    // }
-
-
+    console.log(checkList)
     return (
         <div>
             {/* <AppSidebar /> */}
@@ -253,42 +324,56 @@ export default function MRFform(props) {
                             <CCol md={2} className="filterbar align-self-start align-items-center justify-content-center">
                                 FILTER BAR
                                 <hr />
-                                {/* <CRow>
+                                <CForm onSubmit={filterSubmitHandler} id="filterForm">
                                     <CRow>
                                         <CFormCheck id="flexCheckDefault" label="By Position" value="searchPosition" onChange={changeValueHandler} />
-                                        <CRow>
-                                            <input className="input" type="text" placeholder="enter position" onChange={positionSearchHandler} />
-                                        </CRow>
+                                        {checkList.includes("searchPosition") ?
+                                            <CRow>
+                                                <input className="input" type="text" placeholder="enter position" onChange={positionSearchHandler} />
+                                            </CRow> : ""}
                                     </CRow>
                                     <hr />
                                     <CRow>
                                         <CFormCheck id="flexCheckDefault" label="By Heirarchy" value="searchHeirarchy" onChange={changeValueHandler} />
-                                        <CRow>
-                                            <input className="input" type="text" placeholder="enter heirarchy " onChange={heirarchySearchHandler} />
-                                        </CRow>
+                                        {checkList.includes("searchHeirarchy") ?
+                                            <CRow>
+                                                <input className="input" type="text" placeholder="enter heirarchy " onChange={heirarchySearchHandler} />
+                                            </CRow> : ""}
+                                    </CRow>
+                                    <hr />
+                                    <CRow>
+                                        <CFormCheck id="flexCheckDefault" label="By location" value="searchLocation" onChange={changeValueHandler} />
+                                        {checkList.includes("searchLocation") ?
+                                            <CRow>
+                                                <input className="input" type="text" placeholder="enter location" onChange={locationSearchHandler} />
+                                            </CRow> : ""}
                                     </CRow>
                                     <hr />
                                     <CRow>
                                         <CFormCheck id="flexCheckDefault" label="By Branch" value="searchBranch" onChange={changeValueHandler} />
-                                        <CRow>
-                                            <input className="input" type="text" placeholder="enter branch" onChange={branchSearchHandler} />
-                                        </CRow>
+                                        {checkList.includes("searchBranch") ?
+                                            <CRow>
+                                                <input className="input" type="text" placeholder="enter branch" onChange={branchSearchHandler} />
+                                            </CRow> : ""}
                                     </CRow>
                                     <hr />
                                     <CRow>
-                                        <CFormCheck id="flexCheckDefault" label="By Approver" value="searchApprover" onChange={changeValueHandler} />
-                                        <CRow>
-                                            <input className="input" type="text" placeholder="enter approver" onChange={approverSearchHandler} />
-                                        </CRow>
+                                        <CFormCheck id="flexCheckDefault" label="By Reporting Manager" value="reportingManager" onChange={changeValueHandler} />
+                                        {checkList.includes("reportingManager") ?
+                                            <CRow>
+                                                <input className="input" type="text" placeholder="enter reporting manager" onChange={reportingManagerSearchHandler} />
+                                            </CRow> : ""}
                                     </CRow>
                                     <CRow className="mt-4">
-                                        <CCol className="col-sm-2"></CCol>
-                                        <CCol className="col-sm-9">
-                                            <CButton onClick={filterHandler}>APPLY FILTER</CButton>
+                                        <CCol className="col-sm-4 mx-3">
+                                            <CButton type="submit" shape="rounded-pill" >APPLY</CButton>
                                         </CCol>
-                                        <CCol className="col-sm-2"></CCol>
+                                        {/* <CCol className="col-sm-4"></CCol> */}
+                                        <CCol className="col-sm-4 mx-3" >
+                                            <CButton onClick={clearFilterHandler} shape="rounded-pill" color="danger">CLEAR</CButton>
+                                        </CCol>
                                     </CRow>
-                                </CRow> */}
+                                </CForm>
                             </CCol>
                             <CCol className="col-sm-8 col-md-10 ">
                                 <CContainer fluid >
@@ -303,7 +388,7 @@ export default function MRFform(props) {
                                         scrollX
                                         searchTop
                                         searchBottom={false}
-                                        data={widerData}
+                                        data={dataTable}
                                     />;
                                 </CContainer>
                             </CCol>
