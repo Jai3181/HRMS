@@ -24,7 +24,7 @@
     color: blue;
 } */
 
-.filter{
+/* .filter{
     
     overflow-y: scroll !important;
 }
@@ -52,4 +52,10 @@
     margin:20px 20px;
      background-color : #EBEDEF !important;
 }
-
+ */
+.vertical {
+            border-left:  1px solid #808080;
+            height: 70%;
+            position:absolute;
+            left: 18%;
+        }

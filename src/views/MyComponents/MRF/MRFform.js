@@ -375,6 +375,7 @@ export default function MRFform(props) {
                                     </CRow>
                                 </CForm>
                             </CCol>
+                            <div className="vertical"></div>
                             <CCol className="col-sm-8 col-md-10 ">
                                 <CContainer fluid >
                                     <MDBDataTableV5
