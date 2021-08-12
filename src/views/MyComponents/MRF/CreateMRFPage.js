@@ -175,8 +175,9 @@ const formReducer = (formState, action) => {
 
 function CreateMRFPage(props) {
     const [formState, dispatchForm] = useReducer(formReducer, InitialFormState)
-    const [reducerState, dispatch] = useStateValue()
-    const token = reducerState.token
+    // const [reducerState, dispatch] = useStateValue()
+    const [position, setPosition] = useState("new")
+    const token = JSON.parse(sessionStorage.getItem("token"));
     const userList = JSON.parse(sessionStorage.getItem("userList"))
     const hierarchyList = JSON.parse(sessionStorage.getItem("hierarchyList"))
     const branchList = JSON.parse(sessionStorage.getItem("branchList"))
@@ -217,9 +218,10 @@ function CreateMRFPage(props) {
         let branchLocationObject = new Set()
         {
             branchList?.map(branch => {
-                branchLocationObject.add(branch.location)
+                branchLocationObject.add(branch.location.trim())
             })
         }
+        console.log("branchLocationObject", branchLocationObject)
         {
             for (let branch of branchLocationObject) {
                 branchLocationOptions.push({ label: branch, value: branch })
@@ -244,6 +246,7 @@ function CreateMRFPage(props) {
         console.log(event.value)
     }
     const posTypeChangeHandler = (event) => {
+        setPosition(event.target.value)
         dispatchForm({ type: "POSTYPE_INPUT", val: event.target.value })
         console.log(event.target.value)
     }
@@ -475,19 +478,19 @@ function CreateMRFPage(props) {
                             </CCol>
                         </CRow>
 
-
-                        <CRow className="mb-3">
-                            <CFormLabel htmlFor="rep_name" className="col-md-2 col-form-label">Replacement for</CFormLabel>
-                            <CCol sm="4">
-                                <Select
-                                    options={userNameOptions}
-                                    isSearchable
-                                    // isClearable
-                                    onChange={ReplacementIDChangeHandler}
-                                    required
-                                />
-                            </CCol>
-                        </CRow>
+                        {position == "new" ? "" :
+                            <CRow className="mb-3">
+                                <CFormLabel htmlFor="rep_name" className="col-md-2 col-form-label">Replacement for</CFormLabel>
+                                <CCol sm="4">
+                                    <Select
+                                        options={userNameOptions}
+                                        isSearchable
+                                        // isClearable
+                                        onChange={ReplacementIDChangeHandler}
+                                        required
+                                    />
+                                </CCol>
+                            </CRow>}
 
 
                         <br />
@@ -527,11 +530,14 @@ function CreateMRFPage(props) {
                             <CFormLabel htmlFor="rep_man" className="col-sm-2 col-form-label">Reporting Manager</CFormLabel>
                             <CCol sm="4">
                                 <Select
+                                    placeholder="You"
+                                    isDisabled
                                     options={userNameOptions}
                                     isSearchable
                                     // isClearable
                                     onChange={repManChangeHandler}
                                     required
+                                    disabled
                                 />
                             </CCol>
 

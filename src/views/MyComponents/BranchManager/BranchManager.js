@@ -80,8 +80,8 @@ function BranchManager(props) {
         console.log("in add branch handler")
         event.preventDefault()
         const newBranch = {
-            location: enteredBranchLocation,
-            name: enteredBranchName
+            location: enteredBranchLocation.trim(),
+            name: enteredBranchName.trim()
         }
         postData(endPoints.addBranch, newBranch)
             .then(Data => {

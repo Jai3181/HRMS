@@ -145,9 +145,12 @@ function UserProfile() {
 
 
     const postDataHandler = () => {
-        setVisibleOne(false)
         console.log(Access);
-        postData(endPoints.postUserProfile, { role: newRole, access: Access }).then(res => console.log(res));
+        postData(endPoints.postUserProfile, { role: newRole, access: Access }).then(res => {
+            if (res.Success === true) {
+                showDataList(endPoints.getUserProfile).then(data => { setShowData(data); setVisibleOne(false); });
+            }
+        });
 
     }
     const datatable = {

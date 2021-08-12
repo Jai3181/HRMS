@@ -476,15 +476,16 @@ function AddUserForm(props) {
         let branchLocationObject = new Set()
         {
             branchList?.map(branch => {
-                branchLocationObject.add(branch.location)
+                branchLocationObject.add(branch.location.trim())
             })
         }
+        console.log("branchLocationObject", branchLocationObject)
         {
             for (let branch of branchLocationObject) {
                 branchLocationOptions.push({ label: branch, value: branch })
             }
         }
-        console.log("branchLocationOptions after", branchLocationOptions)
+        console.log("branchLocationOptions", branchLocationOptions)
     }
 
     const hierarchyNameOptions = []
@@ -514,7 +515,8 @@ function AddUserForm(props) {
                     // last_name: user.name.lastName,
                     user_type: user.userType,
                     user_role: user.userRole.name,
-                    hierarchy: user.hierarchyID.type + "," + user.hierarchyID.name,
+                    // hierarchy: user.hierarchyID.type + "," + user.hierarchyID.name,
+                    hierarchy: user.hierarchyID.name,
                     // hierarchy_type: user.hierarchyID.type,
                     // hierarchy_name: user.hierarchyID.name,
                     job_type: user.jobType,
