@@ -132,13 +132,20 @@ function UserProfile() {
 
 
     const savePermissionHandler = (event) => {
+
         console.log(roles);
-        // showData.map(data => {
-        //     patchData(endPoints.patchUserProfile, { _id: data._id, access: data.access }).then(res => console.log(res));
+        showData.map(data => {
+            patchData(endPoints.patchUserProfile, { _id: data._id, access: data.access }).then(res => {
+                if (res.success === true) {
+                    showDataList(endPoints.getUserProfile).then(data => { setShowData(data); setVisible(false); });
+                }
+            });
 
 
-        // })
+        });
+
     }
+
 
     const postDataHandler = () => {
 

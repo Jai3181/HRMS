@@ -12,14 +12,7 @@ import ViewApprovalForm from '../MRF/ViewApprovalForm';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { useStateValue } from "../../../StateProvider";
-import { makeStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import StepContent from '@material-ui/core/StepContent';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+
 
 
 
@@ -144,8 +137,8 @@ function Approval(props) {
                 DataRows.push({
                     document_id: data._id,
                     delete: <div className="d-flex justify-content-around">
-                        <Link to="/viewapprovalform"><CButton size="sm" color="primary" variant="ghost" id={data._id} className="icon1" onClick={pageChangeHandler}>Edit</CButton></Link>
-                        <CButton variant="ghost" color="danger" size="sm" className="icon3" onClick={dataDeleteHandler} id={data._id} >Delete</CButton>
+                        <Link to="/viewapprovalform"><CButton color="primary" variant="ghost" id={data._id} className="icon1" onClick={pageChangeHandler}>Edit</CButton></Link>
+                        <CButton variant="ghost" color="danger" className="icon3" onClick={dataDeleteHandler} id={data._id} >Delete</CButton>
                     </div>,
                     position: data.position,
                     heirarchy: data.hierarchyID.name,
@@ -359,6 +352,7 @@ function Approval(props) {
                                                 <input className="input" type="text" placeholder="enter approver" onChange={approverSearchHandler} />
                                             </CRow> : ""}
                                     </CRow>
+                                    <hr />
                                     <CRow className="mt-4">
                                         <CCol className="col-sm-4 mx-3">
                                             <CButton type="submit" shape="rounded-pill" >APPLY</CButton>
