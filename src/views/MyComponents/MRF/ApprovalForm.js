@@ -214,7 +214,7 @@ function ApprovalForm(props) {
         }
         // console.log(newEmp.TAT);
         console.log(newEmp)
-        // postData(endPoints.addApprovalMatrix, newEmp).then(Data => { console.log(Data) });
+        postData(endPoints.addApprovalMatrix, newEmp).then(Data => { console.log(Data) });
         event.target.reset()
     }
 

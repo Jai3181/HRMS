@@ -46,7 +46,7 @@ function ApprovalStatus() {
   const [visible, setVisible] = useState(false)
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
   const [stepsList, setStepsList] = useState([]);
   const [status, setStatus] = useState([]);
   const [checkList, setCheckList] = useState([])
@@ -113,12 +113,16 @@ function ApprovalStatus() {
               setStepsList(stepsList.concat(approver, ["accepted"]));
             });
             let count = 0;
+            console.log("before:", activeStep)
             for (let i = 0; i < item.Approvers.length; i++) {
               if (item.Approvers[i].status == "Accept") {
                 setActiveStep(i + 1);
-              } else if (item.Approvers[i].status == "None") {
-                setActiveStep(i);
               }
+              if (item.Approvers[i].status == "None") {
+                setActiveStep(i);
+                break;
+              }
+              // console.log("after:",activeStep)
             }
             // item.Approvers.map(data => {
             //   status1.push(data.status);
@@ -345,6 +349,7 @@ function ApprovalStatus() {
 
   console.log(checkList)
 
+  console.log("after:", activeStep)
 
   return (
     <div>
