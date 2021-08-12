@@ -399,7 +399,7 @@ function AddUserForm(props) {
     }
     async function showData(url) {
         console.log("in show data")
-        // setIsLoading(true)
+        setIsLoading(true)
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -408,7 +408,7 @@ function AddUserForm(props) {
             },
         });
         const Data = await response.json();
-        // setIsLoading(false)
+        setIsLoading(false)
         return Data
     }
     async function removeData(url, data) {
@@ -636,7 +636,7 @@ function AddUserForm(props) {
                         <CCol sm="2">
                             <CFormSelect id="searchBy" onChange={selectedFilterByHandler} value={filterBy} required>
                                 <option>search by...</option>
-                                <option value="name.fName">First Name</option>
+                                <option value="name.fName">Name</option>
                                 <option value="uType">User Type</option>
                                 <option value="uRole">User Role</option>
                                 <option value="jType">Job Type</option>
@@ -670,19 +670,20 @@ function AddUserForm(props) {
                     </CRow>
                 </CForm>
             </CRow>
-            <MDBDataTableV5
-                // small
-                hover
-                // striped
-                fullPagination
-                entriesOptions={[5, 10, 20]}
-                entries={5}
-                bordered
-                scrollX
-                searchTop={false}
-                searchBottom={false}
-                data={widerData}
-            />;
+            {isLoading ? <CSpinner color="primary" /> :
+                <MDBDataTableV5
+                    // small
+                    hover
+                    // striped
+                    fullPagination
+                    entriesOptions={[5, 10, 20]}
+                    entries={5}
+                    bordered
+                    scrollX
+                    searchTop={false}
+                    searchBottom={false}
+                    data={widerData}
+                />}
             <CModal size="xl" alignment="center" visible={visible} backdrop={true}>
                 <CModalHeader onDismiss={modalCloseHandler}>
                     <CModalTitle>Add New User</CModalTitle>

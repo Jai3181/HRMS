@@ -7,9 +7,9 @@ import PropTypes from "prop-types";
 import endPoints from 'src/utils/EndPointApi';
 import { useStateValue } from "../../../StateProvider"
 import LoadingOverlay from 'react-loading-overlay';
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 function LoginCard(props) {
-    // const history = useHistory();
+    const history = useHistory();
     const MyDashboard = React.lazy(() => import('../../dashboard/MyDashboard'))
     // const createAccountHandler = (event) => {
     //     props?.isNewUser(false);
@@ -19,6 +19,7 @@ function LoginCard(props) {
     const [enteredPassword, setEnteredPassword] = useState("");
     const [emailerrorMessage, setEmailerrorMessage] = useState(false);
     const [passworderrorMessage, setPassworderrorMessage] = useState(false);
+    const [authenticate, setAuthenticated] = useState(false);
     // const [okLogin, setOkLogin] = useState(false);
 
 
@@ -48,7 +49,8 @@ function LoginCard(props) {
                 if (data.token) {
                     console.log("entered here")
                     sessionStorage.setItem('token', JSON.stringify(data.token));
-                    // history.push("/mydashboard");
+                    history.push("/mydashboard")
+                    // setAuthenticated(true)
                 }
 
                 dispatch({
@@ -78,6 +80,10 @@ function LoginCard(props) {
         });
         return response.json(); // parses JSON response into native JavaScript objects
     }
+
+    // if (authenticate == true) {
+    //     return <Redirect to="/mydashboard" />
+    // }
     return (
         <CCard className="card_component mt-5">
             <CCardBody>
