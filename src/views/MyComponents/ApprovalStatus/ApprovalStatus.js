@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
-import '../MRF/MRFform.css'
+import '../MRF/MRFform.css';
+import "../Approval/Approval.css";
 import { MDBDataTableV5 } from 'mdbreact';
-import { CContainer, CRow, CCol, CBadge, CButton, CFormCheck, CFormControl, CModalFooter, CModalBody, CModalTitle, CModalHeader, CModal } from '@coreui/react'
+import { CContainer, CRow, CCol, CBadge, CButton, CFormCheck, CFormControl, CModalFooter, CModalBody, CModalTitle, CModalHeader, CModal, CForm } from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index';
 import endPoints from "../../../utils/EndPointApi";
 import { useStateValue } from "../../../StateProvider";
@@ -44,9 +45,13 @@ function ApprovalStatus() {
   const [mrfData, setMrfData] = useState([]);
   const [visible, setVisible] = useState(false)
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const steps = getSteps();
   const [value, setValue] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [stepsList, setStepsList] = useState([]);
+  const [status, setStatus] = useState([]);
+  const [checkList, setCheckList] = useState([])
+  const [mdbDataRows, setMdbDataRows] = useState([])
+  const [isFiltered, setIsFiltered] = useState(false)
 
   const handleChange = (e) => {
     console.log(e.value);
@@ -90,19 +95,37 @@ function ApprovalStatus() {
   }, []);
 
 
-  const viewModalHandler = (event) => {
-    setVisible(!visible);
 
-
-
-  }
+  const approver = [];
+  const status1 = [];
   console.log("mrfData:", mrfData);
   const tableRows = []
   {
     mrfData?.map(item => {
       console.log(item.mrfRequestID.designation.positionID);
       tableRows.push({
-        showButton: <CButton variant="ghost" color="info" className="icon2 bold" id={item._id} onClick={viewModalHandler} >View</CButton>,
+        showButton: <CButton variant="ghost" color="primary" className="icon2" id={item.mrfRequestID._id}
+          onClick={(event) => {
+            setVisible(!visible);
+            item.Approvers.map(data => {
+              approver.push(data._id.name.firstName + " " + data._id.name.lastName);
+              console.log(approver);
+              setStepsList(stepsList.concat(approver, ["accepted"]));
+            });
+            let count = 0;
+            for (let i = 0; i < item.Approvers.length; i++) {
+              if (item.Approvers[i].status == "Accept") {
+                setActiveStep(i + 1);
+              } else if (item.Approvers[i].status == "None") {
+                setActiveStep(i);
+              }
+            }
+            // item.Approvers.map(data => {
+            //   status1.push(data.status);
+            //   setStatus(status1);
+            // })
+          }
+          }>View</CButton>,
         position_id: item.mrfRequestID.designation.positionID.position,
         position_type: item.mrfRequestID.designation.positionType,
         hierarchy: item.mrfRequestID.hierarchyID.type + ": " + item.mrfRequestID.hierarchyID.name,
@@ -115,6 +138,31 @@ function ApprovalStatus() {
       })
     })
   }
+  console.log("list:", stepsList)
+  console.log("status:", status)
+  // var step = 0;
+  // for (let i = 0; i < status.length; i++) {
+  //   console.log(status[i]);
+  //   if (status[i] == "Accept") {
+  //     step = i + 1
+  //     // console.log(step);
+  //     setActiveStep(step);
+
+  //   }
+
+  // }
+  // console.log(step);
+
+  // status.map((data, index) => {
+  //   if (data == "Accept") {
+  //     console.log("hello:", data, index);
+  //   }
+  // })
+
+
+
+
+
 
   const dataTable = {
     columns: [
@@ -180,7 +228,7 @@ function ApprovalStatus() {
       },
 
     ],
-    rows: tableRows
+    rows: isFiltered ? mdbDataRows : tableRows
   }
   const widerData = {
     columns: [
@@ -192,11 +240,6 @@ function ApprovalStatus() {
     rows: [...dataTable.rows],
   }
 
-
-
-  function getSteps() {
-    return ['waiting for approval', 'Approver-1', 'Approver-2', 'Approver-3', 'accepted'];
-  }
 
   function getStepContent(step) {
     switch (step) {
@@ -212,42 +255,97 @@ function ApprovalStatus() {
         return 'Unknown step';
     }
   }
-  const items = [
-    {
-      label: "Cart",
-      icon: "k-i-cart",
-    },
-    {
-      label: "Delivery Address",
-      icon: "k-i-marker-pin-target",
-    },
-    {
-      label: "Payment Method",
-      icon: "k-i-dollar",
-    },
-    {
-      label: "Preview",
-      icon: "k-i-preview",
-      optional: true,
-    },
-    {
-      label: "Finish Order",
-      icon: "k-i-track-changes-accept",
-    },
-  ];
 
-
-  var i = 0
-  const checkStatus = () => {
-    if (getStepContent(i) == "approved") {
-      handleNext();
-      console.log("done", getStepContent(i), i);
-      i++;
-
+  var searchPosition = "";
+  var searchHierarchy = "";
+  var searchLocation = "";
+  var searchBranch = "";
+  var reportingManager = "";
+  // const checkList = []
+  const changeValueHandler = (event) => {
+    // console.log(event.target)
+    if (event.target.checked == true) {
+      setCheckList([...checkList, event.target.value])
+    } else if (event.target.checked == false) {
+      const index1 = checkList.indexOf(event.target.value);
+      let newCheckList = [...checkList]
+      newCheckList.splice(index1, 1);
+      console.log(newCheckList)
+      setCheckList(newCheckList)
     }
-
-    // console.log("clicked", index);
   }
+
+  const filteredRows = [];
+  const clearFilterHandler = () => {
+    document.querySelector("#filterForm").reset()
+    setIsFiltered(false)
+    setCheckList([])
+  }
+
+  const filterSubmitHandler = (event) => {
+    event.preventDefault()
+    console.log("event: ", event)
+    if (checkList.includes("searchPosition")) {
+      if (searchPosition.length > 0) {
+        tableRows.filter(data => data.position_id.toUpperCase().includes(searchPosition.toUpperCase())).map(data => filteredRows.push(data));
+      }
+      console.log("filteredRows:", filteredRows);
+    }
+    if (checkList.includes("searchHeirarchy")) {
+      if (searchHierarchy.length > 0) {
+        tableRows.filter(data => data.hierarchy.toUpperCase().includes(searchHierarchy.toUpperCase())).map(data => filteredRows.push(data));
+      }
+      console.log("filteredRows:", filteredRows);
+    }
+    if (checkList.includes("searchLocation")) {
+      if (searchLocation.length > 0) {
+        tableRows.filter(data => data.job_city.toUpperCase().includes(searchLocation.toUpperCase())).map(data => filteredRows.push(data))
+      }
+      console.log("filteredRows:", filteredRows);
+    }
+    if (checkList.includes("searchBranch")) {
+      if (searchBranch.length > 0) {
+        tableRows.filter(data => data.job_branch.toUpperCase().includes(searchBranch.toUpperCase())).map(data => filteredRows.push(data))
+      }
+      console.log("filteredRows:", filteredRows);
+    }
+    if (checkList.includes("reportingManager")) {
+      if (reportingManager.length > 0) {
+        tableRows.filter(data => data.repoting_manager.toUpperCase().includes(reportingManager.toUpperCase())).map(data => filteredRows.push(data));
+      }
+      console.log("filteredRows:", filteredRows);
+    }
+    let updatedRows = [...new Set(filteredRows)];
+    console.log("updatedRows:", updatedRows);
+    setMdbDataRows(updatedRows)
+    setIsFiltered(true)
+    event.target.reset()
+  }
+
+  const positionSearchHandler = (event) => {
+    searchPosition = event.target.value;
+    console.log("searchPosition: ", searchPosition)
+  }
+  const heirarchySearchHandler = (event) => {
+    searchHierarchy = event.target.value;
+    console.log("search hierarchy: ", searchHierarchy)
+  }
+  const locationSearchHandler = (event) => {
+    searchLocation = event.target.value;
+    console.log("searchLocation: ", searchLocation)
+  }
+  const branchSearchHandler = (event) => {
+    searchBranch = event.target.value;
+    console.log("searchBranch: ", searchBranch)
+  }
+  const reportingManagerSearchHandler = (event) => {
+    reportingManager = event.target.value;
+    console.log("reportingManager: ", reportingManager)
+  }
+
+  console.log(checkList)
+
+
   return (
     <div>
       {/* <AppSidebar /> */}
@@ -263,17 +361,60 @@ function ApprovalStatus() {
               <CCol className=" col-sm-4 col-md-2 filter ">
                 FILTER BAR
                 <hr />
-                {/* <CRow>
+                <CForm onSubmit={filterSubmitHandler} id="filterForm">
                   <CRow>
                     <CFormCheck id="flexCheckDefault" label="By Position" value="searchPosition" onChange={changeValueHandler} />
-                    <CRow>
-                      <input className="input" type="text" placeholder="enter position" onChange={positionSearchHandler} />
-                    </CRow>
+                    {checkList.includes("searchPosition") ?
+                      <CRow>
+                        <input className="input" type="text" placeholder="enter position" onChange={positionSearchHandler} />
+                      </CRow> : ""}
                   </CRow>
-                 */}
+                  <hr />
+                  <CRow>
+                    <CFormCheck id="flexCheckDefault" label="By Heirarchy" value="searchHeirarchy" onChange={changeValueHandler} />
+                    {checkList.includes("searchHeirarchy") ?
+                      <CRow>
+                        <input className="input" type="text" placeholder="enter heirarchy " onChange={heirarchySearchHandler} />
+                      </CRow> : ""}
+                  </CRow>
+                  <hr />
+                  <CRow>
+                    <CFormCheck id="flexCheckDefault" label="By location" value="searchLocation" onChange={changeValueHandler} />
+                    {checkList.includes("searchLocation") ?
+                      <CRow>
+                        <input className="input" type="text" placeholder="enter location" onChange={locationSearchHandler} />
+                      </CRow> : ""}
+                  </CRow>
+                  <hr />
+                  <CRow>
+                    <CFormCheck id="flexCheckDefault" label="By Branch" value="searchBranch" onChange={changeValueHandler} />
+                    {checkList.includes("searchBranch") ?
+                      <CRow>
+                        <input className="input" type="text" placeholder="enter branch" onChange={branchSearchHandler} />
+                      </CRow> : ""}
+                  </CRow>
+                  <hr />
+                  <CRow>
+                    <CFormCheck id="flexCheckDefault" label="By Reporting Manager" value="reportingManager" onChange={changeValueHandler} />
+                    {checkList.includes("reportingManager") ?
+                      <CRow>
+                        <input className="input" type="text" placeholder="enter reporting manager" onChange={reportingManagerSearchHandler} />
+                      </CRow> : ""}
+                  </CRow>
+                  <hr />
+                  <CRow className="mt-4">
+                    <CCol className="col-sm-4 mx-3">
+                      <CButton type="submit" shape="rounded-pill" >APPLY</CButton>
+                    </CCol>
+                    <CCol className="col-sm-4 mx-3" >
+                      <CButton onClick={clearFilterHandler} shape="rounded-pill" color="danger">CLEAR</CButton>
+                    </CCol>
+                  </CRow>
+                </CForm>
               </CCol>
 
               <CCol className="col-sm-8 col-md-10 ">
+                <div className="vertical"></div>
                 <CContainer fluid >
                   <MDBDataTableV5 hover bordered entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4} scrollX data={widerData} fullPagination />
                 </CContainer>
@@ -281,13 +422,13 @@ function ApprovalStatus() {
             </CRow>
           </CContainer>
           <CModal alignment="center" visible={visible}>
-            <CModalHeader onDismiss={() => setVisible(false)}>
+            <CModalHeader onDismiss={() => { setVisible(false); setStepsList([]) }}>
               <CModalTitle>Approval Status</CModalTitle>
             </CModalHeader>
             <CModalBody>
               <div className={classes.root}>
                 <Stepper activeStep={activeStep} orientation="vertical">
-                  {steps.map((label, index) => (
+                  {stepsList.map((label, index) => (
                     <Step key={label}>
                       <StepLabel color="success">{label}</StepLabel>
                       <StepContent>
@@ -326,14 +467,7 @@ function ApprovalStatus() {
                     </Step>
                   ))}
                 </Stepper>
-                {activeStep === steps.length && (
-                  <Paper square elevation={0} className={classes.resetContainer}>
-                    <Typography>All steps completed - you&apos;re finished</Typography>
-                    <Button onClick={handleReset} className={classes.button}>
-                      Reset
-                    </Button>
-                  </Paper>
-                )}
+
                 {/* <CButton onClick={checkStatus}>update</CButton> */}
               </div>
 
@@ -341,7 +475,7 @@ function ApprovalStatus() {
 
             </CModalBody>
             <CModalFooter>
-              <CButton color="secondary" onClick={() => setVisible(false)}>
+              <CButton color="secondary" onClick={() => { setVisible(false); setStepsList([]) }}>
                 Close
               </CButton>
               <CButton color="primary">Save changes</CButton>

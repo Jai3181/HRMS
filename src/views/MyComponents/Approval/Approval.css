@@ -4,19 +4,19 @@
 }
 
 .icon1{
-    left: -2%; position: relative; 
+    left: 0%; position: relative; 
     color: blue;
 }
 
 /* .icon1:hover{
     color: red;
 } */
-.icon2{
+/* .icon2{
     left: 2%; position: relative; 
     /* color: black; */
-}
+
 .icon3{
-    left: 6%; position: relative; 
+    left: -1%; position: relative; 
     color:red;
 }
 
@@ -34,7 +34,7 @@
 .filter::-webkit-scrollbar-thumb {
     color:#4f5d73;
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-}
+}*/
 .input {
     size:20px;
     border:none;
@@ -42,20 +42,26 @@
     background-color : #EBEDEF;
     margin:20px 20px;
     color: black;
-  ;
+  
 }
 .input:focus{
     outline: none;
-}
-
+} 
+/* 
 .select{
     margin:20px 20px;
      background-color : #EBEDEF !important;
-}
- */
+} */
+
 .vertical {
             border-left:  1px solid #808080;
             height: 70%;
             position:absolute;
             left: 18%;
         }
+
+
+.icon2{
+    left: 50%;
+
+}

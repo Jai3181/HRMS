@@ -19,17 +19,64 @@ function ViewApprovals() {
     const [showApproval, setShowApproval] = useState([]);
     const [remarks, setRemarks] = useState("");
     const token = JSON.parse(sessionStorage.getItem("token"));
+    const [acceptApproval, setAcceptApproval] = useState([]);
+    const [pendingApproval, setPendingApproval] = useState([]);
+    const [rejectApproval, setRejectApproval] = useState([]);
+    const [escalateApproval, setEscalateApproval] = useState([]);
 
 
-    const cardInfo = [
-        { title: "hello 1", body: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book" },
-        { title: "hello 2", body: "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia," },
-        { title: "hello 3", body: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters" },
-        { title: "hello 3", body: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters" },
-        { title: "hello 3", body: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters" },
-        { title: "hello 3", body: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters" }
+    const cardInfo1 = [];
+    {
+        pendingApproval.map(data => {
+            cardInfo1.push({
+                position: data.mrfRequestID.designation.positionID.position,
+                heirarchyType: data.mrfRequestID.hierarchyID.type,
+                heirarchyName: data.mrfRequestID.hierarchyID.name,
+                branchName: data.mrfRequestID.branchID.name,
+                jobType: data.mrfRequestID.jobType
+            });
+        })
+    }
 
-    ]
+    const cardInfo2 = [];
+    {
+        acceptApproval.map(data => {
+            cardInfo2.push({
+                position: data.mrfRequestID.designation.positionID.position,
+                heirarchyType: data.mrfRequestID.hierarchyID.type,
+                heirarchyName: data.mrfRequestID.hierarchyID.name,
+                branchName: data.mrfRequestID.branchID.name,
+                jobType: data.mrfRequestID.jobType
+            });
+        })
+    }
+    const cardInfo3 = [];
+    {
+        rejectApproval.map(data => {
+            cardInfo3.push({
+                position: data.mrfRequestID.designation.positionID.position,
+                heirarchyType: data.mrfRequestID.hierarchyID.type,
+                heirarchyName: data.mrfRequestID.hierarchyID.name,
+                branchName: data.mrfRequestID.branchID.name,
+                jobType: data.mrfRequestID.jobType
+            });
+        })
+    }
+    const cardInfo4 = [];
+    {
+        escalateApproval.map(data => {
+            cardInfo4.push({
+                position: data.mrfRequestID.designation.positionID.position,
+                heirarchyType: data.mrfRequestID.hierarchyID.type,
+                heirarchyName: data.mrfRequestID.hierarchyID.name,
+                branchName: data.mrfRequestID.branchID.name,
+                jobType: data.mrfRequestID.jobType
+            });
+        })
+    }
+
+
+
 
     async function getApproval(url) {
         // console.log("in show data")
@@ -64,9 +111,16 @@ function ViewApprovals() {
     }
 
     useEffect(() => {
-        getApproval(endPoints.getApprovals).then(data => console.log(data));
+        getApproval(endPoints.getApprovals).then(data => {
+            console.log(data);
+            setAcceptApproval(data);
+        });
 
     }, [])
+    console.log("approval:", acceptApproval);
+
+
+
 
 
     const acceptApprovalHandler = () => {
@@ -94,7 +148,7 @@ function ViewApprovals() {
     }
 
 
-    const renderCard = (card, index) => {
+    const renderCard1 = (card, index) => {
         return (
             <>
 
@@ -102,10 +156,19 @@ function ViewApprovals() {
 
                 <CCard style={{ width: '30rem' }} key={index} className="mx-auto my-5">
                     <CCardBody>
-                        <CCardTitle>{card.title}</CCardTitle>
-                        <CCardSubtitle className="mb-2 text-muted">Card subtitle</CCardSubtitle>
-                        <CCardText>
-                            {card.body}
+                        <CCardTitle>Accepted Approval</CCardTitle>
+                        <hr />
+                        <CCardSubtitle className="mb-2 text-muted"></CCardSubtitle>
+                        <CCardText className="text-black">
+                            Position: {card.position}
+                            <br></br>
+                            Hierarchy-Type: {card.heirarchyType}
+                            <br></br>
+                            Hierarchy-Name: {card.heirarchyName}
+                            <br></br>
+                            Branch-Name: {card.branchName}
+                            <br></br>
+                            Job Type: {card.jobType}
                         </CCardText>
                         <div className="buttons">
                             <CButton className="buttons" color="success" onClick={acceptApprovalHandler}>Accept</CButton>
@@ -135,6 +198,38 @@ function ViewApprovals() {
                             <CButton color="primary" onClick={sendRemarksHandler}>Send</CButton>
                         </CModalFooter>
                     </CModal>
+                </CCard>
+
+
+            </>
+
+        );
+    }
+
+
+    const renderCard2 = (card, index) => {
+        return (
+            <>
+
+
+
+                <CCard style={{ width: '30rem' }} key={index} className="mx-auto my-5">
+                    <CCardBody>
+                        <CCardTitle>Accepted Approval</CCardTitle>
+                        <hr />
+                        <CCardSubtitle className="mb-2 text-muted"></CCardSubtitle>
+                        <CCardText className="text-black">
+                            Position: {card.position}
+                            <br></br>
+                            Hierarchy-Type: {card.heirarchyType}
+                            <br></br>
+                            Hierarchy-Name: {card.heirarchyName}
+                            <br></br>
+                            Branch-Name: {card.branchName}
+                            <br></br>
+                            Job Type: {card.jobType}
+                        </CCardText>
+                    </CCardBody>
                 </CCard>
 
 
@@ -175,19 +270,37 @@ function ViewApprovals() {
                                     <div className="docs-example-row">
                                         <CCol  >
                                             <CRow xs={{ gutterX: 5 }}>
-                                                {cardInfo.map(renderCard)}
+                                                {cardInfo1.map(renderCard1)}
                                             </CRow>
                                         </CCol>
                                     </div>
                                 </CTabPane>
                                 <CTabPane visible={activeKey === 2}>
-                                    <h1>acceptedapprovals</h1>
+                                    <div className="docs-example-row">
+                                        <CCol  >
+                                            <CRow xs={{ gutterX: 5 }}>
+                                                {cardInfo2.map(renderCard2)}
+                                            </CRow>
+                                        </CCol>
+                                    </div>
                                 </CTabPane>
                                 <CTabPane visible={activeKey === 3}>
-                                    <h1>rejected approvals</h1>
+                                    <div className="docs-example-row">
+                                        <CCol  >
+                                            <CRow xs={{ gutterX: 5 }}>
+                                                {cardInfo3.map(renderCard2)}
+                                            </CRow>
+                                        </CCol>
+                                    </div>
                                 </CTabPane>
                                 <CTabPane visible={activeKey === 4}>
-                                    <h1> escalated approvals</h1>
+                                    <div className="docs-example-row">
+                                        <CCol  >
+                                            <CRow xs={{ gutterX: 5 }}>
+                                                {cardInfo4.map(renderCard2)}
+                                            </CRow>
+                                        </CCol>
+                                    </div>
                                 </CTabPane>
                             </CTabContent>
                         </CCol>

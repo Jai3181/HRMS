@@ -401,8 +401,8 @@ export default function MRFform(props) {
                         </CRow>
                     </CContainer>
                 </div>
-                {/* <AppFooter /> */}
+                <AppFooter />
             </div>
-        </div >
+        </div>
     );
 }
