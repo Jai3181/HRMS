@@ -370,9 +370,8 @@ function Approval(props) {
                                     </CRow>
                                 </CForm>
                             </CCol>
-                            <div className="vertical"></div>
-
                             <CCol className="col-sm-8 col-md-10 ">
+                                <div className="vertical"></div>
                                 <CContainer fluid >
                                     <MDBDataTableV5 hover bordered
                                         entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4} scrollX data={widerData} fullPagination />

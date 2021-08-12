@@ -169,7 +169,7 @@ export default function MRFform(props) {
     }
     const axios = require('axios').default;
     async function showData(url) {
-        setIsLoading(true)
+        // setIsLoading(true)
         const response = await axios.get(url, {
             headers: {
                 'Content-Type': 'application/json',
@@ -177,7 +177,7 @@ export default function MRFform(props) {
             },
         });
         console.log(response)
-        setIsLoading(false)
+        // setIsLoading(false)
         return response.data
 
         // const response = await fetch(url, {
@@ -378,23 +378,24 @@ export default function MRFform(props) {
                                     </CRow>
                                 </CForm>
                             </CCol>
-                            <div className="vertical"></div>
                             <CCol className="col-sm-8 col-md-10 ">
+                                <div className="vertical"></div>
                                 <CContainer fluid >
-                                    {isLoading ? <CSpinner color="primary" /> :
-                                        <MDBDataTableV5
-                                            small
-                                            hover
-                                            // striped
-                                            fullPagination
-                                            entriesOptions={[5, 20, 25]}
-                                            entries={5}
-                                            // bordered
-                                            scrollX
-                                            searchTop
-                                            searchBottom={false}
-                                            data={dataTable}
-                                        />}
+                                    {/* {isLoading ? <CSpinner color="primary" /> : */}
+                                    <MDBDataTableV5
+                                        small
+                                        hover
+                                        // striped
+                                        fullPagination
+                                        entriesOptions={[5, 20, 25]}
+                                        entries={5}
+                                        // bordered
+                                        scrollX
+                                        searchTop
+                                        searchBottom={false}
+                                        data={dataTable}
+                                    />
+                                    {/* } */}
                                 </CContainer>
                             </CCol>
                         </CRow>
