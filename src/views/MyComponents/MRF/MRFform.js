@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import './MRFform.css'
 import { BsEyeFill } from "react-icons/bs";
 import { MDBDataTableV5 } from 'mdbreact';
-import { CContainer, CRow, CCol, CButton, CForm, CFormCheck } from '@coreui/react'
+import { CContainer, CRow, CCol, CButton, CForm, CFormCheck, CSpinner } from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index'
 import { useStateValue } from "../../../StateProvider";
 import "../Approval/Approval.css";
@@ -20,6 +20,7 @@ export default function MRFform(props) {
     const [approvalList, setApprovalList] = useState()
     const [mdbDataRows, setMdbDataRows] = useState([])
     const [isFiltered, setIsFiltered] = useState(false)
+    const [isLoading, setIsLoading] = useState()
 
 
     if (approvalList) { sessionStorage.setItem("approvalList", JSON.stringify(approvalList)) }
@@ -163,11 +164,12 @@ export default function MRFform(props) {
             body: JSON.stringify(data)
         });
         const Data = await response.json();
+        // setIsLoading(false)
         return Data
     }
     const axios = require('axios').default;
     async function showData(url) {
-        // setIsLoading(true)
+        setIsLoading(true)
         const response = await axios.get(url, {
             headers: {
                 'Content-Type': 'application/json',
@@ -175,6 +177,7 @@ export default function MRFform(props) {
             },
         });
         console.log(response)
+        setIsLoading(false)
         return response.data
 
         // const response = await fetch(url, {
@@ -377,19 +380,20 @@ export default function MRFform(props) {
                             </CCol>
                             <CCol className="col-sm-8 col-md-10 ">
                                 <CContainer fluid >
-                                    <MDBDataTableV5
-                                        small
-                                        hover
-                                        // striped
-                                        fullPagination
-                                        entriesOptions={[5, 20, 25]}
-                                        entries={5}
-                                        // bordered
-                                        scrollX
-                                        searchTop
-                                        searchBottom={false}
-                                        data={dataTable}
-                                    />;
+                                    {isLoading ? <CSpinner color="primary" /> :
+                                        <MDBDataTableV5
+                                            small
+                                            hover
+                                            // striped
+                                            fullPagination
+                                            entriesOptions={[5, 20, 25]}
+                                            entries={5}
+                                            // bordered
+                                            scrollX
+                                            searchTop
+                                            searchBottom={false}
+                                            data={dataTable}
+                                        />}
                                 </CContainer>
                             </CCol>
                         </CRow>
