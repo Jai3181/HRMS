@@ -132,23 +132,20 @@ function UserProfile() {
 
 
     const savePermissionHandler = (event) => {
-
         console.log(roles);
+        setVisible(false)
         showData.map(data => {
             patchData(endPoints.patchUserProfile, { _id: data._id, access: data.access }).then(res => {
                 if (res.success === true) {
                     showDataList(endPoints.getUserProfile).then(data => { setShowData(data); setVisible(false); });
                 }
             });
-
-
         });
-
     }
 
 
     const postDataHandler = () => {
-
+        setVisibleOne(false)
         console.log(Access);
         postData(endPoints.postUserProfile, { role: newRole, access: Access }).then(res => console.log(res));
 
@@ -224,8 +221,6 @@ function UserProfile() {
                                                             switch
                                                             id={key}
                                                             defaultChecked={key[1]}
-
-
                                                             onChange={(event) => {
                                                                 showData = showData.filter(data => data._id == Id).map(data => {
                                                                     // console.log(showData);
@@ -284,24 +279,17 @@ function UserProfile() {
                                 {/* console.log(Access); */ }
                                 {/* console.log(key[0]) */ }
                                 return (
-
                                     <CCol className="col-sm-6" key={key} >
                                         <CFormCheck
                                             id={key}
                                             label={key}
-
                                             onChange={(event) => {
-                                                // console.log(key, value);
-
-                                                if (event.target.checked) {
-
+                                                if (event.target.checked == true) {
                                                     Access[key[0]] = true;
                                                     // console.log(Access);
                                                 }
                                                 return Access;
-
                                             }} />
-
                                     </CCol>
 
                                 );
@@ -316,7 +304,7 @@ function UserProfile() {
                         <CButton color="secondary" onClick={() => setVisibleOne(false)}>
                             Close
                         </CButton>
-                        <CButton color="primary" onClick={postDataHandler}> Save changes</CButton>
+                        <CButton color="primary" onClick={postDataHandler}>Add Role</CButton>
                     </CModalFooter>
                 </CModal>
             </div>
