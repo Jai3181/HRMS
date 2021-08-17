@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CNavbar, CContainer, CNavbarBrand, CNavbarToggler, CCollapse, CNavbarNav, CNavLink, CRow, CTabContent, CTabPane, CCol, CButton, CButtonGroup, CModal, CModalBody, CModalHeader, CModalTitle, CModalFooter, CFormControl, CCard, CCardTitle, CCardBody, CCardSubtitle, CCardText, CNav } from "@coreui/react";
+import { CNavbar, CContainer, CNavbarBrand, CNavbarToggler, CCollapse, CNavbarNav, CNavLink, CRow, CTabContent, CTabPane, CCol, CButton, CButtonGroup, CModal, CModalBody, CModalHeader, CModalTitle, CModalFooter, CFormControl, CCard, CCardTitle, CCardBody, CCardSubtitle, CCardText, CNav, CNavItem, CBadge, CCardHeader } from "@coreui/react";
 // import "../Approval/Approval.css"
 import "./ViewApproval.css";
 
@@ -7,6 +7,7 @@ import "./ViewApproval.css";
 // import "../../../../node_modules/semantic-ui-css/semantic.min.css";
 import { useStateValue } from "../../../StateProvider";
 import endPoints from "../../../utils/EndPointApi";
+
 
 
 
@@ -29,11 +30,11 @@ function ViewApprovals() {
     {
         pendingApproval.map(data => {
             cardInfo1.push({
-                position: data.mrfRequestID.designation.positionID.position,
-                heirarchyType: data.mrfRequestID.hierarchyID.type,
-                heirarchyName: data.mrfRequestID.hierarchyID.name,
-                branchName: data.mrfRequestID.branchID.name,
-                jobType: data.mrfRequestID.jobType
+                position: data.mrfInfo.designation.positionID,
+                heirarchyType: data.mrfInfo.hierarchyID.type,
+                heirarchyName: data.mrfInfo.hierarchyID.name,
+                branchName: data.mrfInfo.branchID.name,
+                jobType: data.mrfInfo.jobType
             });
         })
     }
@@ -42,11 +43,13 @@ function ViewApprovals() {
     {
         acceptApproval.map(data => {
             cardInfo2.push({
-                position: data.mrfRequestID.designation.positionID.position,
-                heirarchyType: data.mrfRequestID.hierarchyID.type,
-                heirarchyName: data.mrfRequestID.hierarchyID.name,
-                branchName: data.mrfRequestID.branchID.name,
-                jobType: data.mrfRequestID.jobType
+                title: "Accepted Approval",
+                status: "Accepted",
+                position: data.mrfInfo.designation.positionID,
+                heirarchyType: data.mrfInfo.hierarchyID.type,
+                heirarchyName: data.mrfInfo.hierarchyID.name,
+                branchName: data.mrfInfo.branchID.name,
+                jobType: data.mrfInfo.jobType
             });
         })
     }
@@ -54,11 +57,11 @@ function ViewApprovals() {
     {
         rejectApproval.map(data => {
             cardInfo3.push({
-                position: data.mrfRequestID.designation.positionID.position,
-                heirarchyType: data.mrfRequestID.hierarchyID.type,
-                heirarchyName: data.mrfRequestID.hierarchyID.name,
-                branchName: data.mrfRequestID.branchID.name,
-                jobType: data.mrfRequestID.jobType
+                position: data.mrfInfo.designation.positionID,
+                heirarchyType: data.mrfInfo.hierarchyID.type,
+                heirarchyName: data.mrfInfo.hierarchyID.name,
+                branchName: data.mrfInfo.branchID.name,
+                jobType: data.mrfInfo.jobType
             });
         })
     }
@@ -66,11 +69,11 @@ function ViewApprovals() {
     {
         escalateApproval.map(data => {
             cardInfo4.push({
-                position: data.mrfRequestID.designation.positionID.position,
-                heirarchyType: data.mrfRequestID.hierarchyID.type,
-                heirarchyName: data.mrfRequestID.hierarchyID.name,
-                branchName: data.mrfRequestID.branchID.name,
-                jobType: data.mrfRequestID.jobType
+                position: data.mrfInfo.designation.positionID,
+                heirarchyType: data.mrfInfo.hierarchyID.type,
+                heirarchyName: data.mrfInfo.hierarchyID.name,
+                branchName: data.mrfInfo.branchID.name,
+                jobType: data.mrfInfo.jobType
             });
         })
     }
@@ -111,13 +114,19 @@ function ViewApprovals() {
     }
 
     useEffect(() => {
-        getApproval(endPoints.getApprovals).then(data => {
-            console.log(data);
-            setAcceptApproval(data);
+        getApproval(endPoints.viewApprovals).then(data => {
+            data.filter(data => data.status === "Accept").map(data => { console.log("accept:", data); setAcceptApproval([data]) });
+            data.filter(data => data.status === "None").map(data => { console.log("pending:", data); setPendingApproval([data]) });
+            data.filter(data => data.status === "Reject").map(data => { console.log("reject:", data); setRejectApproval([data]) });
+            data.filter(data => data.status === "Escalate").map(data => { console.log("escalate:", data); setEscalateApproval([data]) });
         });
 
     }, [])
-    console.log("approval:", acceptApproval);
+    console.log("approval:", showApproval);
+
+
+
+    console.log("approval", acceptApproval);
 
 
 
@@ -213,21 +222,48 @@ function ViewApprovals() {
 
 
 
-                <CCard style={{ width: '30rem' }} key={index} className="mx-auto my-5">
+                <CCard style={{ width: '32rem' }} key={index} className="mx-auto my-5 ">
+
                     <CCardBody>
-                        <CCardTitle>Accepted Approval</CCardTitle>
+                        <CCardTitle className="cardTitle my-3">
+                            <div >
+                                <CRow>
+                                    <CCol className="col-sm-7 cardTitle" >{card.title}</CCol>
+                                    {/* <CCol className="col-sm-2"></CCol> */}
+                                    <CCol className="col-sm-5"><CBadge className="mx-5" color="success">{card.status}</CBadge></CCol>
+                                </CRow>
+
+                            </div>
+
+                        </CCardTitle>
                         <hr />
-                        <CCardSubtitle className="mb-2 text-muted"></CCardSubtitle>
-                        <CCardText className="text-black">
-                            Position: {card.position}
-                            <br></br>
-                            Hierarchy-Type: {card.heirarchyType}
-                            <br></br>
-                            Hierarchy-Name: {card.heirarchyName}
-                            <br></br>
-                            Branch-Name: {card.branchName}
-                            <br></br>
-                            Job Type: {card.jobType}
+                        {/* <CCardSubtitle className="mb-2 text-muted"><CBadge color="primary">{card.status}</CBadge></CCardSubtitle> */}
+                        <CCardText className="text-black ">
+                            <CRow>
+                                <CCol className="col-sm-5">Position</CCol>
+                                <CCol className="col-sm-1">:</CCol>
+                                <CCol className="col-sm-6"></CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol className="col-sm-5">Hierarchy-Type</CCol>
+                                <CCol className="col-sm-1">:</CCol>
+                                <CCol className="col-sm-6">{card.heirarchyType}</CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol className="col-sm-5">Hierarchy-Name</CCol>
+                                <CCol className="col-sm-1">:</CCol>
+                                <CCol className="col-sm-6">{card.heirarchyName}</CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol className="col-sm-5"> Branch-Name</CCol>
+                                <CCol className="col-sm-1">:</CCol>
+                                <CCol className="col-sm-6"> {card.branchName}</CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol className="col-sm-5">Job Type</CCol>
+                                <CCol className="col-sm-1">:</CCol>
+                                <CCol className="col-sm-6">{card.jobType}</CCol>
+                            </CRow>
                         </CCardText>
                     </CCardBody>
                 </CCard>
@@ -244,10 +280,10 @@ function ViewApprovals() {
 
                 <div >
                     <CRow >
-                        <CNavbar colorScheme="light" className="bg-light" variant="tabs">
+                        {/* <CNavbar colorScheme="light" className="bg-light" variant="tabs">
                             <CContainer fluid>
                                 {/* <CNavbarToggler onClick={() => setVisible1(!visible1)} />
-                                <CCollapse className="navbar-collapse" visible={visible1}> */}
+                                <CCollapse className="navbar-collapse" visible={visible1}> 
 
                                 <CNavbarBrand className="mx-auto nav1 " active={activeKey === 1}
                                     onClick={() => setActiveKey(1)}>PENDING</CNavbarBrand>
@@ -257,16 +293,57 @@ function ViewApprovals() {
                                     onClick={() => setActiveKey(3)}>REJECTED</CNavbarBrand>
                                 <CNavbarBrand className="mx-auto nav1 " active={activeKey === 4}
                                     onClick={() => setActiveKey(4)}>ESCALATED</CNavbarBrand>
-                                {/* </CCollapse> */}
+                                {/* </CCollapse> 
                             </CContainer>
-                        </CNavbar>
+                        </CNavbar> */}
+                        <CNav variant="tabs">
+                            <CNavItem className="mx-auto">
+                                <CNavLink
+                                    className="text-black"
+                                    href="#"
+                                    active={activeKey === 1}
+                                    onClick={() => setActiveKey(1)}
+                                >
+                                    PENDING
+                                </CNavLink>
+                            </CNavItem>
+                            <CNavItem className="mx-auto">
+                                <CNavLink
+                                    className="text-black"
+                                    href="#"
+                                    active={activeKey === 2}
+                                    onClick={() => setActiveKey(2)}
+                                >
+                                    ACCEPTED
+                                </CNavLink>
+                            </CNavItem>
+                            <CNavItem className="mx-auto">
+                                <CNavLink
+                                    className="text-black"
+                                    href="#"
+                                    active={activeKey === 3}
+                                    onClick={() => setActiveKey(3)}
+                                >
+                                    REJECTED
+                                </CNavLink>
+                            </CNavItem>
+                            <CNavItem className="mx-auto">
+                                <CNavLink
+                                    className="text-black"
+                                    href="#"
+                                    active={activeKey === 4}
+                                    onClick={() => setActiveKey(4)}
+                                >
+                                    ESCALATED
+                                </CNavLink>
+                            </CNavItem>
+                        </CNav>
                     </CRow>
-                    <hr />
-                    {/* <CButton onClick={getDataHandler}>show data</CButton> */}
                     <CRow>
                         <CCol>
                             <CTabContent >
                                 <CTabPane visible={activeKey === 1}>
+                                    {/* <h1>pending approvals</h1> */}
                                     <div className="docs-example-row">
                                         <CCol  >
                                             <CRow xs={{ gutterX: 5 }}>
@@ -285,6 +362,7 @@ function ViewApprovals() {
                                     </div>
                                 </CTabPane>
                                 <CTabPane visible={activeKey === 3}>
+                                    {/* <h1>rejected approvals</h1> */}
                                     <div className="docs-example-row">
                                         <CCol  >
                                             <CRow xs={{ gutterX: 5 }}>
@@ -294,6 +372,7 @@ function ViewApprovals() {
                                     </div>
                                 </CTabPane>
                                 <CTabPane visible={activeKey === 4}>
+                                    {/* <h1>escalated approvals</h1> */}
                                     <div className="docs-example-row">
                                         <CCol  >
                                             <CRow xs={{ gutterX: 5 }}>

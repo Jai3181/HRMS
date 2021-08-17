@@ -26,7 +26,14 @@ const endPoints = {
     patchUserProfile: baseLink + "/userprofile",
     searchUserProfile: baseLink + "/userprofile",
     getApprovals: baseLink + "/mrfapproval",
+
+
+    viewApprovals: baseLink + "/approval",
+
+    
+
     getRecruiter: baseLink + "/recruitermanagement",
+
     settings: baseLink + "/settings"
 
 

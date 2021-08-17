@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import '../MRF/MRFform.css'
 import { MDBDataTableV5 } from 'mdbreact';
-import { CContainer, CRow, CCol, CForm, CBadge, CButton, CFormCheck, CFormControl, CModalFooter, CModalBody, CModalTitle, CModalHeader, CModal } from '@coreui/react'
+import { CContainer, CRow, CCol, CForm, CBadge, CSpinner, CButton, CFormCheck, CFormControl, CModalFooter, CModalBody, CModalTitle, CModalHeader, CModal } from '@coreui/react'
 import { AppFooter, AppHeader2 } from '../../../components/index';
 import endPoints from "../../../utils/EndPointApi";
 // import { AiOutlineMinusCircle } from "react-icons/ai";
@@ -27,6 +27,7 @@ function Approval(props) {
     const [mdbDataRows, setMdbDataRows] = useState([])
     const [isFiltered, setIsFiltered] = useState(false)
     const [checkList, setCheckList] = useState([])
+    const [isLoading, setIsLoading] = useState();
 
 
     var searchPosition = "";
@@ -41,7 +42,7 @@ function Approval(props) {
 
 
     async function showData(url) {
-        // setIsLoading(true)
+        setIsLoading(true)
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -50,7 +51,7 @@ function Approval(props) {
             },
         });
         const Data = await response.json();
-        // setIsLoading(false)
+        setIsLoading(false)
         return Data
     }
     useEffect(() => {
@@ -364,11 +365,13 @@ function Approval(props) {
                                     </CRow>
                                 </CForm>
                             </CCol>
+
                             <CCol className="col-sm-8 col-md-10 ">
                                 <div className="vertical"></div>
                                 <CContainer fluid >
-                                    <MDBDataTableV5 hover bordered
-                                        entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4} scrollX data={widerData} fullPagination />
+                                    {isLoading ? <CSpinner color="primary" /> :
+                                        <MDBDataTableV5 hover bordered
+                                            entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4} scrollX data={widerData} fullPagination />}
                                 </CContainer>
                             </CCol>
                         </CRow>
