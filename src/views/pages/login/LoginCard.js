@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "./Login.css"
 import { BrowserRouter, Route, Switch, Router, withRouter, Redirect } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { CButton, CCard, CCardBody, CCol, CForm, CFormControl, CRow, CFormFloating, CFormLabel, CAlert } from '@coreui/react'
+import { CButton, CCard, CCardBody, CCol, CForm, CFormControl, CRow, CFormFloating, CFormLabel, CAlert, CSpinner } from '@coreui/react'
 import PropTypes from "prop-types";
 import endPoints from 'src/utils/EndPointApi';
 import { useStateValue } from "../../../StateProvider"
@@ -15,6 +15,7 @@ function LoginCard(props) {
     //     props?.isNewUser(false);
     // }
     const [reducerState, dispatch] = useStateValue()
+    const [isLoading, setIsLoading] = useState()
     const [enteredEmail, setEnteredEmail] = useState("");
     const [enteredPassword, setEnteredPassword] = useState("");
     const [emailerrorMessage, setEmailerrorMessage] = useState(false);
@@ -32,6 +33,7 @@ function LoginCard(props) {
 
     const loginHandler = (event) => {
         event.preventDefault();
+        setIsLoading(true)
         const credentials = {
             email: enteredEmail,
             password: enteredPassword,
@@ -39,18 +41,22 @@ function LoginCard(props) {
         console.log(credentials)
         postData(endPoints.loginURL, credentials)
             .then(data => {
+                // setIsLoading(true)
                 console.log(data);
                 if (data.email == "Invalid") {
                     setEmailerrorMessage(true);
+                    setIsLoading(false)
                 }
                 else if (data.password == "Invalid") {
                     setPassworderrorMessage(true);
+                    setIsLoading(false)
                 }
                 if (data.token) {
                     console.log("entered here")
                     sessionStorage.setItem('token', JSON.stringify(data.token));
                     // history.push("/mydashboard")
                     setAuthenticated(true)
+                    setIsLoading(false)
                 }
 
                 dispatch({
@@ -120,7 +126,7 @@ function LoginCard(props) {
                         <CFormLabel htmlFor="password">Password</CFormLabel>
                     </CFormFloating>
                     <CFormFloating className="mb-3">
-                        <CButton type="submit" size="lg" style={{ width: "100%" }} color="primary" className="text-center px-5 heading">Login</CButton>
+                        <CButton type="submit" size="lg" style={{ width: "100%" }} color="primary" className="text-center px-5 heading">{isLoading ? <CSpinner color="white" /> : "Login"}</CButton>
 
                     </CFormFloating>
 
