@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "./Login.css"
 import { BrowserRouter, Route, Switch, Router, withRouter, Redirect } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { CButton, CCard, CCardBody, CCol, CForm, CFormControl, CRow, CFormFloating, CFormLabel, CAlert } from '@coreui/react'
+import { CButton, CCard, CCardBody, CCol, CForm, CFormControl, CRow, CFormFloating, CFormLabel, CAlert, CSpinner } from '@coreui/react'
 import PropTypes from "prop-types";
 import endPoints from 'src/utils/EndPointApi';
 import { useStateValue } from "../../../StateProvider"
@@ -84,6 +84,8 @@ function LoginCard(props) {
         });
         return response.json(); // parses JSON response into native JavaScript objects
     }
+
+    // authenticate == true ? <Redirect to="/mydashboard" /> : <CSpinner color="primary" />
 
     if (authenticate == true) {
         return <Redirect to="/mydashboard" />
