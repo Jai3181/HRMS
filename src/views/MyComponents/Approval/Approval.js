@@ -127,7 +127,7 @@ function Approval(props) {
             {
                 for (var i = 0; i < data.approversID.length; i++) {
 
-                    approverList += [i + 1] + "." + "" + data.approversID[i]._id.name.firstName + "  " + data.approversID[i]._id.name.lastName + " ";
+                    approverList += [i + 1] + "." + "" + data.approversID[i]._id.name.firstName + "  " + data.approversID[i]._id.name.lastName + "\n";
                     var approverListfinal = approverList;
                 }
                 approverList = "";
@@ -369,8 +369,10 @@ function Approval(props) {
                             <CCol className="col-sm-8 col-md-10 ">
                                 <div className="vertical"></div>
                                 <CContainer fluid >
+
                                     {isLoading ? <CSpinner color="primary" /> :
-                                        <MDBDataTableV5 hover bordered
+                                        <MDBDataTableV5 hover 
+                                            // bordered
                                             entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4} scrollX data={widerData} fullPagination />}
                                 </CContainer>
                             </CCol>
