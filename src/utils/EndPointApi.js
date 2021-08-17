@@ -27,6 +27,8 @@ const endPoints = {
     searchUserProfile: baseLink + "/userprofile",
     getApprovals: baseLink + "/mrfapproval",
 
+    viewApprovals: baseLink + "/approval",
+
     getRecruiter: baseLink + "/recruiter",
     settings: baseLink + "/settings"
 
