@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import '../login/Login.css'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import PropTypes from "prop-types";
+import endPoints from 'src/utils/EndPointApi';
 import { CButton, CCard, CCardBody, CCol, CForm, CFormControl, CRow, CFormFloating, CFormLabel } from '@coreui/react'
 // import {CInputGroup, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle} from '@coreui/react'
 function RegisterCard(props) {
@@ -9,7 +10,7 @@ function RegisterCard(props) {
     // const existingLoginHandler = (event) => {
     //     props?.isExistingUser(true);
     // }
-
+    const [authenticate, setAuthenticated] = useState(false);
     const [enteredFName, setEnteredFName] = useState("");
     const [enteredLName, setEnteredLName] = useState("");
     const [enteredEmail, setEnteredEmail] = useState("");
@@ -49,10 +50,16 @@ function RegisterCard(props) {
             email: enteredEmail,
             password: enteredPassword
         };
-        postData("https://crm1728.herokuapp.com/super-admin/add", registerData)
+        postData(endPoints.registerURL, registerData)
             .then(data => {
                 console.log(data); // JSON data parsed by data.json() call
-            });
+                if (data.success === true) {
+                    // sessionStorage.setItem('token', JSON.stringify(data.token));
+                    // history.push("/mydashboard")
+                    setAuthenticated(true)
+                }
+            }
+            );
         console.log(registerData)
         setEnteredFName("");
         setEnteredLName("");
@@ -74,7 +81,9 @@ function RegisterCard(props) {
         });
         return response.json(); // parses JSON response into native JavaScript objects
     }
-
+    if (authenticate == true) {
+        return <Redirect to="/login" />
+    }
     return (
         <CCard className="card_component">
             <CCardBody>

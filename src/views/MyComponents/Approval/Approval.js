@@ -366,7 +366,6 @@ function Approval(props) {
                                 </CForm>
                             </CCol>
 
-
                             <CCol className="col-sm-8 col-md-10 ">
                                 <div className="vertical"></div>
                                 <CContainer fluid >

@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import endPoints from 'src/utils/EndPointApi';
 import { useStateValue } from "../../../StateProvider"
 import LoadingOverlay from 'react-loading-overlay';
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 function LoginCard(props) {
     // const history = useHistory();
     const MyDashboard = React.lazy(() => import('../../dashboard/MyDashboard'))
@@ -50,7 +50,11 @@ function LoginCard(props) {
                     console.log("entered here")
                     sessionStorage.setItem('token', JSON.stringify(data.token));
                     // history.push("/mydashboard")
+
                     // setAuthenticated(true)
+
+                    setAuthenticated(true)
+
                 }
 
                 dispatch({
@@ -81,9 +85,9 @@ function LoginCard(props) {
         return response.json(); // parses JSON response into native JavaScript objects
     }
 
-    // if (authenticate == true) {
-    //     return <Redirect to="/mydashboard" />
-    // }
+    if (authenticate == true) {
+        return <Redirect to="/mydashboard" />
+    }
     return (
         <CCard className="card_component mt-5">
             <CCardBody>
