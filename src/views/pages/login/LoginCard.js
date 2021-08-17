@@ -55,6 +55,7 @@ function LoginCard(props) {
                     console.log("entered here")
                     sessionStorage.setItem('token', JSON.stringify(data.token));
                     // history.push("/mydashboard")
+                    // setAuthenticated(true)
                     setAuthenticated(true)
                     setIsLoading(false)
                 }
