@@ -88,6 +88,8 @@ function LoginCard(props) {
         return response.json(); // parses JSON response into native JavaScript objects
     }
 
+    // authenticate == true ? <Redirect to="/mydashboard" /> : <CSpinner color="primary" />
+
     if (authenticate == true) {
         return <Redirect to="/mydashboard" />
     }

@@ -30,7 +30,7 @@ function ViewApprovals() {
     {
         pendingApproval.map(data => {
             cardInfo1.push({
-                position: data.mrfInfo.designation.positionID,
+                position: data.mrfInfo.designation.positionID.position,
                 heirarchyType: data.mrfInfo.hierarchyID.type,
                 heirarchyName: data.mrfInfo.hierarchyID.name,
                 branchName: data.mrfInfo.branchID.name,
@@ -45,7 +45,7 @@ function ViewApprovals() {
             cardInfo2.push({
                 title: "Accepted Approval",
                 status: "Accepted",
-                position: data.mrfInfo.designation.positionID,
+                position: data.mrfInfo.designation.positionID.position,
                 heirarchyType: data.mrfInfo.hierarchyID.type,
                 heirarchyName: data.mrfInfo.hierarchyID.name,
                 branchName: data.mrfInfo.branchID.name,
@@ -57,7 +57,7 @@ function ViewApprovals() {
     {
         rejectApproval.map(data => {
             cardInfo3.push({
-                position: data.mrfInfo.designation.positionID,
+                position: data.mrfInfo.designation.positionID.position,
                 heirarchyType: data.mrfInfo.hierarchyID.type,
                 heirarchyName: data.mrfInfo.hierarchyID.name,
                 branchName: data.mrfInfo.branchID.name,
@@ -69,7 +69,7 @@ function ViewApprovals() {
     {
         escalateApproval.map(data => {
             cardInfo4.push({
-                position: data.mrfInfo.designation.positionID,
+                position: data.mrfInfo.designation.positionID.position,
                 heirarchyType: data.mrfInfo.hierarchyID.type,
                 heirarchyName: data.mrfInfo.hierarchyID.name,
                 branchName: data.mrfInfo.branchID.name,
@@ -242,7 +242,7 @@ function ViewApprovals() {
                             <CRow>
                                 <CCol className="col-sm-5">Position</CCol>
                                 <CCol className="col-sm-1">:</CCol>
-                                <CCol className="col-sm-6"></CCol>
+                                <CCol className="col-sm-6">{card.position}</CCol>
                             </CRow>
                             <CRow>
                                 <CCol className="col-sm-5">Hierarchy-Type</CCol>
