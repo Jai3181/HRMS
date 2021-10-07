@@ -442,7 +442,7 @@ function CreateMRFPage(props) {
 
 
                         <CRow className="mb-3">
-                            <CFormLabel htmlFor="pos_id" className="col-sm-2 col-form-label">Position ID</CFormLabel>
+                            <CFormLabel htmlFor="pos_id" className="col-sm-2 col-form-label">Position Name</CFormLabel>
                             <CCol sm="4">
                                 <Select
                                     options={positionNameOptions}

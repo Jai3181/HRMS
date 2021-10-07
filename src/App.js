@@ -24,6 +24,7 @@ const EditMRFPage = React.lazy(() => import('./views/MyComponents/MRF/EditMRFPag
 const Approval = React.lazy(() => import('./views/MyComponents/Approval/Approval.js'))
 const ApprovalForm = React.lazy(() => import('./views/MyComponents/MRF/ApprovalForm.js'))
 const ViewApprovalForm = React.lazy(() => import('./views/MyComponents/MRF/ViewApprovalForm.js'))
+const AddCandidate = React.lazy(() => import('./views/MyComponents/AddCandidate/AddCandidate'))
 
 
 const NewUser = React.lazy(() => import('./views/MyComponents/UserManager/AddUserForm.js'))
@@ -45,6 +46,7 @@ class App extends Component {
             <Route exact path="/500" name="Page 500" render={(props) => <Page500 {...props} />} />
             <Route exact path="/mydashboard" name="My Dashboard" render={(props) => <MyDashboard {...props} />} />
             <Route exact path="/mrf" name="MRF" render={(props) => <MRF {...props} />} />
+            <Route exact path="/addcandidate" name="Add Candidate" render={(props) => <AddCandidate {...props} />} />
             <Route exact path="/newuser" name="NewUser" render={(props) => <NewUser {...props} />} />
             <Route exact path="/CreateMRFPage" name="CreateMRFPage" render={(props) => <CreateMRFPage {...props} />} />
             <Route exact path="/EditMRFPage" name="EditMRFPage" render={(props) => <EditMRFPage {...props} />} />
